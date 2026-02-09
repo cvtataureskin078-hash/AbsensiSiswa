@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa Pro</title>
+    <title>Absensi Siswa</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
@@ -85,7 +85,6 @@
     </div>
 
 <script>
-    // Inisialisasi data dengan pengecekan ketat untuk Edge
     var dataAbsen = [];
     try {
         var localData = localStorage.getItem('data_absen_siswa');
@@ -118,7 +117,6 @@
         kontainer.innerHTML = '';
         var colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
         
-        // Render dari yang terbaru (reverse)
         for (var i = dataAbsen.length - 1; i >= 0; i--) {
             var x = dataAbsen[i];
             var c = colors[x.s] || '#7f8c8d';
@@ -152,7 +150,6 @@
         saveToStorage();
         render();
         
-        // Reset form
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
         document.getElementById('stat').selectedIndex = 0;
@@ -178,7 +175,6 @@
         render();
     }
 
-    // Inisialisasi awal saat window dimuat
     window.onload = function() {
         setTgl();
         render();
@@ -186,3 +182,4 @@
 </script>
 </body>
 </html>
+
