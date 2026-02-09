@@ -157,11 +157,10 @@
     }
 
     function hapusSemua() {
-        if(confirm("Yakin ingin menghapus semua daftar?")) {
-            dataAbsen = [];
-            localStorage.removeItem('data_absen_siswa');
-            render();
-        }
+          dataAbsen = [];
+          localStorage.removeItem('data_absen_siswa');
+          render();
+       }
     }
 
     setTgl();
@@ -169,3 +168,4 @@
 </script>
 </body>
 </html>
+
