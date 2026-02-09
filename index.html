@@ -85,89 +85,104 @@
     </div>
 
 <script>
-    // Load data awal
-    let dataAbsen = JSON.parse(localStorage.getItem('data_absen_siswa')) || [];
+    // Inisialisasi data dengan pengecekan ketat untuk Edge
+    var dataAbsen = [];
+    try {
+        var localData = localStorage.getItem('data_absen_siswa');
+        if (localData) {
+            dataAbsen = JSON.parse(localData);
+        }
+    } catch (e) {
+        console.error("Gagal mengambil data", e);
+    }
 
     function setTgl() {
-        const d = new Date();
-        const tgl = String(d.getDate()).padStart(2, '0');
-        const bln = String(d.getMonth() + 1).padStart(2, '0');
-        const thn = d.getFullYear();
-        document.getElementById('tgl').innerText = `Hari Ini: ${tgl}/${bln}/${thn}`;
+        var d = new Date();
+        var tgl = String(d.getDate()).padStart(2, '0');
+        var bln = String(d.getMonth() + 1).padStart(2, '0');
+        var thn = d.getFullYear();
+        document.getElementById('tgl').innerText = "Hari Ini: " + tgl + "/" + bln + "/" + thn;
     }
 
     function toggleTheme() {
-        const b = document.body;
-        const isL = b.getAttribute('data-theme') === 'light';
+        var b = document.body;
+        var isL = b.getAttribute('data-theme') === 'light';
         b.setAttribute('data-theme', isL ? 'dark' : 'light');
         document.getElementById('tBtn').innerText = isL ? '🌙 DARK MODE' : '☀️ LIGHT MODE';
     }
 
-    function tambah() {
-        const n = document.getElementById('nama').value;
-        const nr = document.getElementById('no').value;
-        const s = document.getElementById('stat').value;
+    function render() {
+        var kontainer = document.getElementById('list');
+        if(!kontainer) return;
         
-        if(!n || !nr || !s) {
-            alert("Mohon lengkapi Nama, Nomor, dan Pilih Status!");
-            return;
+        kontainer.innerHTML = '';
+        var colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
+        
+        // Render dari yang terbaru (reverse)
+        for (var i = dataAbsen.length - 1; i >= 0; i--) {
+            var x = dataAbsen[i];
+            var c = colors[x.s] || '#7f8c8d';
+            kontainer.innerHTML += '<div class="item">' +
+                '<div style="max-width: 70%;"><b>' + x.n + '</b><br><small>No: ' + x.noFix + ' | ' + x.jam + '</small></div>' +
+                '<span class="badge" style="background:' + c + '">' + x.s + '</span>' +
+            '</div>';
         }
-
-        const noFix = String(nr).padStart(2, '0');
-        const tglFull = document.getElementById('tgl').innerText.replace('Hari Ini: ', '');
-        const waktu = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-
-        dataAbsen.push({ n, noFix, s, jam: `${tglFull} ${waktu}` });
-        
-        saveToStorage();
-        render();
-        
-        // Reset form input
-        document.getElementById('nama').value = '';
-        document.getElementById('no').value = '';
-        document.getElementById('stat').selectedIndex = 0;
     }
 
     function saveToStorage() {
         localStorage.setItem('data_absen_siswa', JSON.stringify(dataAbsen));
     }
 
-    function render() {
-        const kontainer = document.getElementById('list');
-        kontainer.innerHTML = '';
-        [...dataAbsen].reverse().forEach(x => {
-            const colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
-            const c = colors[x.s] || '#7f8c8d';
-            kontainer.innerHTML += `<div class="item">
-                <div style="max-width: 70%;"><b>${x.n}</b><br><small>No: ${x.noFix} | ${x.jam}</small></div>
-                <span class="badge" style="background:${c}">${x.s}</span>
-            </div>`;
-        });
+    function tambah() {
+        var n = document.getElementById('nama').value;
+        var nr = document.getElementById('no').value;
+        var s = document.getElementById('stat').value;
+        
+        if(!n || !nr || !s) {
+            alert("Mohon lengkapi Nama, Nomor, dan Pilih Status!");
+            return;
+        }
+
+        var noFix = String(nr).padStart(2, '0');
+        var tglFull = document.getElementById('tgl').innerText.replace('Hari Ini: ', '');
+        var waktu = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+
+        dataAbsen.push({ n: n, noFix: noFix, s: s, jam: tglFull + " " + waktu });
+        
+        saveToStorage();
+        render();
+        
+        // Reset form
+        document.getElementById('nama').value = '';
+        document.getElementById('no').value = '';
+        document.getElementById('stat').selectedIndex = 0;
     }
 
     function ekspor() {
         if(dataAbsen.length === 0) return alert("Belum ada data!");
-        let csv = "sep=,\nNama,No Absen,Waktu,Status\n";
-        dataAbsen.forEach(x => {
-            csv += `"${x.n}","'${x.noFix}","${x.jam}","${x.s}"\n`;
-        });
-        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
+        var csv = "sep=,\nNama,No Absen,Waktu,Status\n";
+        for (var i = 0; i < dataAbsen.length; i++) {
+            var x = dataAbsen[i];
+            csv += '"' + x.n + '","\'' + x.noFix + '","' + x.jam + '","' + x.s + '"\n';
+        }
+        var blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        var link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Rekap_Absen_${new Date().getTime()}.csv`;
+        link.download = "Rekap_Absen_" + new Date().getTime() + ".csv";
         link.click();
     }
 
     function hapusSemua() {
-        // Langsung hapus total tanpa pop-up tanya-tanya
         dataAbsen = [];
         localStorage.removeItem('data_absen_siswa');
         render();
     }
 
-    // Jalankan pertama kali
-    setTgl();
-    render();
+    // Inisialisasi awal saat window dimuat
+    window.onload = function() {
+        setTgl();
+        render();
+    };
 </script>
 </body>
 </html>
