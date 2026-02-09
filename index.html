@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Siswa</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+        :root {
+            --bg-body: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-color: #1e272e;
+            --panel-right: #f8f9fa;
+            --input-border: #ddd;
+            --btn-submit: #4834d4;
+            --btn-excel: #10ac84;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0a0a0a;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --panel-right: #252525;
+            --input-border: #333;
+            --btn-submit: #3c2bb3;
+            --btn-excel: #0a7c5f;
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-body);
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0;
+        }
+
+        .main-card { 
+            background: var(--card-bg); 
+            width: 950px; height: 580px;
+            display: flex; border-radius: 20px; 
+            border: 1px solid var(--input-border);
+            overflow: hidden; color: var(--text-color);
+            position: relative;
+            clip-path: none; 
+        }
+
+        .left-panel { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+        .right-panel { flex: 1.2; padding: 40px; background: var(--panel-right); border-left: 1px solid rgba(128,128,128,0.1); display: flex; flex-direction: column; }
+
+        h2 { margin: 0; font-weight: 800; text-transform: uppercase; color: var(--text-color); letter-spacing: -1px; font-size: 26px; }
+        .current-date { font-size: 14px; font-weight: 600; margin-bottom: 25px; color: var(--text-color); opacity: 0.8; }
+        
+        label { font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.7; margin-bottom: 5px; display: block; }
+        
+        input, select, textarea { 
+            width: 100%; padding: 12px; margin-bottom: 15px; 
+            border-radius: 8px; border: 2px solid var(--input-border); 
+            background: var(--card-bg); color: var(--text-color);
+            box-sizing: border-box; font-size: 14px; font-family: inherit;
+        }
+
+        button { border: none; border-radius: 8px; cursor: pointer; font-weight: 800; transition: all 0.3s; }
+        .btn-submit { background: var(--btn-submit); color: #fff; padding: 15px; font-size: 16px; width: 100%; }
+        .btn-excel { background: var(--btn-excel); color: white; padding: 10px; font-size: 13px; margin-top: 10px; width: 100%; }
+        .btn-reset { background: #ff4757; color: white; padding: 8px 15px; font-size: 11px; margin-top: 10px; align-self: flex-end; }
+        
+        #daftarAbsen { flex-grow: 1; overflow-y: auto; padding-right: 10px; }
+        .item-mhs {
+            background: var(--card-bg); margin-bottom: 12px; padding: 15px;
+            border-radius: 12px; display: flex; justify-content: space-between;
+            align-items: center; border: 1px solid var(--input-border);
+            border-left: 6px solid var(--btn-submit);
+        }
+
+        .badge { padding: 5px 12px; border-radius: 6px; font-size: 11px; color: white; font-weight: 800; text-transform: uppercase; }
+        
+        .toggle-container { position: absolute; top: 20px; right: 20px; }
+        .theme-btn { 
+            background: var(--text-color); color: var(--card-bg); padding: 10px 20px; 
+            border-radius: 10px; font-weight: bold; font-size: 12px;
+        }
+
+        .bg-hadir { background: #10ac84; }
+        .bg-izin { background: #f1c40f; }
+        .bg-sakit { background: #ee5253; }
+    </style>
+</head>
+<body data-theme="light">
+
+    <div class="toggle-container">
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 DARK MODE</button>
+    </div>
+
+    <div class="main-card">
+        <div class="left-panel">
+            <h2>ABSENSI</h2>
+            <div class="current-date" id="tanggalHariIni"></div>
+            
+            <label>NAMA SISWA</label>
+            <input type="text" id="nama" placeholder="Nama lengkap...">
+            <label>NOMOR ABSENSI</label>
+            <input type="number" id="no_absen" placeholder="Contoh: 1, 2, 3...">
+            <label>STATUS</label>
+            <select id="status">
+                <option value="" disabled selected>-- Pilih Status --</option>
+                <option value="Hadir">Hadir</option>
+                <option value="Izin">Izin</option>
+                <option value="Sakit">Sakit</option>
+            </select>
+            <label>KETERANGAN</label>
+            <textarea id="keterangan" placeholder="Keterangan (opsional)..."></textarea>
+
+            <button class="btn-submit" onclick="tambahAbsen()">TAMBAHKAN KE LIST</button>
+        </div>
+
+        <div class="right-panel">
+            <h3 style="margin:0 0 15px 0; font-weight: 800; font-size: 20px;">Daftar Hadir</h3>
+            <div id="daftarAbsen"></div>
+            
+            <button class="btn-excel" onclick="exportKeExcel()">📊 SIMPAN DATA KE EXCEL</button>
+            <button class="btn-reset" onclick="hapusSemua()">KOSONGKAN DAFTAR HADIR</button>
+        </div>
+    </div>
+
+<script>
+    let listAbsensi = [];
+
+    function updateTanggal() {
+        const d = new Date();
+        const tgl = String(d.getDate()).padStart(2, '0');
+        const bln = String(d.getMonth() + 1).padStart(2, '0');
+        const thn = d.getFullYear();
+        document.getElementById('tanggalHariIni').innerText = `Hari Ini: ${tgl}/${bln}/${thn}`;
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const isLight = body.getAttribute('data-theme') === 'light';
+        body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+        document.getElementById('themeBtn').innerText = isLight ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+    }
+
+    function tambahAbsen() {
+        const nama = document.getElementById('nama').value;
+        let noAbsenRaw = document.getElementById('no_absen').value;
+        const status = document.getElementById('status').value;
+        const ket = document.getElementById('keterangan').value || '-';
+        const tglFull = document.getElementById('tanggalHariIni').innerText.replace('Hari Ini: ', '');
+        const waktu = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+        if (!nama || !noAbsenRaw || !status) {
+            alert('Lengkapi data dulu!');
+            return;
+        }
+
+        // Trik Otomatis 01, 02, dst
+        const noAbsen = String(noAbsenRaw).padStart(2, '0');
+
+        listAbsensi.push({ nama, noAbsen, status, ket, full_waktu: `${tglFull} ${waktu}` });
+        tampilkanData();
+        
+        document.getElementById('nama').value = '';
+        document.getElementById('no_absen').value = '';
+        document.getElementById('status').selectedIndex = 0;
+        document.getElementById('keterangan').value = '';
+    }
+
+    function tampilkanData() {
+        const list = document.getElementById('daftarAbsen');
+        list.innerHTML = '';
+        [...listAbsensi].reverse().forEach((siswa) => {
+            let color = siswa.status === 'Hadir' ? 'bg-hadir' : (siswa.status === 'Izin' ? 'bg-izin' : 'bg-sakit');
+            list.innerHTML += `<div class="item-mhs">
+                <div style="width:70%">
+                    <div style="font-weight:600; font-size:16px">${siswa.nama}</div>
+                    <div style="font-size:12px; opacity:0.7">No: ${siswa.noAbsen} | ${siswa.full_waktu}</div>
+                </div>
+                <span class="badge ${color}">${siswa.status}</span>
+            </div>`;
+        });
+    }
+
+    function exportKeExcel() {
+        if (listAbsensi.length === 0) return alert('List kosong!');
+
+        let csvContent = "sep=,\nNama Siswa,Nomor Absensi,Waktu Lengkap,Status,Keterangan\n";
+        
+        listAbsensi.forEach(siswa => {
+            csvContent += `"${siswa.nama}","'${siswa.noAbsen}","${siswa.full_waktu}","${siswa.status}","${siswa.ket}"\n`;
+        });
+
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        
+        a.href = url;
+        a.download = `Rekap_Absensi_${new Date().getTime()}.csv`;
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    function hapusSemua() {
+        listAbsensi = [];
+        tampilkanData();
+    }
+
+    updateTanggal();
+</script>
+</body>
+</html>
