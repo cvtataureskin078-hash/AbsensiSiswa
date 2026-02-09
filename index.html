@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa</title>
+    <title>Absensi Siswa Pro</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
@@ -38,13 +38,17 @@
         .btn-csv { background: var(--green); color: white; padding: 12px; width: 100%; margin-top: 15px; }
         .btn-reset { background: var(--red); color: white; padding: 8px; width: 100%; margin-top: 8px; font-size: 11px; opacity: 0.9; }
         
-        #list { flex-grow: 1; overflow-y: auto; max-height: 400px; padding-right: 5px; min-height: 100px; }
+        #list { flex-grow: 1; overflow-y: auto; max-height: 350px; padding-right: 5px; min-height: 100px; }
         .item { background: var(--card); margin-bottom: 10px; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0,0,0,0.05); border-left: 5px solid var(--accent); animation: slideIn 0.3s ease; }
         
         .badge { padding: 5px 12px; border-radius: 7px; font-size: 10px; color: #fff; font-weight: 800; text-transform: uppercase; }
         .theme-toggle { position: absolute; top: 20px; right: 20px; background: #1e272e; color: #fff; padding: 8px 15px; font-size: 11px; border-radius: 8px; z-index: 10; }
         [data-theme="dark"] .theme-toggle { background: #f0f2f5; color: #1e272e; }
-        
+
+        .rekap-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; text-align: center; }
+        .rekap-item { font-size: 10px; font-weight: 800; }
+        .rekap-val { display: block; font-size: 16px; color: var(--accent); }
+
         @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
@@ -79,6 +83,13 @@
             <h3 style="margin-top:0; font-weight: 800;">Daftar Hadir</h3>
             <div id="list"></div>
             
+            <div class="rekap-container">
+                <div class="rekap-item">HADIR<span id="cHadir" class="rekap-val">0</span></div>
+                <div class="rekap-item">IZIN<span id="cIzin" class="rekap-val">0</span></div>
+                <div class="rekap-item">SAKIT<span id="cSakit" class="rekap-val">0</span></div>
+                <div class="rekap-item">ALFA<span id="cAlfa" class="rekap-val">0</span></div>
+            </div>
+
             <button class="btn-csv" onclick="ekspor()">📊 SIMPAN KE EXCEL (.CSV)</button>
             <button class="btn-reset" onclick="hapusSemua()">🗑️ KOSONGKAN DAFTAR HADIR</button>
         </div>
@@ -88,19 +99,12 @@
     var dataAbsen = [];
     try {
         var localData = localStorage.getItem('data_absen_siswa');
-        if (localData) {
-            dataAbsen = JSON.parse(localData);
-        }
-    } catch (e) {
-        console.error("Gagal mengambil data", e);
-    }
+        if (localData) { dataAbsen = JSON.parse(localData); }
+    } catch (e) { console.error(e); }
 
     function setTgl() {
         var d = new Date();
-        var tgl = String(d.getDate()).padStart(2, '0');
-        var bln = String(d.getMonth() + 1).padStart(2, '0');
-        var thn = d.getFullYear();
-        document.getElementById('tgl').innerText = "Hari Ini: " + tgl + "/" + bln + "/" + thn;
+        document.getElementById('tgl').innerText = "Hari Ini: " + String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
     }
 
     function toggleTheme() {
@@ -113,41 +117,36 @@
     function render() {
         var kontainer = document.getElementById('list');
         if(!kontainer) return;
-        
         kontainer.innerHTML = '';
+        
+        var count = {Hadir: 0, Izin: 0, Sakit: 0, Alfa: 0};
         var colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
         
         for (var i = dataAbsen.length - 1; i >= 0; i--) {
             var x = dataAbsen[i];
+            count[x.s]++; 
             var c = colors[x.s] || '#7f8c8d';
-            kontainer.innerHTML += '<div class="item">' +
-                '<div style="max-width: 70%;"><b>' + x.n + '</b><br><small>No: ' + x.noFix + ' | ' + x.jam + '</small></div>' +
-                '<span class="badge" style="background:' + c + '">' + x.s + '</span>' +
-            '</div>';
+            kontainer.innerHTML += '<div class="item"><div style="max-width: 70%;"><b>' + x.n + '</b><br><small>No: ' + x.noFix + ' | ' + x.jam + '</small></div><span class="badge" style="background:' + c + '">' + x.s + '</span></div>';
         }
-    }
 
-    function saveToStorage() {
-        localStorage.setItem('data_absen_siswa', JSON.stringify(dataAbsen));
+        document.getElementById('cHadir').innerText = count.Hadir;
+        document.getElementById('cIzin').innerText = count.Izin;
+        document.getElementById('cSakit').innerText = count.Sakit;
+        document.getElementById('cAlfa').innerText = count.Alfa;
     }
 
     function tambah() {
         var n = document.getElementById('nama').value;
         var nr = document.getElementById('no').value;
         var s = document.getElementById('stat').value;
-        
-        if(!n || !nr || !s) {
-            alert("Mohon lengkapi Nama, Nomor, dan Pilih Status!");
-            return;
-        }
+        if(!n || !nr || !s) return alert("Lengkapi data!");
 
         var noFix = String(nr).padStart(2, '0');
-        var tglFull = document.getElementById('tgl').innerText.replace('Hari Ini: ', '');
         var waktu = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+        var tglFull = document.getElementById('tgl').innerText.replace('Hari Ini: ', '');
 
         dataAbsen.push({ n: n, noFix: noFix, s: s, jam: tglFull + " " + waktu });
-        
-        saveToStorage();
+        localStorage.setItem('data_absen_siswa', JSON.stringify(dataAbsen));
         render();
         
         document.getElementById('nama').value = '';
@@ -156,7 +155,7 @@
     }
 
     function ekspor() {
-        if(dataAbsen.length === 0) return alert("Belum ada data!");
+        if(dataAbsen.length === 0) return alert("Data kosong!");
         var csv = "sep=,\nNama,No Absen,Waktu,Status\n";
         for (var i = 0; i < dataAbsen.length; i++) {
             var x = dataAbsen[i];
@@ -175,11 +174,7 @@
         render();
     }
 
-    window.onload = function() {
-        setTgl();
-        render();
-    };
+    window.onload = function() { setTgl(); render(); };
 </script>
 </body>
 </html>
-
