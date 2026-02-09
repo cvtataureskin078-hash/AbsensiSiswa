@@ -31,8 +31,7 @@
         .date { font-size: 14px; margin-bottom: 20px; opacity: 0.7; font-weight: 600; }
         
         label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; display: block; opacity: 0.6; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 2px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; font-size: 14px; outline: none; transition: 0.2s; }
-        input:focus, select:focus { border-color: var(--accent); }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 2px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; font-size: 14px; outline: none; }
         
         button { border: none; border-radius: 10px; cursor: pointer; font-weight: 800; transition: 0.3s; }
         .btn-add { background: var(--accent); color: #fff; padding: 15px; width: 100%; font-size: 16px; margin-bottom: 5px; }
@@ -43,13 +42,15 @@
         .item { background: var(--card); margin-bottom: 10px; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0,0,0,0.05); border-left: 5px solid var(--accent); animation: slideIn 0.3s ease; }
         
         .badge { padding: 5px 12px; border-radius: 7px; font-size: 10px; color: #fff; font-weight: 800; text-transform: uppercase; }
-        .theme-toggle { position: absolute; top: 20px; right: 20px; background: #1e272e; color: #fff; padding: 8px 15px; font-size: 11px; border-radius: 8px; z-index: 10; border: 1px solid rgba(255,255,255,0.1); }
+        .theme-toggle { position: absolute; top: 20px; right: 20px; background: #1e272e; color: #fff; padding: 8px 15px; font-size: 11px; border-radius: 8px; z-index: 10; }
         [data-theme="dark"] .theme-toggle { background: #f0f2f5; color: #1e272e; }
         
         @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
-<body data-theme="light"> <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙 DARK MODE</button>
+<body data-theme="light">
+
+    <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙 DARK MODE</button>
 
     <div class="main-card">
         <div class="left-panel">
@@ -84,7 +85,7 @@
     </div>
 
 <script>
-    let dataAbsen = [];
+    let dataAbsen = JSON.parse(localStorage.getItem('data_absen_siswa')) || [];
 
     function setTgl() {
         const d = new Date();
@@ -115,6 +116,9 @@
         const waktu = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
 
         dataAbsen.push({ n, noFix, s, jam: `${tglFull} ${waktu}` });
+        
+        // 2. SIMPAN KE STORAGE
+        saveToStorage();
         render();
         
         document.getElementById('nama').value = '';
@@ -122,18 +126,16 @@
         document.getElementById('stat').selectedIndex = 0;
     }
 
+    function saveToStorage() {
+        localStorage.setItem('data_absen_siswa', JSON.stringify(dataAbsen));
+    }
+
     function render() {
         const kontainer = document.getElementById('list');
         kontainer.innerHTML = '';
         [...dataAbsen].reverse().forEach(x => {
-            const colors = {
-                'Hadir': '#10ac84',
-                'Izin': '#f1c40f',
-                'Sakit': '#e67e22',
-                'Alfa': '#ee5253'
-            };
+            const colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
             const c = colors[x.s] || '#7f8c8d';
-            
             kontainer.innerHTML += `<div class="item">
                 <div style="max-width: 70%;"><b>${x.n}</b><br><small>No: ${x.noFix} | ${x.jam}</small></div>
                 <span class="badge" style="background:${c}">${x.s}</span>
@@ -157,11 +159,13 @@
     function hapusSemua() {
         if(confirm("Yakin ingin menghapus semua daftar?")) {
             dataAbsen = [];
+            localStorage.removeItem('data_absen_siswa');
             render();
         }
     }
 
     setTgl();
+    render();
 </script>
 </body>
 </html>
