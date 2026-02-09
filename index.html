@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa</title>
+    <title>Absensi Siswa Pro</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
@@ -85,6 +85,7 @@
     </div>
 
 <script>
+    // Load data awal
     let dataAbsen = JSON.parse(localStorage.getItem('data_absen_siswa')) || [];
 
     function setTgl() {
@@ -107,8 +108,9 @@
         const nr = document.getElementById('no').value;
         const s = document.getElementById('stat').value;
         
-        if(!n || !nr || s === "") {
-            return alert("Mohon lengkapi Nama, Nomor, dan Pilih Status!");
+        if(!n || !nr || !s) {
+            alert("Mohon lengkapi Nama, Nomor, dan Pilih Status!");
+            return;
         }
 
         const noFix = String(nr).padStart(2, '0');
@@ -117,10 +119,10 @@
 
         dataAbsen.push({ n, noFix, s, jam: `${tglFull} ${waktu}` });
         
-        // 2. SIMPAN KE STORAGE
         saveToStorage();
         render();
         
+        // Reset form input
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
         document.getElementById('stat').selectedIndex = 0;
@@ -157,15 +159,15 @@
     }
 
     function hapusSemua() {
-          dataAbsen = [];
-          localStorage.removeItem('data_absen_siswa');
-          render();
-       }
+        // Langsung hapus total tanpa pop-up tanya-tanya
+        dataAbsen = [];
+        localStorage.removeItem('data_absen_siswa');
+        render();
     }
 
+    // Jalankan pertama kali
     setTgl();
     render();
 </script>
 </body>
 </html>
-
