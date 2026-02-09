@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa Pro</title>
+    <title>Absensi Siswa</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; }
-        [data-theme="dark"] { --bg: #0a0a0a; --card: #1e1e1e; --text: #ffffff; --accent: #4d3df2; --green: #14bd91; }
+        :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
+        [data-theme="dark"] { --bg: #0a0a0a; --card: #1e1e1e; --text: #ffffff; --accent: #4d3df2; --green: #14bd91; --red: #ff5252; }
         
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; }
         
-        /* DESAIN UTAMA */
         .main-card { 
             background: var(--card); width: 100%; max-width: 950px; min-height: 580px; 
             display: flex; border-radius: 20px; border: 1px solid rgba(0,0,0,0.1); 
@@ -21,12 +20,10 @@
         .left-panel { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
         .right-panel { flex: 1.2; padding: 40px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; }
         
-        /* RESPONSIVE UNTUK HP */
         @media (max-width: 768px) {
             .main-card { flex-direction: column; height: auto; min-height: unset; margin: 10px 0; }
             .left-panel, .right-panel { padding: 25px; border-left: none; }
             .right-panel { border-top: 1px solid rgba(0,0,0,0.1); }
-            h2 { font-size: 22px; }
         }
 
         h2 { margin: 0; font-weight: 800; text-transform: uppercase; font-size: 26px; letter-spacing: -1px; }
@@ -36,18 +33,23 @@
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 2px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; font-size: 14px; }
         
         button { border: none; border-radius: 10px; cursor: pointer; font-weight: 800; transition: 0.3s; }
-        .btn-add { background: var(--accent); color: #fff; padding: 15px; width: 100%; font-size: 16px; box-shadow: 0 4px 15px rgba(72, 52, 212, 0.3); }
-        .btn-csv { background: var(--green); color: white; padding: 12px; width: 100%; margin-top: 10px; }
+        .btn-add { background: var(--accent); color: #fff; padding: 15px; width: 100%; font-size: 16px; margin-bottom: 5px; }
+        .btn-csv { background: var(--green); color: white; padding: 12px; width: 100%; margin-top: 15px; }
+        .btn-reset { background: var(--red); color: white; padding: 8px; width: 100%; margin-top: 8px; font-size: 11px; opacity: 0.9; }
+        .btn-reset:hover { opacity: 1; transform: scale(0.98); }
         
-        #list { flex-grow: 1; overflow-y: auto; max-height: 400px; padding-right: 5px; }
+        #list { flex-grow: 1; overflow-y: auto; max-height: 400px; padding-right: 5px; min-height: 100px; }
         .item { background: var(--card); margin-bottom: 10px; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0,0,0,0.05); border-left: 5px solid var(--accent); animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
         
         .badge { padding: 5px 12px; border-radius: 7px; font-size: 10px; color: #fff; font-weight: 800; text-transform: uppercase; }
         .theme-toggle { position: absolute; top: 20px; right: 20px; background: var(--text); color: var(--card); padding: 8px 15px; font-size: 11px; border-radius: 8px; z-index: 10; }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
-<body data-theme="dark"> <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">☀️ LIGHT MODE</button>
+<body data-theme="dark">
+
+    <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">☀️ LIGHT MODE</button>
 
     <div class="main-card">
         <div class="left-panel">
@@ -73,7 +75,9 @@
         <div class="right-panel">
             <h3 style="margin-top:0; font-weight: 800;">Daftar Hadir</h3>
             <div id="list"></div>
+            
             <button class="btn-csv" onclick="ekspor()">📊 SIMPAN KE EXCEL (.CSV)</button>
+            <button class="btn-reset" onclick="hapusSemua()">🗑️ KOSONGKAN DAFTAR HADIR</button>
         </div>
     </div>
 
@@ -136,6 +140,13 @@
         link.href = URL.createObjectURL(blob);
         link.download = `Rekap_Absen_${new Date().getTime()}.csv`;
         link.click();
+    }
+
+    function hapusSemua() {
+        if(confirm("Yakin ingin menghapus semua daftar?")) {
+            dataAbsen = [];
+            render();
+        }
     }
 
     setTgl();
