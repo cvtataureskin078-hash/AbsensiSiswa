@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Wajah & Foto</title>
+    <title>Absensi Kamera Simpel</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
-        [data-theme="dark"] { --bg: #0a0a0a; --card: #1e1e1e; --text: #ffffff; --accent: #4d3df2; --green: #14bd91; --red: #ff5252; }
         
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; }
         
@@ -22,19 +21,22 @@
         
         @media (max-width: 850px) { .main-card { flex-direction: column; } }
 
+        /* Kamera Tanpa Bingkai */
         #cam-box {
             width: 100%; height: 240px; background: #000; border-radius: 15px; 
-            overflow: hidden; position: relative; margin-bottom: 15px; border: 3px solid var(--accent);
+            overflow: hidden; position: relative; margin-bottom: 15px;
         }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         canvas { display: none; }
 
         .input-group { margin-bottom: 10px; }
         label { font-size: 11px; font-weight: 700; display: block; margin-bottom: 5px; opacity: 0.7; }
-        input, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-family: inherit; outline: none; }
+        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-family: inherit; outline: none; }
         
         button { border: none; border-radius: 10px; cursor: pointer; font-weight: 800; padding: 12px; width: 100%; transition: 0.3s; }
         .btn-cam { background: #2f3542; color: white; margin-bottom: 10px; }
+        .btn-cam.active { background: var(--red); } /* Warna merah kalau mau matiin */
+        
         .btn-add { background: var(--accent); color: white; font-size: 16px; }
         .btn-csv { background: var(--green); color: white; margin-top: 15px; }
         .btn-reset { background: var(--red); color: white; margin-top: 8px; font-size: 11px; }
@@ -45,7 +47,7 @@
             display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05);
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .foto-hasil { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 2px solid var(--accent); }
+        .foto-hasil { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
         .info { flex-grow: 1; font-size: 12px; }
         .badge { padding: 4px 8px; border-radius: 5px; color: #fff; font-size: 9px; font-weight: 800; }
     </style>
@@ -54,25 +56,25 @@
 
     <div class="main-card">
         <div class="left-panel">
-            <h2 style="margin:0;">FACE CAPTURE</h2>
-            <p id="status" style="font-size: 12px; color: var(--red); margin-bottom: 15px;">● KAMERA MATI</p>
+            <h2 style="margin:0;">ABSENSI CAMERA</h2>
+            <p id="status" style="font-size: 12px; color: var(--red); margin-bottom: 15px;">● KAMERA NONAKTIF</p>
             
             <div id="cam-box">
                 <video id="video" autoplay muted playsinline></video>
             </div>
             <canvas id="canvas"></canvas>
 
-            <button class="btn-cam" onclick="startCam()">📸 NYALAKAN KAMERA</button>
+            <button id="camBtn" class="btn-cam" onclick="toggleCam()">📸 NYALAKAN KAMERA</button>
             
             <div class="input-group">
                 <label>NAMA SISWA</label>
-                <input type="text" id="nama" placeholder="Nama lengkap...">
+                <input type="text" id="nama" placeholder="Ketik nama...">
             </div>
             
             <div style="display: flex; gap: 10px;" class="input-group">
                 <div style="flex: 1;">
                     <label>NO ABSEN</label>
-                    <input type="number" id="no" placeholder="01">
+                    <input type="number" id="no" placeholder="...">
                 </div>
                 <div style="flex: 2;">
                     <label>STATUS</label>
@@ -86,7 +88,7 @@
                 </div>
             </div>
             
-            <button class="btn-add" onclick="tambah()">SIMPAN & FOTO</button>
+            <button class="btn-add" onclick="tambah()">SIMPAN DATA</button>
         </div>
 
         <div class="right-panel">
@@ -98,18 +100,37 @@
     </div>
 
 <script>
-    var dataAbsen = JSON.parse(localStorage.getItem('absen_foto_data')) || [];
+    var dataAbsen = JSON.parse(localStorage.getItem('absen_cam_v4')) || [];
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
+    var streamLocal = null;
 
-    function startCam() {
-        navigator.mediaDevices.getUserMedia({ video: { width: 400, height: 300 } })
-        .then(function(stream) {
-            video.srcObject = stream;
-            document.getElementById('status').innerText = "● KAMERA AKTIF";
-            document.getElementById('status').style.color = "var(--green)";
-        })
-        .catch(function(err) { alert("Izin kamera ditolak!"); });
+    function toggleCam() {
+        var btn = document.getElementById('camBtn');
+        var statText = document.getElementById('status');
+
+        if (!streamLocal) {
+            // Nyalakan Kamera
+            navigator.mediaDevices.getUserMedia({ video: { width: 400, height: 300 } })
+            .then(function(stream) {
+                streamLocal = stream;
+                video.srcObject = stream;
+                btn.innerText = "🛑 MATIKAN KAMERA";
+                btn.classList.add('active');
+                statText.innerText = "● KAMERA AKTIF";
+                statText.style.color = "var(--green)";
+            })
+            .catch(function(err) { alert("Akses kamera ditolak!"); });
+        } else {
+            // Matikan Kamera
+            streamLocal.getTracks().forEach(track => track.stop());
+            video.srcObject = null;
+            streamLocal = null;
+            btn.innerText = "📸 NYALAKAN KAMERA";
+            btn.classList.remove('active');
+            statText.innerText = "● KAMERA NONAKTIF";
+            statText.style.color = "var(--red)";
+        }
     }
 
     function tambah() {
@@ -117,34 +138,27 @@
         var nr = document.getElementById('no').value;
         var s = document.getElementById('stat').value;
 
-        // Validasi ketat supaya status tidak kosong
-        if(!n || !nr || s === "" || s === null) {
-            alert("Harap isi Nama, Nomor, dan Pilih Status!");
-            return;
-        }
+        if(!n || !nr || s === "") return alert("Lengkapi Nama, Nomor, dan Status!");
 
-        if(!video.srcObject) {
-            alert("Nyalakan kamera dulu!");
-            return;
+        // Ambil foto kalau kamera nyala, kalau mati pake gambar kosong
+        var fotoData = "https://via.placeholder.com/150?text=No+Photo";
+        if (streamLocal) {
+            canvas.width = 150;
+            canvas.height = 110;
+            var ctx = canvas.getContext('2d');
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            fotoData = canvas.toDataURL('image/jpeg', 0.7);
         }
-
-        canvas.width = 150;
-        canvas.height = 110;
-        var ctx = canvas.getContext('2d');
-        ctx.translate(canvas.width, 0);
-        ctx.scale(-1, 1);
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        var fotoData = canvas.toDataURL('image/jpeg', 0.7);
 
         var tgl = new Date();
         var jam = tgl.getHours().toString().padStart(2, '0') + ":" + tgl.getMinutes().toString().padStart(2, '0');
         
-        dataAbsen.push({ n: n, no: nr.padStart(2, '0'), s: s, jam: jam, img: fotoData });
-        localStorage.setItem('absen_foto_data', JSON.stringify(dataAbsen));
+        dataAbsen.push({ n: n, no: nr, s: s, jam: jam, img: fotoData });
+        localStorage.setItem('absen_cam_v4', JSON.stringify(dataAbsen));
         
         render();
-        
-        // Form reset ke default
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
         document.getElementById('stat').selectedIndex = 0;
@@ -162,7 +176,7 @@
                     <img src="${x.img}" class="foto-hasil">
                     <div class="info">
                         <b>${x.n}</b><br>
-                        No: ${x.no} | Pukul ${x.jam}
+                        No: ${x.no} | Jam: ${x.jam}
                     </div>
                     <span class="badge" style="background:${colors[x.s]}">${x.s}</span>
                 </div>`;
@@ -176,13 +190,13 @@
         var blob = new Blob(["\uFEFF" + csv], { type: 'text/csv' });
         var link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "Absen_Wajah_Fix.csv";
+        link.download = "Data_Absensi.csv";
         link.click();
     }
 
     function hapusSemua() {
         dataAbsen = [];
-        localStorage.removeItem('absen_foto_data');
+        localStorage.removeItem('absen_cam_v4');
         render();
     }
 
