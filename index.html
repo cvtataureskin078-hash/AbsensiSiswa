@@ -54,10 +54,10 @@
         .btn-reset { background: var(--red); color: white; margin-top: 10px; font-size: 11px; padding: 10px; }
 
         #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
-        .item { background: var(--card); padding: 12px; margin-bottom: 10px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); }
-        .foto-hasil { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; }
+        .item { background: var(--card); padding: 15px; margin-bottom: 12px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); }
+        .foto-hasil { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; border: 2px solid var(--accent); }
         .info { flex-grow: 1; font-size: 12px; line-height: 1.6; }
-        .badge { padding: 5px 10px; border-radius: 8px; color: #fff; font-size: 10px; font-weight: 800; }
+        .badge { padding: 6px 12px; border-radius: 8px; color: #fff; font-size: 10px; font-weight: 800; }
     </style>
 </head>
 <body data-theme="light">
@@ -80,14 +80,14 @@
             <input type="text" id="nama" placeholder="Masukkan nama lengkap...">
             
             <div style="display: flex; gap: 10px;">
-                <div style="flex: 1;">
+                <div style="flex: 2;">
                     <label>NOMOR ABSENSI</label>
                     <input type="text" id="no" placeholder="Masukan nomor absensi..." oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 </div>
-                <div style="flex: 1.5;">
+                <div style="flex: 1;">
                     <label>STATUS</label>
                     <select id="stat">
-                        <option value="" selected disabled>-- Pilih Status --</option>
+                        <option value="" selected disabled>--</option>
                         <option value="Hadir">Hadir</option>
                         <option value="Izin">Izin</option>
                         <option value="Sakit">Sakit</option>
