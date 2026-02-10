@@ -51,7 +51,9 @@
         .btn-cam.active { background: var(--red); }
         .btn-add { background: var(--accent); color: white; font-size: 16px; height: 55px; box-shadow: 0 4px 12px rgba(72, 52, 212, 0.2); }
         .btn-csv { background: var(--green); color: white; margin-top: 15px; }
-        .btn-reset { background: transparent; color: var(--red); margin-top: 10px; font-size: 11px; padding: 10px; text-decoration: underline; }
+        
+        /* TOMBOL RESET KEMBALI ADA BACKGROUND MERAH */
+        .btn-reset { background: var(--red); color: white; margin-top: 10px; font-size: 11px; padding: 10px; }
 
         #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
         .item { background: var(--card); padding: 12px; margin-bottom: 10px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); }
@@ -82,7 +84,7 @@
             <div style="display: flex; gap: 10px;">
                 <div style="flex: 1;">
                     <label>NOMOR ABSENSI</label>
-                    <input type="number" id="no" placeholder="..." min="1" oninput="validasiNo(this)">
+                    <input type="number" id="no" placeholder="Ketik nomor.." oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : ''">
                 </div>
                 <div style="flex: 1.5;">
                     <label>STATUS</label>
@@ -112,10 +114,6 @@
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
     var aliranKamera = null;
-
-    function validasiNo(input) {
-        if (input.value < 1) input.value = '';
-    }
 
     function pasangTema(pilihan) {
         document.body.setAttribute('data-theme', pilihan);
