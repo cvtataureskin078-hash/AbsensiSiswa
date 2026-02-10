@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Pro Camera</title>
+    <title>Absensi Siswa</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
@@ -61,7 +61,7 @@
 
     <div class="main-card">
         <div class="left-panel">
-            <h2 style="margin:0; font-weight: 800;">ABSENSI CAMERA</h2>
+            <h2 style="margin:0; font-weight: 800;">ABSENSI SISWA</h2>
             <div class="date-header" id="tglDisplay"></div>
             
             <div id="cam-box">
@@ -69,7 +69,7 @@
             </div>
             <canvas id="canvas"></canvas>
 
-            <button id="camBtn" class="btn-cam" onclick="toggleCam()">📸 NYALAKAN KAMERA</button>
+            <button id="camBtn" class="btn-cam" onclick="toggleCam()">NYALAKAN KAMERA</button>
             
             <label>NAMA SISWA</label>
             <input type="text" id="nama" placeholder="Ketik nama lengkap...">
@@ -95,10 +95,10 @@
         </div>
 
         <div class="right-panel">
-            <h3 style="margin:0; font-weight: 800;">Log Kehadiran</h3>
+            <h3 style="margin:0; font-weight: 800;">DAFTAR HADIR</h3>
             <div id="list"></div>
-            <button class="btn-csv" onclick="ekspor()">📊 EKSPOR LAPORAN (FOTO)</button>
-            <button class="btn-reset" onclick="hapusSemua()">🗑️ KOSONGKAN LIST</button>
+            <button class="btn-csv" onclick="ekspor()">EKSPOR DAFTAR HADIR</button>
+            <button class="btn-reset" onclick="hapusSemua()">KOSONGKAN DAFTAR HADIR</button>
         </div>
     </div>
 
@@ -139,7 +139,7 @@
             .then(function(stream) {
                 streamLocal = stream;
                 video.srcObject = stream;
-                btn.innerText = "🛑 MATIKAN KAMERA";
+                btn.innerText = "MATIKAN KAMERA";
                 btn.classList.add('active');
             }).catch(function(err) { alert("Izin kamera ditolak!"); });
         } else {
@@ -228,3 +228,4 @@
 </script>
 </body>
 </html>
+
