@@ -7,7 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
-        [data-theme="dark"] { --bg: #0a0a0a; --card: #1e1e1e; --text: #ffffff; --accent: #4d3df2; --green: #14bd91; --red: #ff5252; }
+        [data-theme="dark"] { --bg: #0a0a0a; --card: #1e1e1e; --text: #ffffff; --accent: #4d3df2; --green: #10ac84; --red: #ff4757; }
         
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; transition: 0.3s; }
         
@@ -57,7 +57,7 @@
         .item { background: var(--card); padding: 15px; margin-bottom: 12px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); }
         .foto-hasil { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; border: 1px solid #000; }
         .info { flex-grow: 1; font-size: 12px; line-height: 1.6; }
-        .badge { padding: 6px 12px; border-radius: 8px; color: #fff; font-size: 10px; font-weight: 800; }
+        .badge { padding: 8px 15px; border-radius: 8px; color: #fff; font-size: 11px; font-weight: 800; text-align: center; min-width: 70px; }
     </style>
 </head>
 <body data-theme="light">
@@ -112,6 +112,14 @@
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
     var aliranKamera = null;
+
+    // WARNA ASLI KEMBALI
+    const DAFTAR_WARNA = {
+        'HADIR': '#10ac84', // Hijau
+        'IZIN': '#f1c40f',  // Kuning
+        'SAKIT': '#e67e22', // Oranye
+        'ALFA': '#ee5253'   // Merah
+    };
 
     function pasangTema(pilihan) {
         document.body.setAttribute('data-theme', pilihan);
@@ -181,8 +189,8 @@
     function render() {
         var tempatList = document.getElementById('list');
         tempatList.innerHTML = '';
-        var warnaLabel = {'HADIR': '#10ac84', 'IZIN': '#f1c40f', 'SAKIT': '#e67e22', 'ALFA': '#ee5253'};
         dataLokal.slice().reverse().forEach(item => {
+            const warna = DAFTAR_WARNA[item.s] || '#333';
             tempatList.innerHTML += `
                 <div class="item">
                     <img src="${item.img}" class="foto-hasil">
@@ -192,14 +200,13 @@
                         TANGGAL: ${item.tgl}<br>
                         PUKUL: ${item.jam}
                     </div>
-                    <span class="badge" style="background:${warnaLabel[item.s] || '#333'}">${item.s}</span>
+                    <span class="badge" style="background:${warna}">${item.s}</span>
                 </div>`;
         });
     }
 
     function ekspor() {
         if(dataLokal.length === 0) return;
-        const warnaBadge = { 'HADIR': '#10ac84', 'IZIN': '#f1c40f', 'SAKIT': '#e67e22', 'ALFA': '#ee5253' };
         
         let html = `
         <html>
@@ -213,7 +220,7 @@
                 .header p { margin: 5px 0 10px 0; font-size: 13px; font-weight: 600; opacity: 0.8; }
                 table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; border: 1px solid #ddd; }
                 th { background-color: #4834d4 !important; color: white !important; padding: 15px 5px; text-align: center; font-size: 14px; font-weight: 800; border: 1px solid #4834d4; }
-                td { padding: 10px; border: 1px solid #ddd; font-size: 14px; font-weight: 600; vertical-align: middle; text-align: center; word-wrap: break-word; }
+                td { padding: 10px; border: 1px solid #ddd; font-size: 14px; font-weight: 600; vertical-align: middle; text-align: center; }
                 tr:nth-child(even) { background-color: #f8f9fa !important; }
                 .foto { width: 100px; height: 100px; border-radius: 10px; object-fit: cover; border: 2px solid #1e272e; display: inline-block; }
                 .status-chip { padding: 8px 15px; border-radius: 5px; color: white !important; font-weight: 800; font-size: 12px; display: inline-block; }
@@ -229,7 +236,7 @@
                 <thead>
                     <tr>
                         <th style="width: 120px;">FOTO</th>
-                        <th style="width: 140px;">NOMOR ABSENSI</th>
+                        <th style="width: 150px;">NOMOR ABSENSI</th>
                         <th>NAMA SISWA</th>
                         <th style="width: 120px;">TANGGAL</th>
                         <th style="width: 100px;">WAKTU</th>
@@ -240,6 +247,7 @@
 
         dataLokal.forEach(item => {
             const st = item.s.toUpperCase();
+            const warna = DAFTAR_WARNA[st] || '#333';
             html += `
                 <tr>
                     <td><img src="${item.img}" class="foto"></td>
@@ -247,7 +255,7 @@
                     <td style="font-size: 16px;">${item.n}</td>
                     <td>${item.tgl}</td>
                     <td>${item.jam}</td>
-                    <td><span class="status-chip" style="background-color: ${warnaBadge[st] || '#333'} !important;">${st}</span></td>
+                    <td><span class="status-chip" style="background-color: ${warna} !important;">${st}</span></td>
                 </tr>`;
         });
 
