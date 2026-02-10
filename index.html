@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa - Minimalis</title>
+    <title>Absensi Siswa - Versi Final</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
@@ -11,62 +11,57 @@
         
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; transition: 0.3s; }
         
-        /* Ukuran kartu diperkecil */
         .main-card { 
-            background: var(--card); width: 100%; max-width: 900px; 
+            background: var(--card); width: 100%; max-width: 850px; 
             display: flex; border-radius: 16px; color: var(--text); 
             position: relative; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: 0.3s;
         }
 
         .theme-toggle { 
-            position: absolute !important; top: 15px !important; right: 15px !important; width: auto !important;
-            padding: 6px 14px !important; border-radius: 50px; display: flex; align-items: center; gap: 6px;
-            cursor: pointer; border: none; font-size: 10px; font-weight: 800; z-index: 1000;
-            white-space: nowrap; transform: scale(1); transform-origin: right top;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.2s;
+            position: absolute !important; top: 12px !important; right: 12px !important; width: auto !important;
+            padding: 5px 12px !important; border-radius: 50px; display: flex; align-items: center; gap: 5px;
+            cursor: pointer; border: none; font-size: 9px; font-weight: 800; z-index: 1000;
+            white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.2s;
         }
 
         [data-theme="light"] .theme-toggle { background: #1e272e; color: #ffffff; }
         [data-theme="dark"] .theme-toggle { background: #ffffff; color: #1e272e; }
 
-        /* Padding dikurangi agar lebih compact */
-        .left-panel { flex: 1.1; padding: 25px; }
-        .right-panel { flex: 1; padding: 25px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); border-radius: 0 16px 16px 0; display: flex; flex-direction: column; }
+        .left-panel { flex: 1.1; padding: 20px 25px; }
+        .right-panel { flex: 1; padding: 20px 25px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); border-radius: 0 16px 16px 0; display: flex; flex-direction: column; }
         
-        @media (max-width: 850px) { 
-            .main-card { flex-direction: column; margin-top: 10px; } 
+        @media (max-width: 800px) { 
+            .main-card { flex-direction: column; } 
             .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); border-radius: 0 0 16px 16px; } 
             .left-panel { padding: 40px 15px 20px 15px; }
         }
 
-        .date-header { font-size: 12px; opacity: 0.7; font-weight: 600; margin-bottom: 12px; }
-        
-        /* Tinggi kamera diperpendek */
-        #cam-box { width: 100%; height: 200px; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
+        .date-header { font-size: 11px; opacity: 0.7; font-weight: 600; margin-bottom: 10px; }
+        #cam-box { width: 100%; height: 180px; background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 10px; border: 2px solid var(--accent); }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         canvas { display: none; }
 
-        label { font-size: 10px; font-weight: 700; display: block; margin-bottom: 4px; opacity: 0.7; }
-        input, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; margin-bottom: 12px; outline: none; font-size: 13px; }
+        label { font-size: 9px; font-weight: 700; display: block; margin-bottom: 3px; opacity: 0.7; }
+        input, select { width: 100%; padding: 9px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; margin-bottom: 10px; outline: none; font-size: 12px; }
         
-        button { border: none; border-radius: 10px; cursor: pointer; font-weight: 800; padding: 12px; width: 100%; transition: 0.3s; font-size: 13px; }
-        .btn-cam { background: #2f3542; color: white; margin-bottom: 8px; font-size: 11px; padding: 10px; }
+        button { border: none; border-radius: 8px; cursor: pointer; font-weight: 800; padding: 10px; width: 100%; transition: 0.3s; font-size: 12px; }
+        .btn-cam { background: #2f3542; color: white; margin-bottom: 8px; font-size: 10px; }
         .btn-cam.active { background: var(--red); }
-        .btn-add { background: var(--accent); color: white; font-size: 14px; height: 50px; box-shadow: 0 4px 10px rgba(72, 52, 212, 0.2); }
-        .btn-csv { background: var(--green); color: white; margin-top: 12px; }
-        .btn-reset { background: var(--red); color: white; margin-top: 8px; font-size: 10px; padding: 8px; }
+        .btn-add { background: var(--accent); color: white; font-size: 13px; height: 45px; box-shadow: 0 4px 10px rgba(72, 52, 212, 0.2); }
+        .btn-csv { background: var(--green); color: white; margin-top: 10px; }
+        .btn-reset { background: var(--red); color: white; margin-top: 6px; font-size: 9px; padding: 6px; }
 
-        #list { flex-grow: 1; overflow-y: auto; max-height: 350px; margin-top: 10px; }
-        .item { background: var(--card); padding: 12px; margin-bottom: 10px; border-radius: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05); }
-        .foto-hasil { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 1px solid #000; }
-        .info { flex-grow: 1; font-size: 11px; line-height: 1.5; }
-        .badge { padding: 5px 10px; border-radius: 6px; color: #fff; font-size: 9px; font-weight: 800; text-align: center; min-width: 60px; }
+        #list { flex-grow: 1; overflow-y: auto; max-height: 320px; margin-top: 5px; }
+        .item { background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .foto-hasil { width: 55px; height: 55px; border-radius: 6px; object-fit: cover; border: 1.5px solid var(--text); }
+        .info { flex-grow: 1; font-size: 10px; line-height: 1.4; }
+        .badge { padding: 4px 8px; border-radius: 5px; color: #fff; font-size: 9px; font-weight: 800; text-align: center; min-width: 55px; }
     </style>
 </head>
 <body data-theme="light">
 
     <div class="main-card">
-        <button class="theme-toggle" onclick="gantiTema()" id="tBtn">🌙 DARK MODE</button>
+        <button class="theme-toggle" onclick="gantiTema()" id="tBtn">🌙 DARK</button>
 
         <div class="left-panel">
             <h3 style="margin:0; font-weight: 800; letter-spacing: -0.5px;">ABSENSI SISWA</h3>
@@ -80,17 +75,17 @@
             <button id="camBtn" class="btn-cam" onclick="nyalainKamera()">AKTIFKAN KAMERA</button>
             
             <label>NAMA LENGKAP</label>
-            <input type="text" id="nama" placeholder="NAMA..." style="text-transform: uppercase;">
+            <input type="text" id="nama" placeholder="Masukkan Nama..." style="text-transform: uppercase;">
             
             <div style="display: flex; gap: 8px;">
-                <div style="flex: 1.2;">
-                    <label>NO ABSENSI</label>
-                    <input type="text" id="no" placeholder="00" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-                </div>
                 <div style="flex: 1;">
+                    <label>NO ABSENSI</label>
+                    <input type="text" id="no" placeholder="00" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                </div>
+                <div style="flex: 1.2;">
                     <label>STATUS</label>
                     <select id="stat">
-                        <option value="" selected disabled>- PILIH -</option>
+                        <option value="" selected disabled>- PILIH STATUS -</option>
                         <option value="HADIR">HADIR</option>
                         <option value="IZIN">IZIN</option>
                         <option value="SAKIT">SAKIT</option>
@@ -106,7 +101,7 @@
             <h4 style="margin:0; font-weight: 800;">DAFTAR HADIR</h4>
             <div id="list"></div>
             <button class="btn-csv" onclick="ekspor()">EKSPOR LAPORAN</button>
-            <button class="btn-reset" onclick="hapusSemua()">KOSONGKAN</button>
+            <button class="btn-reset" onclick="hapusSemua()">KOSONGKAN DATA</button>
         </div>
     </div>
 
@@ -153,7 +148,7 @@
             .then(function(s) {
                 aliranKamera = s; video.srcObject = s;
                 btn.innerText = "MATIKAN KAMERA"; btn.classList.add('active');
-            }).catch(function(e) { });
+            }).catch(function(e) { alert("Akses kamera ditolak!"); });
         } else {
             aliranKamera.getTracks().forEach(t => t.stop());
             video.srcObject = null; aliranKamera = null;
@@ -165,17 +160,17 @@
         var n = document.getElementById('nama').value;
         var nr = document.getElementById('no').value;
         var s = document.getElementById('stat').value;
-        if(!n || !nr || !s) return;
+        if(!n || !nr || !s) { alert("Lengkapi data!"); return; }
 
         var noAbsen = nr.toString().padStart(2, '0');
         var gambar = "https://via.placeholder.com/150?text=No+Photo";
 
         if (aliranKamera) {
-            canvas.width = 150; canvas.height = 110;
+            canvas.width = 320; canvas.height = 240;
             var ctx = canvas.getContext('2d');
             ctx.translate(canvas.width, 0); ctx.scale(-1, 1);
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            gambar = canvas.toDataURL('image/jpeg', 0.7);
+            gambar = canvas.toDataURL('image/jpeg', 0.8);
         }
 
         var d = new Date();
@@ -197,8 +192,9 @@
                 <div class="item">
                     <img src="${item.img}" class="foto-hasil">
                     <div class="info">
-                        <b style="font-size: 12px; text-transform: uppercase;">${item.n}</b><br>
-                        ABSEN: ${item.no} | ${item.jam}
+                        <b style="font-size: 11px; text-transform: uppercase;">${item.n}</b><br>
+                        NO: ${item.no} | ${item.jam}<br>
+                        ${item.tgl}
                     </div>
                     <span class="badge" style="background:${warna}">${item.s}</span>
                 </div>`;
@@ -207,68 +203,42 @@
 
     function ekspor() {
         if(dataLokal.length === 0) return;
-        
         let html = `
         <html>
         <head>
-            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
             <style>
-                * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; }
-                body { font-family: 'Poppins', sans-serif; padding: 15px; color: #1e272e; text-transform: uppercase; }
-                .header { text-align: center; margin-bottom: 15px; border-bottom: 2px solid #4834d4; padding-bottom: 5px; }
-                h2 { color: #4834d4; margin: 0; font-weight: 800; font-size: 20px; }
-                .header p { margin: 3px 0; font-size: 11px; font-weight: 600; opacity: 0.8; }
-                table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; border: 1px solid #ddd; }
-                th { background-color: #4834d4 !important; color: white !important; padding: 10px 5px; text-align: center; font-size: 12px; font-weight: 800; border: 1px solid #4834d4; }
-                td { padding: 8px; border: 1px solid #ddd; font-size: 12px; font-weight: 600; vertical-align: middle; text-align: center; }
-                tr:nth-child(even) { background-color: #f8f9fa !important; }
-                .foto { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1.5px solid #1e272e; display: inline-block; }
-                .status-chip { padding: 5px 10px; border-radius: 4px; color: white !important; font-weight: 800; font-size: 10px; display: inline-block; }
-                @media print { body { padding: 0; } }
+                * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; font-family: sans-serif; }
+                body { padding: 20px; text-transform: uppercase; }
+                table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                th { background: #4834d4 !important; color: white !important; padding: 12px; font-size: 12px; }
+                td { padding: 10px; border: 1px solid #ddd; text-align: center; font-size: 12px; font-weight: bold; }
+                .foto { width: 70px; height: 70px; border-radius: 5px; object-fit: cover; border: 1px solid #000; }
+                .chip { padding: 5px 10px; border-radius: 4px; color: white !important; font-size: 10px; }
             </style>
         </head>
         <body onload="window.print()">
-            <div class="header">
-                <h2>LAPORAN ABSENSI</h2>
-                <p>DICETAK: ${new Date().toLocaleString('id-ID')}</p>
-            </div>
+            <h2 style="text-align:center;">LAPORAN ABSENSI SISWA</h2>
+            <p style="text-align:center;">DICETAK: ${new Date().toLocaleString('id-ID')}</p>
             <table>
-                <thead>
-                    <tr>
-                        <th style="width: 100px;">FOTO</th>
-                        <th style="width: 120px;">NO ABSEN</th>
-                        <th>NAMA SISWA</th>
-                        <th style="width: 100px;">TANGGAL</th>
-                        <th style="width: 80px;">JAM</th>
-                        <th style="width: 110px;">STATUS</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-
+                <tr><th>FOTO</th><th>NO</th><th>NAMA SISWA</th><th>TANGGAL</th><th>JAM</th><th>STATUS</th></tr>`;
         dataLokal.forEach(item => {
-            const st = item.s.toUpperCase();
-            const warna = DAFTAR_WARNA[st] || '#333';
-            html += `
-                <tr>
-                    <td><img src="${item.img}" class="foto"></td>
-                    <td style="font-size: 16px;">${item.no}</td>
-                    <td style="font-size: 13px;">${item.n}</td>
-                    <td>${item.tgl}</td>
-                    <td>${item.jam}</td>
-                    <td><span class="status-chip" style="background-color: ${warna} !important;">${st}</span></td>
-                </tr>`;
+            html += `<tr>
+                <td><img src="${item.img}" class="foto"></td>
+                <td>${item.no}</td>
+                <td style="text-align:left;">${item.n}</td>
+                <td>${item.tgl}</td>
+                <td>${item.jam}</td>
+                <td><span class="chip" style="background:${DAFTAR_WARNA[item.s]} !important;">${item.s}</span></td>
+            </tr>`;
         });
-
-        html += `</tbody></table></body></html>`;
-        var file = new Blob([html], { type: 'text/html' });
-        var a = document.createElement("a");
-        a.href = URL.createObjectURL(file);
-        a.download = "LAPORAN_ABSENSI.html";
-        a.click();
+        html += `</table></body></html>`;
+        var win = window.open('', '_blank');
+        win.document.write(html);
+        win.document.close();
     }
 
     function hapusSemua() { 
-        if(confirm("HAPUS SEMUA DATA?")) {
+        if(confirm("Hapus semua data absensi?")) {
             dataLokal = []; localStorage.removeItem('catatan_absen_siswa'); render(); 
         }
     }
