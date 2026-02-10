@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Pro Camera</title>
+    <title>Absensi Siswa</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
@@ -31,26 +31,15 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
         }
 
-        /* --- TOMBOL DARK MODE PENDEK (FIXED) --- */
         .theme-toggle { 
-            position: absolute; 
-            top: 20px; 
-            right: 20px; 
-            width: auto; /* Biar lebarnya ngikutin tulisan saja */
-            padding: 8px 15px; 
-            border-radius: 50px;
-            background: #2f3542; 
-            color: #fff; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px;
-            cursor: pointer; 
-            border: none; 
-            font-size: 10px; /* Tulisan dikecilkan biar manis */
-            font-weight: 800; 
-            z-index: 100;
+            position: absolute; top: 20px; right: 20px; 
+            width: auto; padding: 8px 15px; border-radius: 50px;
+            background: #2f3542; color: #fff; 
+            display: flex; align-items: center; gap: 8px;
+            cursor: pointer; border: none; font-size: 10px;
+            font-weight: 800; z-index: 100;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            white-space: nowrap; /* Biar tulisan nggak turun ke bawah */
+            white-space: nowrap;
         }
         
         [data-theme="dark"] .theme-toggle { background: #f1c40f; color: #000; }
@@ -64,10 +53,10 @@
         @media (max-width: 850px) { 
             .main-card { flex-direction: column; margin-top: 50px; } 
             .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); }
-            .theme-toggle { top: -45px; right: 0; } /* Posisi di atas kartu kalau di HP */
+            .theme-toggle { top: -45px; right: 0; }
         }
 
-        .date { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; }
+        .date-header { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; }
         #cam-box { width: 100%; height: 240px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         canvas { display: none; }
@@ -92,7 +81,7 @@
             display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05); 
         }
         .foto-hasil { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
-        .info { flex-grow: 1; font-size: 12px; }
+        .info { flex-grow: 1; font-size: 11px; line-height: 1.4; }
         .badge { padding: 4px 8px; border-radius: 5px; color: #fff; font-size: 9px; font-weight: 800; }
     </style>
 </head>
@@ -103,7 +92,7 @@
     <div class="main-card">
         <div class="left-panel">
             <h2 style="margin:0; font-weight: 800;">ABSENSI CAMERA</h2>
-            <div class="date" id="tglDisplay"></div>
+            <div class="date-header" id="tglDisplay"></div>
             
             <div id="cam-box">
                 <video id="video" autoplay muted playsinline></video>
@@ -144,7 +133,7 @@
     </div>
 
 <script>
-    var dataAbsen = JSON.parse(localStorage.getItem('absen_v_final_foto')) || [];
+    var dataAbsen = JSON.parse(localStorage.getItem('absen_v_ultra')) || [];
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
     var streamLocal = null;
@@ -156,10 +145,15 @@
         document.getElementById('tBtn').innerHTML = isL ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
     }
 
+    function getFormattedDate() {
+        var d = new Date();
+        return String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
+    }
+
     function setTgl() {
         var d = new Date();
         var hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-        document.getElementById('tglDisplay').innerText = hari[d.getDay()] + ", " + String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
+        document.getElementById('tglDisplay').innerText = hari[d.getDay()] + ", " + getFormattedDate();
     }
 
     function toggleCam() {
@@ -200,8 +194,11 @@
 
         var d = new Date();
         var jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-        dataAbsen.push({ n: n, no: no2, s: s, jam: jam, img: foto });
-        localStorage.setItem('absen_v_final_foto', JSON.stringify(dataAbsen));
+        var tglSkrg = getFormattedDate();
+        
+        dataAbsen.push({ n: n, no: no2, s: s, jam: jam, tgl: tglSkrg, img: foto });
+        localStorage.setItem('absen_v_ultra', JSON.stringify(dataAbsen));
+        
         render();
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
@@ -214,14 +211,23 @@
         var colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
         for (var i = dataAbsen.length - 1; i >= 0; i--) {
             var x = dataAbsen[i];
-            kontainer.innerHTML += `<div class="item"><img src="${x.img}" class="foto-hasil"><div class="info"><b>${x.n}</b><br>No: ${x.no} | Jam: ${x.jam}</div><span class="badge" style="background:${colors[x.s]}">${x.s}</span></div>`;
+            kontainer.innerHTML += `
+                <div class="item">
+                    <img src="${x.img}" class="foto-hasil">
+                    <div class="info">
+                        <b>${x.n}</b><br>
+                        No: ${x.no} | ${x.tgl}<br>
+                        Pukul: ${x.jam}
+                    </div>
+                    <span class="badge" style="background:${colors[x.s]}">${x.s}</span>
+                </div>`;
         }
     }
 
     function ekspor() {
         if(dataAbsen.length === 0) return alert("Kosong!");
-        let h = `<html><head><title>Laporan</title><style>table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:10px;}img{width:60px;height:60px;border-radius:5px;}</style></head><body><h2>LAPORAN ABSENSI</h2><table><tr><th>Foto</th><th>No</th><th>Nama</th><th>Jam</th><th>Status</th></tr>`;
-        dataAbsen.forEach(x => { h += `<tr><td><img src="${x.img}"></td><td>${x.no}</td><td>${x.n}</td><td>${x.jam}</td><td>${x.s}</td></tr>`; });
+        let h = `<html><head><title>Laporan</title><style>body{font-family:sans-serif;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:10px;}img{width:60px;height:60px;border-radius:5px;}</style></head><body><h2>LAPORAN ABSENSI</h2><table><tr><th>Foto</th><th>No</th><th>Nama</th><th>Tanggal</th><th>Jam</th><th>Status</th></tr>`;
+        dataAbsen.forEach(x => { h += `<tr><td><img src="${x.img}"></td><td>${x.no}</td><td>${x.n}</td><td>${x.tgl}</td><td>${x.jam}</td><td>${x.s}</td></tr>`; });
         h += `</table><script>window.print();<\/script></body></html>`;
         var blob = new Blob([h], { type: 'text/html' });
         var link = document.createElement("a");
@@ -230,7 +236,13 @@
         link.click();
     }
 
-    function hapusSemua() { if(confirm("Hapus semua?")) { dataAbsen = []; localStorage.removeItem('absen_v_final_foto'); render(); } }
+    function hapusSemua() { 
+        // Langsung hapus tanpa konfirmasi pop-up
+        dataAbsen = []; 
+        localStorage.removeItem('absen_v_ultra'); 
+        render(); 
+    }
+    
     window.onload = function() { setTgl(); render(); };
 </script>
 </body>
