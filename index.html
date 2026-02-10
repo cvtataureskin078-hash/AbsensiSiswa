@@ -88,10 +88,10 @@
                     <label>STATUS</label>
                     <select id="stat">
                         <option value="" selected disabled>- PILIH STATUS -</option>
-                        <option value="Hadir">HADIR</option>
-                        <option value="Izin">IZIN</option>
-                        <option value="Sakit">SAKIT</option>
-                        <option value="Alfa">ALFA</option>
+                        <option value="HADIR">HADIR</option>
+                        <option value="IZIN">IZIN</option>
+                        <option value="SAKIT">SAKIT</option>
+                        <option value="ALFA">ALFA</option>
                     </select>
                 </div>
             </div>
@@ -192,7 +192,7 @@
                         TANGGAL: ${item.tgl}<br>
                         PUKUL: ${item.jam}
                     </div>
-                    <span class="badge" style="background:${warnaLabel[item.s]}">${item.s}</span>
+                    <span class="badge" style="background:${warnaLabel[item.s] || '#333'}">${item.s}</span>
                 </div>`;
         });
     }
@@ -206,17 +206,17 @@
         <head>
             <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
             <style>
-                * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; }
                 body { font-family: 'Poppins', sans-serif; padding: 20px; color: #1e272e; text-transform: uppercase; }
                 .header { text-align: center; margin-bottom: 20px; border-bottom: 3px solid #4834d4; padding-bottom: 5px; }
                 h2 { color: #4834d4; margin: 0; font-weight: 800; font-size: 24px; }
                 .header p { margin: 5px 0 10px 0; font-size: 13px; font-weight: 600; opacity: 0.8; }
-                table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; border: 1px solid #ddd; }
                 th { background-color: #4834d4 !important; color: white !important; padding: 15px 5px; text-align: center; font-size: 14px; font-weight: 800; border: 1px solid #4834d4; }
-                td { padding: 12px 5px; border: 1px solid #ddd; font-size: 14px; font-weight: 600; vertical-align: middle; text-align: center; word-wrap: break-word; }
+                td { padding: 10px; border: 1px solid #ddd; font-size: 14px; font-weight: 600; vertical-align: middle; text-align: center; word-wrap: break-word; }
                 tr:nth-child(even) { background-color: #f8f9fa !important; }
                 .foto { width: 100px; height: 100px; border-radius: 10px; object-fit: cover; border: 2px solid #1e272e; display: inline-block; }
-                .status-chip { padding: 6px 12px; border-radius: 4px; color: white !important; font-weight: 800; font-size: 12px; display: inline-block; }
+                .status-chip { padding: 8px 15px; border-radius: 5px; color: white !important; font-weight: 800; font-size: 12px; display: inline-block; }
                 @media print { body { padding: 0; } .header { border-bottom: 2px solid #000; } }
             </style>
         </head>
@@ -229,11 +229,11 @@
                 <thead>
                     <tr>
                         <th style="width: 120px;">FOTO</th>
-                        <th style="width: 130px;">NOMOR ABSENSI</th>
+                        <th style="width: 140px;">NOMOR ABSENSI</th>
                         <th>NAMA SISWA</th>
                         <th style="width: 120px;">TANGGAL</th>
-                        <th style="width: 90px;">WAKTU</th>
-                        <th style="width: 110px;">STATUS</th>
+                        <th style="width: 100px;">WAKTU</th>
+                        <th style="width: 130px;">STATUS</th>
                     </tr>
                 </thead>
                 <tbody>`;
@@ -243,11 +243,11 @@
             html += `
                 <tr>
                     <td><img src="${item.img}" class="foto"></td>
-                    <td style="font-size: 18px;">${item.no}</td>
-                    <td style="font-size: 15px;">${item.n}</td>
+                    <td style="font-size: 20px;">${item.no}</td>
+                    <td style="font-size: 16px;">${item.n}</td>
                     <td>${item.tgl}</td>
                     <td>${item.jam}</td>
-                    <td><span class="status-chip" style="background-color: ${warnaBadge[st]} !important;">${st}</span></td>
+                    <td><span class="status-chip" style="background-color: ${warnaBadge[st] || '#333'} !important;">${st}</span></td>
                 </tr>`;
         });
 
