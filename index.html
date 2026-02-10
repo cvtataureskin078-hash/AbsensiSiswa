@@ -17,27 +17,12 @@
             position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
         }
 
-        /* TOMBOL TEMA: Skala Pas (1.05) */
         .theme-toggle { 
-            position: absolute !important; 
-            top: 20px !important; 
-            right: 20px !important; 
-            width: auto !important;
-            padding: 8px 18px !important; 
-            border-radius: 50px;
-            display: flex; 
-            align-items: center; 
-            gap: 8px;
-            cursor: pointer; 
-            border: none; 
-            font-size: 11px; 
-            font-weight: 800; 
-            z-index: 1000;
-            white-space: nowrap; 
-            transform: scale(1.05) !important; 
-            transform-origin: right top;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: 0.2s;
+            position: absolute !important; top: 20px !important; right: 20px !important; width: auto !important;
+            padding: 8px 18px !important; border-radius: 50px; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; border: none; font-size: 11px; font-weight: 800; z-index: 1000;
+            white-space: nowrap; transform: scale(1.05) !important; transform-origin: right top;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: 0.2s;
         }
 
         [data-theme="light"] .theme-toggle { background: #1e272e; color: #ffffff; }
@@ -66,7 +51,7 @@
         .btn-cam.active { background: var(--red); }
         .btn-add { background: var(--accent); color: white; font-size: 16px; height: 55px; box-shadow: 0 4px 12px rgba(72, 52, 212, 0.2); }
         .btn-csv { background: var(--green); color: white; margin-top: 15px; }
-        .btn-reset { background: var(--red); color: white; margin-top: 10px; font-size: 11px; padding: 10px; }
+        .btn-reset { background: transparent; color: var(--red); margin-top: 10px; font-size: 11px; padding: 10px; text-decoration: underline; }
 
         #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
         .item { background: var(--card); padding: 12px; margin-bottom: 10px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); }
@@ -89,7 +74,7 @@
             </div>
             <canvas id="canvas"></canvas>
 
-            <button id="camBtn" class="btn-cam" onclick="nyalainKamera()">📸 NYALAKAN KAMERA</button>
+            <button id="camBtn" class="btn-cam" onclick="nyalainKamera()">NYALAKAN KAMERA</button>
             
             <label>NAMA SISWA</label>
             <input type="text" id="nama" placeholder="Masukkan nama lengkap...">
@@ -97,7 +82,7 @@
             <div style="display: flex; gap: 10px;">
                 <div style="flex: 1;">
                     <label>NOMOR ABSENSI</label>
-                    <input type="number" id="no" placeholder="..." min="1">
+                    <input type="number" id="no" placeholder="..." min="1" oninput="validasiNo(this)">
                 </div>
                 <div style="flex: 1.5;">
                     <label>STATUS</label>
@@ -128,6 +113,10 @@
     var canvas = document.getElementById('canvas');
     var aliranKamera = null;
 
+    function validasiNo(input) {
+        if (input.value < 1) input.value = '';
+    }
+
     function pasangTema(pilihan) {
         document.body.setAttribute('data-theme', pilihan);
         document.getElementById('tBtn').innerHTML = pilihan === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
@@ -156,17 +145,13 @@
         if (!aliranKamera) {
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
             .then(function(s) {
-                aliranKamera = s;
-                video.srcObject = s;
-                btn.innerText = "🚫 MATIKAN KAMERA";
-                btn.classList.add('active');
-            }).catch(function(e) { alert("Gagal akses kamera"); });
+                aliranKamera = s; video.srcObject = s;
+                btn.innerText = "MATIKAN KAMERA"; btn.classList.add('active');
+            }).catch(function(e) { });
         } else {
             aliranKamera.getTracks().forEach(t => t.stop());
-            video.srcObject = null;
-            aliranKamera = null;
-            btn.innerText = "📸 NYALAKAN KAMERA";
-            btn.classList.remove('active');
+            video.srcObject = null; aliranKamera = null;
+            btn.innerText = "NYALAKAN KAMERA"; btn.classList.remove('active');
         }
     }
 
@@ -174,7 +159,7 @@
         var n = document.getElementById('nama').value;
         var nr = document.getElementById('no').value;
         var s = document.getElementById('stat').value;
-        if(!n || !nr || !s) { alert("Isi semua data!"); return; }
+        if(!n || !nr || !s) return;
 
         var noAbsen = nr.toString().padStart(2, '0');
         var gambar = "https://via.placeholder.com/150?text=No+Photo";
@@ -192,8 +177,6 @@
         dataLokal.push({ n: n, no: noAbsen, s: s, jam: waktu, tgl: formatTanggal(), img: gambar });
         localStorage.setItem('catatan_absen_siswa', JSON.stringify(dataLokal));
         render();
-        
-        // Reset Form
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
         document.getElementById('stat').selectedIndex = 0;
@@ -203,8 +186,7 @@
         var tempatList = document.getElementById('list');
         tempatList.innerHTML = '';
         var warnaLabel = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
-        for (var i = dataLokal.length - 1; i >= 0; i--) {
-            var item = dataLokal[i];
+        dataLokal.slice().reverse().forEach(item => {
             tempatList.innerHTML += `
                 <div class="item">
                     <img src="${item.img}" class="foto-hasil">
@@ -215,33 +197,25 @@
                     </div>
                     <span class="badge" style="background:${warnaLabel[item.s]}">${item.s}</span>
                 </div>`;
-        }
+        });
     }
 
     function ekspor() {
         if(dataLokal.length === 0) return;
-        let isi = `<html><head><title>Laporan</title><style>body{font-family:sans-serif;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:10px;}img{width:60px;height:60px;border-radius:5px;}</style></head><body><h2>LAPORAN ABSENSI</h2><table><tr><th>Foto</th><th>No</th><th>Nama</th><th>Tanggal</th><th>Jam</th><th>Status</th></tr>`;
-        dataLokal.forEach(item => { isi += `<tr><td><img src="${item.img}"></td><td>${item.no}</td><td>${item.n}</td><td>${item.tgl}</td><td>${item.jam}</td><td>${item.s}</td></tr>`; });
-        isi += `</table><script>window.print();<\/script></body></html>`;
+        let isi = `<html><body onload="window.print()"><h2>LAPORAN</h2><table border="1" style="width:100%;border-collapse:collapse"><tr><th>Foto</th><th>No</th><th>Nama</th><th>Tgl</th><th>Jam</th><th>Status</th></tr>`;
+        dataLokal.forEach(item => { isi += `<tr><td><img src="${item.img}" width="50"></td><td>${item.no}</td><td>${item.n}</td><td>${item.tgl}</td><td>${item.jam}</td><td>${item.s}</td></tr>`; });
+        isi += `</table></body></html>`;
         var file = new Blob([isi], { type: 'text/html' });
-        var a = document.createElement("a");
-        a.href = URL.createObjectURL(file);
-        a.download = "Laporan_Absen.html";
-        a.click();
+        var a = document.createElement("a"); a.href = URL.createObjectURL(file); a.download = "Laporan_Absen.html"; a.click();
     }
 
     function hapusSemua() { 
-        if(confirm("Hapus semua riwayat absen?")) {
-            dataLokal = []; 
-            localStorage.removeItem('catatan_absen_siswa'); 
-            render(); 
-        }
+        dataLokal = []; localStorage.removeItem('catatan_absen_siswa'); render(); 
     }
     
     window.onload = function() { 
         var temaDulu = localStorage.getItem('setelan_tema') || 'light';
-        pasangTema(temaDulu);
-        setTgl(); render(); 
+        pasangTema(temaDulu); setTgl(); render(); 
     };
 </script>
 </body>
