@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa</title>
+    <title>Absensi Face Scan Pro</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
@@ -12,170 +13,169 @@
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; transition: 0.3s; }
         
         .main-card { 
-            background: var(--card); width: 100%; max-width: 950px; min-height: 580px; 
+            background: var(--card); width: 100%; max-width: 1000px; min-height: 600px; 
             display: flex; border-radius: 20px; border: 1px solid rgba(0,0,0,0.1); 
             overflow: hidden; color: var(--text); position: relative; transition: 0.3s;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        .left-panel { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
-        .right-panel { flex: 1.2; padding: 40px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .left-panel { flex: 1.2; padding: 30px; display: flex; flex-direction: column; }
+        .right-panel { flex: 1; padding: 30px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; }
         
-        @media (max-width: 768px) {
-            .main-card { flex-direction: column; height: auto; min-height: unset; margin: 10px 0; }
-            .left-panel, .right-panel { padding: 25px; border-left: none; }
-            .right-panel { border-top: 1px solid rgba(0,0,0,0.1); }
+        @media (max-width: 850px) {
+            .main-card { flex-direction: column; }
+            .left-panel, .right-panel { border-left: none; }
         }
 
-        h2 { margin: 0; font-weight: 800; text-transform: uppercase; font-size: 26px; letter-spacing: -1px; }
-        .date { font-size: 14px; margin-bottom: 20px; opacity: 0.7; font-weight: 600; }
-        
-        label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; display: block; opacity: 0.6; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 2px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; font-size: 14px; outline: none; }
-        
-        button { border: none; border-radius: 10px; cursor: pointer; font-weight: 800; transition: 0.3s; }
-        .btn-add { background: var(--accent); color: #fff; padding: 15px; width: 100%; font-size: 16px; margin-bottom: 5px; }
-        .btn-csv { background: var(--green); color: white; padding: 12px; width: 100%; margin-top: 15px; }
-        .btn-reset { background: var(--red); color: white; padding: 8px; width: 100%; margin-top: 8px; font-size: 11px; opacity: 0.9; }
-        
-        #list { flex-grow: 1; overflow-y: auto; max-height: 350px; padding-right: 5px; min-height: 100px; }
-        .item { background: var(--card); margin-bottom: 10px; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0,0,0,0.05); border-left: 5px solid var(--accent); animation: slideIn 0.3s ease; }
-        
-        .badge { padding: 5px 12px; border-radius: 7px; font-size: 10px; color: #fff; font-weight: 800; text-transform: uppercase; }
-        .theme-toggle { position: absolute; top: 20px; right: 20px; background: #1e272e; color: #fff; padding: 8px 15px; font-size: 11px; border-radius: 8px; z-index: 10; }
-        [data-theme="dark"] .theme-toggle { background: #f0f2f5; color: #1e272e; }
+        /* Camera Box */
+        #video-container {
+            width: 100%; height: 250px; background: #000; border-radius: 15px; 
+            overflow: hidden; position: relative; margin-bottom: 15px; border: 3px solid var(--accent);
+        }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        canvas { position: absolute; top: 0; left: 0; }
 
-        .rekap-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; text-align: center; }
-        .rekap-item { font-size: 10px; font-weight: 800; }
-        .rekap-val { display: block; font-size: 16px; color: var(--accent); }
+        input, select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+        button { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s; width: 100%; margin-bottom: 5px; }
+        
+        .btn-cam { background: #2f3542; color: white; }
+        .btn-add { background: var(--accent); color: white; }
+        .btn-csv { background: var(--green); color: white; margin-top: 10px; }
+        .btn-reset { background: var(--red); color: white; font-size: 11px; }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+        #list { flex-grow: 1; overflow-y: auto; max-height: 300px; margin-top: 10px; }
+        .item { background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; border-left: 4px solid var(--accent); display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        .badge { padding: 4px 8px; border-radius: 5px; color: #fff; font-size: 10px; }
+
+        .loading-text { font-size: 12px; color: var(--red); font-weight: 700; text-align: center; margin-bottom: 10px; }
     </style>
 </head>
 <body data-theme="light">
 
-    <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙 DARK MODE</button>
-
     <div class="main-card">
         <div class="left-panel">
-            <h2>ABSENSI</h2>
-            <div class="date" id="tgl"></div>
+            <h2>FACE SCANNER</h2>
+            <div id="loadingStatus" class="loading-text">Menunggu AI dimuat (Mohon Tunggu)...</div>
             
-            <label>Nama Siswa</label>
-            <input type="text" id="nama" placeholder="Ketik nama lengkap...">
+            <div id="video-container">
+                <video id="video" autoplay muted></video>
+            </div>
+
+            <button class="btn-cam" onclick="startVideo()">1. AKTIFKAN KAMERA</button>
             
-            <label>Nomor Absen</label>
-            <input type="number" id="no" placeholder="Contoh: 1">
+            <label style="font-size: 11px; font-weight: 700;">NAMA SISWA</label>
+            <input type="text" id="nama" placeholder="Ketik nama...">
             
-            <label>Status</label>
-            <select id="stat">
-                <option value="" selected disabled>-- Pilih Status --</option>
-                <option value="Hadir">Hadir</option>
-                <option value="Izin">Izin</option>
-                <option value="Sakit">Sakit</option>
-                <option value="Alfa">Alfa</option>
-            </select>
+            <label style="font-size: 11px; font-weight: 700;">NO ABSEN & STATUS</label>
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="no" placeholder="No" style="flex: 0.5;">
+                <select id="stat" style="flex: 1.5;">
+                    <option value="" selected disabled>-- Pilih Status --</option>
+                    <option value="Hadir">Hadir</option>
+                    <option value="Izin">Izin</option>
+                    <option value="Sakit">Sakit</option>
+                    <option value="Alfa">Alfa</option>
+                </select>
+            </div>
             
-            <button class="btn-add" onclick="tambah()">TAMBAHKAN KE LIST</button>
+            <button class="btn-add" id="btnAdd" onclick="tambah()" disabled>2. SCAN & TAMBAH KE LIST</button>
         </div>
 
         <div class="right-panel">
-            <h3 style="margin-top:0; font-weight: 800;">Daftar Hadir</h3>
+            <h3 style="margin:0;">Daftar Hadir</h3>
             <div id="list"></div>
             
-            <div class="rekap-container">
-                <div class="rekap-item">HADIR<span id="cHadir" class="rekap-val">0</span></div>
-                <div class="rekap-item">IZIN<span id="cIzin" class="rekap-val">0</span></div>
-                <div class="rekap-item">SAKIT<span id="cSakit" class="rekap-val">0</span></div>
-                <div class="rekap-item">ALFA<span id="cAlfa" class="rekap-val">0</span></div>
-            </div>
-
-            <button class="btn-csv" onclick="ekspor()">📊 SIMPAN KE EXCEL (.CSV)</button>
-            <button class="btn-reset" onclick="hapusSemua()">🗑️ KOSONGKAN DAFTAR HADIR</button>
+            <button class="btn-csv" onclick="ekspor()">💾 SIMPAN CSV</button>
+            <button class="btn-reset" onclick="hapusSemua()">🗑️ RESET DATA</button>
         </div>
     </div>
 
 <script>
-    var dataAbsen = [];
-    try {
-        var localData = localStorage.getItem('data_absen_siswa');
-        if (localData) { dataAbsen = JSON.parse(localData); }
-    } catch (e) { console.error(e); }
+    let dataAbsen = JSON.parse(localStorage.getItem('face_absen_data')) || [];
+    const video = document.getElementById('video');
 
-    function setTgl() {
-        var d = new Date();
-        document.getElementById('tgl').innerText = "Hari Ini: " + String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
+    // 1. Load Model AI
+    Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('https://raw.githubusercontent.com/ml5js/ml5-data-and-models/main/models/faceapi/tiny_face_detector_model-weights_manifest.json'),
+    ]).then(() => {
+        document.getElementById('loadingStatus').innerText = "✅ AI SIAP! Silakan buka kamera.";
+        document.getElementById('loadingStatus').style.color = "green";
+    });
+
+    function startVideo() {
+        navigator.mediaDevices.getUserMedia({ video: {} })
+            .then(stream => {
+                video.srcObject = stream;
+                document.getElementById('btnAdd').disabled = false;
+                detect();
+            })
+            .catch(err => alert("Gagal akses kamera: " + err));
     }
 
-    function toggleTheme() {
-        var b = document.body;
-        var isL = b.getAttribute('data-theme') === 'light';
-        b.setAttribute('data-theme', isL ? 'dark' : 'light');
-        document.getElementById('tBtn').innerText = isL ? '🌙 DARK MODE' : '☀️ LIGHT MODE';
-    }
+    async function detect() {
+        const canvas = faceapi.createCanvasFromMedia(video);
+        document.getElementById('video-container').append(canvas);
+        const displaySize = { width: video.clientWidth, height: video.clientHeight };
+        faceapi.matchDimensions(canvas, displaySize);
 
-    function render() {
-        var kontainer = document.getElementById('list');
-        if(!kontainer) return;
-        kontainer.innerHTML = '';
-        
-        var count = {Hadir: 0, Izin: 0, Sakit: 0, Alfa: 0};
-        var colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
-        
-        for (var i = dataAbsen.length - 1; i >= 0; i--) {
-            var x = dataAbsen[i];
-            count[x.s]++; 
-            var c = colors[x.s] || '#7f8c8d';
-            kontainer.innerHTML += '<div class="item"><div style="max-width: 70%;"><b>' + x.n + '</b><br><small>No: ' + x.noFix + ' | ' + x.jam + '</small></div><span class="badge" style="background:' + c + '">' + x.s + '</span></div>';
-        }
-
-        document.getElementById('cHadir').innerText = count.Hadir;
-        document.getElementById('cIzin').innerText = count.Izin;
-        document.getElementById('cSakit').innerText = count.Sakit;
-        document.getElementById('cAlfa').innerText = count.Alfa;
+        setInterval(async () => {
+            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions());
+            const resizedDetections = faceapi.resizeResults(detections, displaySize);
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            faceapi.draw.drawDetections(canvas, resizedDetections);
+        }, 100);
     }
 
     function tambah() {
-        var n = document.getElementById('nama').value;
-        var nr = document.getElementById('no').value;
-        var s = document.getElementById('stat').value;
-        if(!n || !nr || !s) return alert("Lengkapi data!");
+        const n = document.getElementById('nama').value;
+        const nr = document.getElementById('no').value;
+        const s = document.getElementById('stat').value;
 
-        var noFix = String(nr).padStart(2, '0');
-        var waktu = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-        var tglFull = document.getElementById('tgl').innerText.replace('Hari Ini: ', '');
+        if(!n || !nr || !s) return alert("Isi data dulu!");
 
-        dataAbsen.push({ n: n, noFix: noFix, s: s, jam: tglFull + " " + waktu });
-        localStorage.setItem('data_absen_siswa', JSON.stringify(dataAbsen));
+        const waktu = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+        dataAbsen.push({ n, no: String(nr).padStart(2,'0'), s, jam: waktu });
+        
+        localStorage.setItem('face_absen_data', JSON.stringify(dataAbsen));
         render();
         
+        // Clear input
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
         document.getElementById('stat').selectedIndex = 0;
     }
 
+    function render() {
+        const list = document.getElementById('list');
+        list.innerHTML = '';
+        const colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
+        
+        [...dataAbsen].reverse().forEach(x => {
+            list.innerHTML += `<div class="item">
+                <div><b>${x.n}</b> (No: ${x.no})<br><small>${x.jam}</small></div>
+                <span class="badge" style="background:${colors[x.s]}">${x.s}</span>
+            </div>`;
+        });
+    }
+
     function ekspor() {
         if(dataAbsen.length === 0) return alert("Data kosong!");
-        var csv = "sep=,\nNama,No Absen,Waktu,Status\n";
-        for (var i = 0; i < dataAbsen.length; i++) {
-            var x = dataAbsen[i];
-            csv += '"' + x.n + '","\'' + x.noFix + '","' + x.jam + '","' + x.s + '"\n';
-        }
-        var blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-        var link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Rekap_Absen_" + new Date().getTime() + ".csv";
-        link.click();
+        let csv = "sep=,\nNama,No,Jam,Status\n";
+        dataAbsen.forEach(x => csv += `"${x.n}","${x.no}","${x.jam}","${x.s}"\n`);
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'Absen_FaceScan.csv';
+        a.click();
     }
 
     function hapusSemua() {
         dataAbsen = [];
-        localStorage.removeItem('data_absen_siswa');
+        localStorage.removeItem('face_absen_data');
         render();
     }
 
-    window.onload = function() { setTgl(); render(); };
+    window.onload = render;
 </script>
 </body>
 </html>
-
