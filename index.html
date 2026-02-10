@@ -3,86 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa - Versi Final</title>
+    <title>Absensi Siswa Pro v5</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
-        [data-theme="dark"] { --bg: #0a0a0a; --card: #1e1e1e; --text: #ffffff; --accent: #4d3df2; --green: #10ac84; --red: #ff4757; }
+        :root { --bg: #f4f7f6; --card: #ffffff; --text: #2d3436; --accent: #4834d4; --green: #10ac84; --red: #ee5253; --yellow: #f1c40f; --orange: #e67e22; }
+        [data-theme="dark"] { --bg: #121212; --card: #1e1e1e; --text: #ffffff; --accent: #6c5ce7; }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; transition: 0.3s; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; transition: 0.3s; }
         
         .main-card { 
-            background: var(--card); width: 100%; max-width: 850px; 
-            display: flex; border-radius: 16px; color: var(--text); 
-            position: relative; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: 0.3s;
+            background: var(--card); width: 100%; max-width: 950px; 
+            display: flex; border-radius: 24px; color: var(--text); 
+            position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden;
         }
 
         .theme-toggle { 
-            position: absolute !important; top: 12px !important; right: 12px !important; width: auto !important;
-            padding: 5px 12px !important; border-radius: 50px; display: flex; align-items: center; gap: 5px;
-            cursor: pointer; border: none; font-size: 9px; font-weight: 800; z-index: 1000;
-            white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.2s;
+            position: absolute !important; top: 20px !important; right: 20px !important; width: auto !important;
+            padding: 8px 16px !important; border-radius: 50px; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; border: none; font-size: 11px; font-weight: 800; z-index: 1000;
+            background: #2d3436; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
+        [data-theme="dark"] .theme-toggle { background: #fff; color: #2d3436; }
 
-        [data-theme="light"] .theme-toggle { background: #1e272e; color: #ffffff; }
-        [data-theme="dark"] .theme-toggle { background: #ffffff; color: #1e272e; }
-
-        .left-panel { flex: 1.1; padding: 20px 25px; }
-        .right-panel { flex: 1; padding: 20px 25px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); border-radius: 0 16px 16px 0; display: flex; flex-direction: column; }
+        .left-panel { flex: 1.2; padding: 35px; border-right: 1px solid rgba(0,0,0,0.05); }
+        .right-panel { flex: 1; padding: 35px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; }
         
-        @media (max-width: 800px) { 
+        @media (max-width: 850px) { 
             .main-card { flex-direction: column; } 
-            .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); border-radius: 0 0 16px 16px; } 
-            .left-panel { padding: 40px 15px 20px 15px; }
+            .left-panel, .right-panel { border: none; padding: 25px; }
         }
 
-        .date-header { font-size: 11px; opacity: 0.7; font-weight: 600; margin-bottom: 10px; }
-        #cam-box { width: 100%; height: 180px; background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 10px; border: 2px solid var(--accent); }
+        .header-title { margin: 0 0 5px 0; font-weight: 800; font-size: 22px; letter-spacing: -0.5px; }
+        .date-display { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; }
+
+        #cam-box { width: 100%; height: 240px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; border: 3px solid var(--accent); position: relative; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-        canvas { display: none; }
-
-        label { font-size: 9px; font-weight: 700; display: block; margin-bottom: 3px; opacity: 0.7; }
-        input, select { width: 100%; padding: 9px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; margin-bottom: 10px; outline: none; font-size: 12px; }
         
-        button { border: none; border-radius: 8px; cursor: pointer; font-weight: 800; padding: 10px; width: 100%; transition: 0.3s; font-size: 12px; }
-        .btn-cam { background: #2f3542; color: white; margin-bottom: 8px; font-size: 10px; }
-        .btn-cam.active { background: var(--red); }
-        .btn-add { background: var(--accent); color: white; font-size: 13px; height: 45px; box-shadow: 0 4px 10px rgba(72, 52, 212, 0.2); }
-        .btn-csv { background: var(--green); color: white; margin-top: 10px; }
-        .btn-reset { background: var(--red); color: white; margin-top: 6px; font-size: 9px; padding: 6px; }
+        label { font-size: 11px; font-weight: 800; display: block; margin-bottom: 6px; opacity: 0.8; color: var(--accent); }
+        input, select { width: 100%; padding: 12px 15px; border-radius: 12px; border: 2px solid rgba(0,0,0,0.08); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; margin-bottom: 15px; font-size: 14px; transition: 0.2s; }
 
-        #list { flex-grow: 1; overflow-y: auto; max-height: 320px; margin-top: 5px; }
-        .item { background: var(--card); padding: 10px; margin-bottom: 8px; border-radius: 10px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .foto-hasil { width: 55px; height: 55px; border-radius: 6px; object-fit: cover; border: 1.5px solid var(--text); }
-        .info { flex-grow: 1; font-size: 10px; line-height: 1.4; }
-        .badge { padding: 4px 8px; border-radius: 5px; color: #fff; font-size: 9px; font-weight: 800; text-align: center; min-width: 55px; }
+        button { border: none; border-radius: 12px; cursor: pointer; font-weight: 800; padding: 14px; width: 100%; transition: 0.3s; font-size: 14px; text-transform: uppercase; }
+        .btn-cam { background: #2d3436; color: white; margin-bottom: 15px; }
+        .btn-cam.active { background: var(--red); }
+        .btn-add { background: var(--accent); color: white; height: 55px; box-shadow: 0 8px 20px rgba(72, 52, 212, 0.3); font-size: 16px; }
+        
+        .btn-csv { background: var(--green); color: white; margin-top: 15px; }
+        .btn-reset { background: var(--red); color: white; margin-top: 10px; font-size: 11px; padding: 10px; opacity: 0.9; }
+
+        #list { flex-grow: 1; overflow-y: auto; max-height: 450px; margin-top: 10px; padding-right: 5px; }
+        .item { background: var(--card); padding: 15px; margin-bottom: 12px; border-radius: 18px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .foto-hasil { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; border: 2px solid var(--text); }
+        .info { flex-grow: 1; font-size: 11px; line-height: 1.6; font-weight: 600; }
+        .info b { font-size: 14px; color: var(--accent); }
+        .badge { padding: 6px 14px; border-radius: 8px; color: #fff; font-size: 10px; font-weight: 800; text-align: center; min-width: 65px; }
+        
+        #list::-webkit-scrollbar { width: 5px; }
+        #list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
     </style>
 </head>
 <body data-theme="light">
 
     <div class="main-card">
-        <button class="theme-toggle" onclick="gantiTema()" id="tBtn">🌙 DARK</button>
+        <button class="theme-toggle" onclick="gantiTema()" id="tBtn">🌙 DARK MODE</button>
 
         <div class="left-panel">
-            <h3 style="margin:0; font-weight: 800; letter-spacing: -0.5px;">ABSENSI SISWA</h3>
-            <div class="date-header" id="tglDisplay"></div>
+            <h1 class="header-title">ABSENSI SISWA</h1>
+            <div class="date-display" id="tglDisplay"></div>
             
             <div id="cam-box">
                 <video id="video" autoplay muted playsinline></video>
             </div>
-            <canvas id="canvas"></canvas>
+            <canvas id="canvas" style="display:none;"></canvas>
 
             <button id="camBtn" class="btn-cam" onclick="nyalainKamera()">AKTIFKAN KAMERA</button>
             
             <label>NAMA LENGKAP</label>
             <input type="text" id="nama" placeholder="Masukkan Nama..." style="text-transform: uppercase;">
             
-            <div style="display: flex; gap: 8px;">
+            <div style="display: flex; gap: 15px;">
                 <div style="flex: 1;">
-                    <label>NO ABSENSI</label>
-                    <input type="text" id="no" placeholder="00" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                    <label>NOMOR ABSENSI</label>
+                    <input type="text" id="no" placeholder="Contoh: 01" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 </div>
-                <div style="flex: 1.2;">
+                <div style="flex: 1;">
                     <label>STATUS</label>
                     <select id="stat">
                         <option value="" selected disabled>- PILIH STATUS -</option>
@@ -94,34 +97,31 @@
                 </div>
             </div>
             
-            <button class="btn-add" onclick="tambah()">SIMPAN DATA</button>
+            <button class="btn-add" onclick="tambah()">SIMPAN DATA ABSENSI</button>
         </div>
 
         <div class="right-panel">
-            <h4 style="margin:0; font-weight: 800;">DAFTAR HADIR</h4>
+            <h2 class="header-title" style="font-size: 18px;">DAFTAR HADIR</h2>
             <div id="list"></div>
-            <button class="btn-csv" onclick="ekspor()">EKSPOR LAPORAN</button>
-            <button class="btn-reset" onclick="hapusSemua()">KOSONGKAN DATA</button>
+            <button class="btn-csv" onclick="ekspor()">EKSPOR LAPORAN (PRINT)</button>
+            <button class="btn-reset" onclick="hapusSemua()">KOSONGKAN SEMUA DATA</button>
         </div>
     </div>
 
 <script>
-    var dataLokal = JSON.parse(localStorage.getItem('catatan_absen_siswa')) || [];
+    var dataLokal = JSON.parse(localStorage.getItem('catatan_absen_vfinal')) || [];
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
     var aliranKamera = null;
 
-    const DAFTAR_WARNA = {
-        'HADIR': '#10ac84',
-        'IZIN': '#f1c40f',
-        'SAKIT': '#e67e22',
-        'ALFA': '#ee5253'
+    const WARNA_STATUS = {
+        'HADIR': '#10ac84', 'IZIN': '#f1c40f', 'SAKIT': '#e67e22', 'ALFA': '#ee5253'
     };
 
     function pasangTema(pilihan) {
         document.body.setAttribute('data-theme', pilihan);
-        document.getElementById('tBtn').innerHTML = pilihan === 'dark' ? '☀️ LIGHT' : '🌙 DARK';
-        localStorage.setItem('setelan_tema', pilihan);
+        document.getElementById('tBtn').innerHTML = pilihan === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+        localStorage.setItem('tema_absen', pilihan);
     }
 
     function gantiTema() {
@@ -130,15 +130,15 @@
         pasangTema(baru);
     }
 
-    function formatTanggal() {
+    function getWaktuLengkap() {
         var d = new Date();
-        return String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
+        var hari = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU"];
+        var tgl = String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
+        return hari[d.getDay()] + ", " + tgl;
     }
 
     function setTgl() {
-        var d = new Date();
-        var hari = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU"];
-        document.getElementById('tglDisplay').innerText = hari[d.getDay()] + ", " + formatTanggal();
+        document.getElementById('tglDisplay').innerText = getWaktuLengkap();
     }
 
     function nyalainKamera() {
@@ -148,7 +148,7 @@
             .then(function(s) {
                 aliranKamera = s; video.srcObject = s;
                 btn.innerText = "MATIKAN KAMERA"; btn.classList.add('active');
-            }).catch(function(e) { alert("Akses kamera ditolak!"); });
+            }).catch(function(e) { alert("Izin kamera diperlukan!"); });
         } else {
             aliranKamera.getTracks().forEach(t => t.stop());
             video.srcObject = null; aliranKamera = null;
@@ -160,11 +160,10 @@
         var n = document.getElementById('nama').value;
         var nr = document.getElementById('no').value;
         var s = document.getElementById('stat').value;
+        
         if(!n || !nr || !s) { alert("Lengkapi data!"); return; }
 
-        var noAbsen = nr.toString().padStart(2, '0');
         var gambar = "https://via.placeholder.com/150?text=No+Photo";
-
         if (aliranKamera) {
             canvas.width = 320; canvas.height = 240;
             var ctx = canvas.getContext('2d');
@@ -174,9 +173,18 @@
         }
 
         var d = new Date();
-        var waktu = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-        dataLokal.push({ n: n.toUpperCase(), no: noAbsen, s: s.toUpperCase(), jam: waktu, tgl: formatTanggal(), img: gambar });
-        localStorage.setItem('catatan_absen_siswa', JSON.stringify(dataLokal));
+        var jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
+        
+        dataLokal.push({
+            n: n.toUpperCase(),
+            no: nr.padStart(2, '0'),
+            s: s.toUpperCase(),
+            jam: jam,
+            tgl: getWaktuLengkap(),
+            img: gambar
+        });
+
+        localStorage.setItem('catatan_absen_vfinal', JSON.stringify(dataLokal));
         render();
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
@@ -187,14 +195,15 @@
         var tempatList = document.getElementById('list');
         tempatList.innerHTML = '';
         dataLokal.slice().reverse().forEach(item => {
-            const warna = DAFTAR_WARNA[item.s] || '#333';
+            const warna = WARNA_STATUS[item.s] || '#333';
             tempatList.innerHTML += `
                 <div class="item">
                     <img src="${item.img}" class="foto-hasil">
                     <div class="info">
-                        <b style="font-size: 11px; text-transform: uppercase;">${item.n}</b><br>
-                        NO: ${item.no} | ${item.jam}<br>
-                        ${item.tgl}
+                        <b>${item.n}</b><br>
+                        NOMOR ABSENSI : ${item.no}<br>
+                        TANGGAL : ${item.tgl}<br>
+                        PUKUL : ${item.jam}
                     </div>
                     <span class="badge" style="background:${warna}">${item.s}</span>
                 </div>`;
@@ -206,30 +215,40 @@
         let html = `
         <html>
         <head>
+            <title>Laporan Absensi</title>
             <style>
-                * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; font-family: sans-serif; }
-                body { padding: 20px; text-transform: uppercase; }
-                table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-                th { background: #4834d4 !important; color: white !important; padding: 12px; font-size: 12px; }
-                td { padding: 10px; border: 1px solid #ddd; text-align: center; font-size: 12px; font-weight: bold; }
-                .foto { width: 70px; height: 70px; border-radius: 5px; object-fit: cover; border: 1px solid #000; }
-                .chip { padding: 5px 10px; border-radius: 4px; color: white !important; font-size: 10px; }
+                * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; font-family: sans-serif; text-transform: uppercase; }
+                body { padding: 30px; }
+                .header { text-align: center; border-bottom: 4px solid #4834d4; padding-bottom: 10px; margin-bottom: 20px; }
+                table { width: 100%; border-collapse: collapse; }
+                th { background: #4834d4 !important; color: white !important; padding: 12px; font-size: 13px; }
+                td { padding: 10px; border: 1px solid #eee; text-align: center; font-size: 12px; font-weight: bold; }
+                .foto { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; border: 2px solid #000; }
+                .chip { padding: 6px 12px; border-radius: 6px; color: white !important; font-size: 11px; }
             </style>
         </head>
         <body onload="window.print()">
-            <h2 style="text-align:center;">LAPORAN ABSENSI SISWA</h2>
-            <p style="text-align:center;">DICETAK: ${new Date().toLocaleString('id-ID')}</p>
+            <div class="header">
+                <h1 style="margin:0; color:#4834d4;">LAPORAN ABSENSI SISWA</h1>
+                <p style="margin:5px 0;">WAKTU CETAK: ${new Date().toLocaleString('id-ID')}</p>
+            </div>
             <table>
-                <tr><th>FOTO</th><th>NO</th><th>NAMA SISWA</th><th>TANGGAL</th><th>JAM</th><th>STATUS</th></tr>`;
+                <tr>
+                    <th>FOTO</th>
+                    <th>NOMOR ABSENSI</th>
+                    <th>NAMA SISWA</th>
+                    <th>TANGGAL / WAKTU</th>
+                    <th>STATUS</th>
+                </tr>`;
         dataLokal.forEach(item => {
-            html += `<tr>
-                <td><img src="${item.img}" class="foto"></td>
-                <td>${item.no}</td>
-                <td style="text-align:left;">${item.n}</td>
-                <td>${item.tgl}</td>
-                <td>${item.jam}</td>
-                <td><span class="chip" style="background:${DAFTAR_WARNA[item.s]} !important;">${item.s}</span></td>
-            </tr>`;
+            html += `
+                <tr>
+                    <td><img src="${item.img}" class="foto"></td>
+                    <td style="font-size: 18px;">${item.no}</td>
+                    <td style="text-align:left;">${item.n}</td>
+                    <td>TANGGAL : ${item.tgl}<br>PUKUL : ${item.jam}</td>
+                    <td><span class="chip" style="background:${WARNA_STATUS[item.s]} !important;">${item.s}</span></td>
+                </tr>`;
         });
         html += `</table></body></html>`;
         var win = window.open('', '_blank');
@@ -238,14 +257,14 @@
     }
 
     function hapusSemua() { 
-        if(confirm("Hapus semua data absensi?")) {
-            dataLokal = []; localStorage.removeItem('catatan_absen_siswa'); render(); 
+        if(confirm("Hapus seluruh data?")) {
+            dataLokal = []; localStorage.removeItem('catatan_absen_vfinal'); render(); 
         }
     }
     
     window.onload = function() { 
-        var temaDulu = localStorage.getItem('setelan_tema') || 'light';
-        pasangTema(temaDulu); setTgl(); render(); 
+        var t = localStorage.getItem('tema_absen') || 'light';
+        pasangTema(t); setTgl(); render(); 
     };
 </script>
 </body>
