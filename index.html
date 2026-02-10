@@ -51,14 +51,12 @@
         .btn-cam.active { background: var(--red); }
         .btn-add { background: var(--accent); color: white; font-size: 16px; height: 55px; box-shadow: 0 4px 12px rgba(72, 52, 212, 0.2); }
         .btn-csv { background: var(--green); color: white; margin-top: 15px; }
-        
-        /* RESET KE WARNA MERAH */
         .btn-reset { background: var(--red); color: white; margin-top: 10px; font-size: 11px; padding: 10px; }
 
         #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
         .item { background: var(--card); padding: 12px; margin-bottom: 10px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); }
         .foto-hasil { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; }
-        .info { flex-grow: 1; font-size: 12px; line-height: 1.5; }
+        .info { flex-grow: 1; font-size: 12px; line-height: 1.6; }
         .badge { padding: 5px 10px; border-radius: 8px; color: #fff; font-size: 10px; font-weight: 800; }
     </style>
 </head>
@@ -84,7 +82,7 @@
             <div style="display: flex; gap: 10px;">
                 <div style="flex: 1;">
                     <label>NOMOR ABSENSI</label>
-                    <input type="text" id="no" placeholder="..." oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                    <input type="text" id="no" placeholder="Masukan nomor absensi..." oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 </div>
                 <div style="flex: 1.5;">
                     <label>STATUS</label>
@@ -189,8 +187,9 @@
                 <div class="item">
                     <img src="${item.img}" class="foto-hasil">
                     <div class="info">
-                        <b>${item.n}</b><br>
-                        No: ${item.no} | ${item.tgl}<br>
+                        <b style="font-size: 14px; text-transform: uppercase;">${item.n}</b><br>
+                        Nomor Absensi: ${item.no}<br>
+                        Tanggal: ${item.tgl}<br>
                         Pukul: ${item.jam}
                     </div>
                     <span class="badge" style="background:${warnaLabel[item.s]}">${item.s}</span>
@@ -200,7 +199,7 @@
 
     function ekspor() {
         if(dataLokal.length === 0) return;
-        let isi = `<html><body onload="window.print()"><h2>LAPORAN</h2><table border="1" style="width:100%;border-collapse:collapse"><tr><th>Foto</th><th>No</th><th>Nama</th><th>Tgl</th><th>Jam</th><th>Status</th></tr>`;
+        let isi = `<html><body onload="window.print()"><h2>LAPORAN ABSENSI</h2><table border="1" style="width:100%;border-collapse:collapse"><tr><th>Foto</th><th>Nomor Absensi</th><th>Nama</th><th>Tanggal</th><th>Jam</th><th>Status</th></tr>`;
         dataLokal.forEach(item => { isi += `<tr><td><img src="${item.img}" width="50"></td><td>${item.no}</td><td>${item.n}</td><td>${item.tgl}</td><td>${item.jam}</td><td>${item.s}</td></tr>`; });
         isi += `</table></body></html>`;
         var file = new Blob([isi], { type: 'text/html' });
