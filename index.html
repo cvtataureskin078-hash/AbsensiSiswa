@@ -12,7 +12,6 @@
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; transition: 0.3s; }
         .main-card { background: var(--card); width: 100%; max-width: 1000px; display: flex; border-radius: 20px; overflow: hidden; color: var(--text); position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s; }
 
-        /* MODIFIKASI TOMBOL SESUAI REQUEST */
         .theme-toggle { 
             position: absolute; top: 20px; right: 20px; 
             width: auto; padding: 8px 15px; border-radius: 50px;
@@ -23,15 +22,8 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Saat Light Mode: Tombol justru berwarna Gelap (untuk ke Dark) */
-        [data-theme="light"] .theme-toggle {
-            background: #2f3542; color: #ffffff; border-color: #2f3542;
-        }
-
-        /* Saat Dark Mode: Tombol justru berwarna Putih (untuk ke Light) */
-        [data-theme="dark"] .theme-toggle { 
-            background: #ffffff; color: #1e272e; border-color: #ffffff;
-        }
+        [data-theme="light"] .theme-toggle { background: #2f3542; color: #ffffff; border-color: #2f3542; }
+        [data-theme="dark"] .theme-toggle { background: #ffffff; color: #1e272e; border-color: #ffffff; }
 
         .left-panel { flex: 1.2; padding: 30px; }
         .right-panel { flex: 1; padding: 30px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; }
@@ -111,18 +103,22 @@
     </div>
 
 <script>
-    var dataAbsen = JSON.parse(localStorage.getItem('absen_v_fix_banget')) || [];
+    var dataAbsen = JSON.parse(localStorage.getItem('absen_v_final_permanent')) || [];
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
     var streamLocal = null;
 
+    // FUNGSI TEMA DENGAN MEMORI (LOCAL STORAGE)
+    function applyTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        document.getElementById('tBtn').innerHTML = theme === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+        localStorage.setItem('user_theme', theme);
+    }
+
     function toggleTheme() {
-        var b = document.body;
-        var isL = b.getAttribute('data-theme') === 'light';
-        b.setAttribute('data-theme', isL ? 'dark' : 'light');
-        
-        var isNowDark = b.getAttribute('data-theme') === 'dark';
-        document.getElementById('tBtn').innerHTML = isNowDark ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+        var current = document.body.getAttribute('data-theme');
+        var target = current === 'light' ? 'dark' : 'light';
+        applyTheme(target);
     }
 
     function getFormattedDate() {
@@ -176,7 +172,7 @@
         var jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
         
         dataAbsen.push({ n: n, no: no2, s: s, jam: jam, tgl: getFormattedDate(), img: foto });
-        localStorage.setItem('absen_v_fix_banget', JSON.stringify(dataAbsen));
+        localStorage.setItem('absen_v_final_permanent', JSON.stringify(dataAbsen));
         
         render();
         document.getElementById('nama').value = '';
@@ -218,11 +214,17 @@
 
     function hapusSemua() { 
         dataAbsen = []; 
-        localStorage.removeItem('absen_v_fix_banget'); 
+        localStorage.removeItem('absen_v_final_permanent'); 
         render(); 
     }
     
-    window.onload = function() { setTgl(); render(); };
+    // CEK TEMA SAAT HALAMAN DIBUKA
+    window.onload = function() { 
+        var savedTheme = localStorage.getItem('user_theme') || 'light';
+        applyTheme(savedTheme);
+        setTgl(); 
+        render(); 
+    };
 </script>
 </body>
 </html>
