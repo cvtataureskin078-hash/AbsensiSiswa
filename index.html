@@ -15,70 +15,68 @@
             background: var(--card); width: 100%; max-width: 1000px; 
             display: flex; border-radius: 20px; color: var(--text); 
             position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
-            overflow: visible !important; 
         }
 
-        /* TOMBOL TETAP DI KANAN & UKURANNYA MANTAP */
+        /* TOMBOL FIX: Ukuran dibatasi (width: auto) biar gak segedegaban */
         .theme-toggle { 
             position: absolute !important; 
             top: 15px !important; 
             right: 15px !important; 
-            left: auto !important;
-            padding: 12px 24px !important; 
+            width: auto !important; /* Biar gak lebar sendiri */
+            min-width: 100px; /* Ukuran minimal biar pas */
+            padding: 8px 16px !important; 
             border-radius: 50px;
             display: flex; 
             align-items: center; 
-            gap: 8px;
+            justify-content: center;
+            gap: 6px;
             cursor: pointer; 
             border: none; 
-            font-size: 12px; 
+            font-size: 10px; 
             font-weight: 800; 
             z-index: 1000;
             white-space: nowrap; 
-            transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        [data-theme="light"] .theme-toggle { background: #1e272e; color: #ffffff; }
+        [data-theme="light"] .theme-toggle { background: #2f3542; color: #ffffff; }
         [data-theme="dark"] .theme-toggle { background: #ffffff; color: #1e272e; }
 
-        .left-panel { flex: 1.2; padding: 35px; }
+        .left-panel { flex: 1.2; padding: 30px; }
         .right-panel { flex: 1; padding: 30px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); border-radius: 0 20px 20px 0; display: flex; flex-direction: column; }
         
         @media (max-width: 850px) { 
-            .main-card { flex-direction: column; margin-top: 25px; } 
+            .main-card { flex-direction: column; margin-top: 10px; } 
             .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); border-radius: 0 0 20px 20px; } 
             .theme-toggle { 
                 top: 12px !important; 
                 right: 12px !important; 
-                padding: 10px 20px !important; 
-                font-size: 11px;
+                padding: 7px 14px !important; 
+                font-size: 9px;
             }
-            .left-panel { padding: 45px 20px 25px 20px; }
+            .left-panel { padding: 40px 20px 20px 20px; }
         }
 
         .date-header { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; }
-        #cam-box { width: 100%; height: 230px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
+        #cam-box { width: 100%; height: 220px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         canvas { display: none; }
 
         label { font-size: 11px; font-weight: 700; display: block; margin-bottom: 5px; opacity: 0.7; }
-        input, select { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; margin-bottom: 15px; outline: none; }
+        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; margin-bottom: 15px; outline: none; }
         
-        button { border: none; border-radius: 12px; cursor: pointer; font-weight: 800; padding: 14px; width: 100%; transition: 0.3s; }
-        .btn-cam { background: #2f3542; color: white; margin-bottom: 10px; font-size: 12px; }
+        /* Tombol action lainnya */
+        .btn-cam { background: #2f3542; color: white; margin-bottom: 10px; font-size: 12px; border:none; padding:12px; border-radius:10px; width:100%; font-weight:800; cursor:pointer;}
         .btn-cam.active { background: var(--red); }
-        .btn-add { background: var(--accent); color: white; font-size: 16px; height: 55px; box-shadow: 0 4px 12px rgba(72, 52, 212, 0.2); }
-        .btn-csv { background: var(--green); color: white; margin-top: 15px; }
-        
-        /* TULISAN DIKEMBALIKAN KE ASLINYA */
-        .btn-reset { background: var(--red); color: white; margin-top: 8px; font-size: 11px; }
+        .btn-add { background: var(--accent); color: white; font-size: 16px; height: 55px; border:none; border-radius:12px; width:100%; font-weight:800; cursor:pointer;}
+        .btn-csv { background: var(--green); color: white; margin-top: 15px; border:none; padding:12px; border-radius:10px; width:100%; font-weight:800; cursor:pointer;}
+        .btn-reset { background: var(--red); color: white; margin-top: 8px; font-size: 11px; border:none; padding:8px; border-radius:8px; width:100%; font-weight:800; cursor:pointer;}
 
-        #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
-        .item { background: var(--card); padding: 12px; margin-bottom: 10px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); }
-        .foto-hasil { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; }
-        .info { flex-grow: 1; font-size: 12px; line-height: 1.5; }
-        .badge { padding: 5px 10px; border-radius: 8px; color: #fff; font-size: 10px; font-weight: 800; }
+        #list { flex-grow: 1; overflow-y: auto; max-height: 380px; margin-top: 10px; }
+        .item { background: var(--card); padding: 10px; margin-bottom: 10px; border-radius: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05); }
+        .foto-hasil { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; }
+        .info { flex-grow: 1; font-size: 11px; line-height: 1.5; }
+        .badge { padding: 4px 8px; border-radius: 5px; color: #fff; font-size: 9px; font-weight: 800; }
     </style>
 </head>
 <body data-theme="light">
@@ -87,7 +85,7 @@
         <button class="theme-toggle" onclick="gantiTema()" id="tBtn">🌙 DARK MODE</button>
 
         <div class="left-panel">
-            <h2 style="margin:0; font-weight: 800;">ABSENSI SISWA</h2>
+            <h2 style="margin:0; font-weight: 800; max-width: 70%;">ABSENSI SISWA</h2>
             <div class="date-header" id="tglDisplay"></div>
             
             <div id="cam-box">
@@ -101,11 +99,11 @@
             <input type="text" id="nama" placeholder="Ketik nama lengkap...">
             
             <div style="display: flex; gap: 10px;">
-                <div style="flex: 1;">
+                <div style="flex: 1.2;">
                     <label>NOMOR ABSENSI</label>
                     <input type="number" id="no" placeholder="..." min="1">
                 </div>
-                <div style="flex: 1.5;">
+                <div style="flex: 1;">
                     <label>STATUS</label>
                     <select id="stat">
                         <option value="" selected disabled>-- Pilih --</option>
