@@ -3,99 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa - Kembali Ke Desain Utama v16</title>
+    <title>Absensi Siswa Minimalis v9</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
-        /* --- TEMA WARNA ASLI (DESAIN UTAMA) --- */
         :root { 
-            --bg-page: #f8f9fa; 
-            --card-bg: #ffffff; 
-            --text-main: #2d3436; 
-            --input-bg: #ffffff;
-            --purple-btn: #4834d4; 
-            
-            /* HANYA 2 BLOK INI YANG BERUBAH */
-            --btn-special-bg: #000000;   /* Light: Hitam */
-            --btn-special-text: #ffffff; /* Light: Putih */
+            --bg: #f1f3f6; 
+            --card: #ffffff; 
+            --text: #000000; 
+            --accent: #000000; 
+            --green: #10ac84; 
+            --red: #ff4757; 
+            --btn-primary: #000000; 
         }
         
         [data-theme="dark"] { 
-            --bg-page: #121212; 
-            --card-bg: #1e1e1e; 
-            --text-main: #ffffff; 
-            --input-bg: #2d2d2d;
-            
-            /* HANYA 2 BLOK INI YANG BERUBAH */
-            --btn-special-bg: #ffffff;   /* Dark: Putih */
-            --btn-special-text: #000000; /* Dark: Hitam */
+            --bg: #121212; 
+            --card: #1e1e1e; 
+            --text: #ffffff; 
+            --accent: #ffffff; 
+            --btn-primary: #ffffff;
         }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-page); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; transition: 0.3s; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; transition: 0.3s; }
         
         .main-card { 
-            background: var(--card-bg); width: 100%; max-width: 1000px; 
-            display: flex; border-radius: 25px; color: var(--text-main); 
-            position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.08); overflow: hidden;
-            min-height: 650px;
+            background: var(--card); width: 100%; max-width: 880px; 
+            display: flex; border-radius: 20px; color: var(--text); 
+            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;
         }
 
         .theme-toggle { 
-            position: absolute !important; top: 20px !important; right: 20px !important; width: auto !important;
-            padding: 8px 16px !important; border-radius: 50px; cursor: pointer; border: none; font-size: 10px; font-weight: 800; z-index: 1000;
-            background: #2d3436; color: #fff; text-transform: uppercase;
+            position: absolute !important; top: 15px !important; right: 15px !important; width: auto !important;
+            padding: 6px 14px !important; border-radius: 50px; cursor: pointer; border: none; font-size: 10px; font-weight: 800; z-index: 1000;
+            background: #000; color: #fff;
         }
         [data-theme="dark"] .theme-toggle { background: #fff; color: #000; }
 
-        .left-panel { flex: 1.1; padding: 45px; border-right: 1px solid rgba(0,0,0,0.05); }
-        .right-panel { flex: 1; padding: 45px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; }
+        .left-panel { flex: 1.1; padding: 30px; border-right: 1px solid rgba(0,0,0,0.05); }
+        .right-panel { flex: 1; padding: 30px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; }
         
-        @media (max-width: 850px) { .main-card { flex-direction: column; } .left-panel, .right-panel { border: none; padding: 30px; } }
+        @media (max-width: 800px) { 
+            .main-card { flex-direction: column; } 
+            .left-panel, .right-panel { border: none; padding: 20px; }
+        }
 
-        .header-title { margin: 0 0 5px 0; font-weight: 800; font-size: 24px; text-transform: uppercase; letter-spacing: -0.5px; }
-        .date-display { font-size: 13px; opacity: 0.6; font-weight: 600; margin-bottom: 25px; text-transform: uppercase; }
+        .header-title { margin: 0 0 3px 0; font-weight: 800; font-size: 19px; text-transform: uppercase; color: var(--text); }
+        .date-display { font-size: 12px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; color: var(--text); }
 
-        #cam-box { width: 100%; height: 260px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
+        /* Kamera TANPA Bingkai */
+        #cam-box { width: 100%; height: 210px; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         
-        label { font-size: 10px; font-weight: 800; display: block; margin-bottom: 8px; opacity: 0.8; }
-        input, select { 
-            width: 100%; padding: 14px; border-radius: 12px; border: 1.5px solid rgba(0,0,0,0.1); 
-            background: var(--input-bg); color: var(--text-main); box-sizing: border-box; font-family: inherit; 
-            margin-bottom: 18px; font-size: 14px; outline: none; 
-        }
+        label { font-size: 10px; font-weight: 800; display: block; margin-bottom: 5px; opacity: 0.9; color: var(--accent); }
+        input, select { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1.5px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; margin-bottom: 12px; font-size: 13px; outline: none; }
 
-        button { border: none; border-radius: 12px; cursor: pointer; font-weight: 800; padding: 15px; width: 100%; transition: 0.2s; font-size: 14px; text-transform: uppercase; }
+        button { border: none; border-radius: 10px; cursor: pointer; font-weight: 800; padding: 12px; width: 100%; transition: 0.3s; font-size: 12px; text-transform: uppercase; }
         
-        .btn-cam { background: #34495e; color: white; margin-bottom: 25px; }
+        .btn-cam { background: #2f3542; color: white; margin-bottom: 15px; }
+        .btn-cam.active { background: var(--red); }
         
-        /* TOMBOL SIMPAN (TETAP WARNA UNGU ASLI) */
-        .btn-simpan { 
-            background: var(--purple-btn); 
-            color: white; 
-            height: 60px;
-            box-shadow: 0 8px 20px rgba(72, 52, 212, 0.25);
+        .btn-add { 
+            background: var(--btn-primary); 
+            color: var(--card); 
+            height: 50px; 
+            font-size: 14px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
         }
+        
+        .btn-csv { background: var(--green); color: white; margin-top: 15px; }
+        .btn-reset { background: var(--red); color: white; margin-top: 8px; font-size: 9px; padding: 6px; opacity: 0.8; }
 
-        /* 2 BLOK YANG DISERASIKAN (EKSPOR & KOSONGKAN) */
-        .btn-special {
-            background: var(--btn-special-bg) !important;
-            color: var(--btn-special-text) !important;
-            height: 60px; /* SAMA DENGAN TOMBOL SIMPAN */
-            margin-top: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        #list { flex-grow: 1; overflow-y: auto; max-height: 420px; margin-top: 15px; }
-        .item { 
-            background: var(--card-bg); padding: 18px; margin-bottom: 15px; border-radius: 18px; 
-            display: flex; align-items: center; gap: 20px; border: 1px solid rgba(0,0,0,0.04); 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-        }
-        .foto-hasil { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; border: 2px solid #eee; }
-        .info { flex-grow: 1; font-size: 12px; font-weight: 600; text-transform: uppercase; }
-        .info b { font-size: 16px; color: var(--purple-btn); display: block; margin-bottom: 2px; }
-        .badge { padding: 8px 16px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: 800; min-width: 75px; text-align: center; }
+        #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
+        .item { background: var(--card); padding: 12px; margin-bottom: 10px; border-radius: 15px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05); }
+        .foto-hasil { width: 65px; height: 65px; border-radius: 10px; object-fit: cover; border: 1.5px solid var(--text); }
+        .info { flex-grow: 1; font-size: 10px; line-height: 1.5; font-weight: 600; text-transform: uppercase; }
+        .info b { font-size: 13px; color: var(--text); display: block; margin-bottom: 2px; }
+        .badge { padding: 5px 12px; border-radius: 6px; color: #fff; font-size: 9px; font-weight: 800; text-align: center; min-width: 60px; }
+        
+        #list::-webkit-scrollbar { width: 4px; }
+        #list::-webkit-scrollbar-thumb { background: var(--text); border-radius: 10px; }
     </style>
 </head>
 <body data-theme="light">
@@ -107,15 +94,17 @@
             <h2 class="header-title">ABSENSI SISWA</h2>
             <div class="date-display" id="tglDisplay"></div>
             
-            <div id="cam-box"><video id="video" autoplay muted playsinline></video></div>
+            <div id="cam-box">
+                <video id="video" autoplay muted playsinline></video>
+            </div>
             <canvas id="canvas" style="display:none;"></canvas>
 
             <button id="camBtn" class="btn-cam" onclick="toggleCam()">AKTIFKAN KAMERA</button>
             
-            <label>NAMA LENGKAP SISWA</label>
-            <input type="text" id="nama" placeholder="INPUT NAMA..." style="text-transform: uppercase;">
+            <label>NAMA LENGKAP</label>
+            <input type="text" id="nama" placeholder="MASUKKAN NAMA..." style="text-transform: uppercase;">
             
-            <div style="display: flex; gap: 20px;">
+            <div style="display: flex; gap: 12px;">
                 <div style="flex: 1;">
                     <label>NOMOR ABSENSI</label>
                     <input type="text" id="no" placeholder="00" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
@@ -132,20 +121,19 @@
                 </div>
             </div>
             
-            <button class="btn-simpan" onclick="simpanData()">SIMPAN DATA ABSENSI</button>
+            <button class="btn-add" onclick="simpanData()">SIMPAN DATA ABSENSI</button>
         </div>
 
         <div class="right-panel">
-            <h3 class="header-title" style="font-size: 18px;">DAFTAR HADIR</h3>
+            <h3 class="header-title" style="font-size: 16px;">DAFTAR HADIR</h3>
             <div id="list"></div>
-            
-            <button class="btn-special" onclick="eksporLaporan()">EKSPOR LAPORAN (PRINT)</button>
-            <button class="btn-special" onclick="resetData()" style="margin-top: 12px;">KOSONGKAN DATABASE</button>
+            <button class="btn-csv" onclick="eksporLaporan()">EKSPOR LAPORAN (PRINT)</button>
+            <button class="btn-reset" onclick="resetData()">KOSONGKAN SEMUA DATA</button>
         </div>
     </div>
 
 <script>
-    let dbAbsen = JSON.parse(localStorage.getItem('db_final_v16')) || [];
+    let dbAbsen = JSON.parse(localStorage.getItem('db_final_v9')) || [];
     let video = document.getElementById('video');
     let canvas = document.getElementById('canvas');
     let stream = null;
@@ -155,7 +143,7 @@
     function applyTheme(t) {
         document.body.setAttribute('data-theme', t);
         document.getElementById('tBtn').innerHTML = t === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
-        localStorage.setItem('theme_v16', t);
+        localStorage.setItem('theme_v9', t);
     }
 
     function toggleTheme() {
@@ -166,21 +154,24 @@
     function getNow() {
         const d = new Date();
         const days = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU"];
-        return days[d.getDay()] + ", " + String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
+        const dateStr = String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
+        return days[d.getDay()] + ", " + dateStr;
     }
 
-    function setDateHeader() { document.getElementById('tglDisplay').innerText = getNow(); }
+    function setDateHeader() { 
+        document.getElementById('tglDisplay').innerText = getNow(); 
+    }
 
     function toggleCam() {
         let btn = document.getElementById('camBtn');
         if (!stream) {
             navigator.mediaDevices.getUserMedia({ video: true })
-            .then(s => { stream = s; video.srcObject = s; btn.innerText = "MATIKAN KAMERA"; btn.style.background = "#ff4757"; })
-            .catch(() => alert("Kamera tidak aktif!"));
+            .then(s => { stream = s; video.srcObject = s; btn.innerText = "MATIKAN KAMERA"; btn.classList.add('active'); })
+            .catch(() => alert("Kamera tidak ditemukan!"));
         } else {
             stream.getTracks().forEach(t => t.stop());
             video.srcObject = null; stream = null;
-            btn.innerText = "AKTIFKAN KAMERA"; btn.style.background = "#34495e";
+            btn.innerText = "AKTIFKAN KAMERA"; btn.classList.remove('active');
         }
     }
 
@@ -188,7 +179,8 @@
         let n = document.getElementById('nama').value;
         let nr = document.getElementById('no').value;
         let s = document.getElementById('stat').value;
-        if(!n || !nr || !s) return alert("Mohon lengkapi data!");
+
+        if(!n || !nr || !s) return alert("Data tidak lengkap!");
 
         let foto = "https://via.placeholder.com/150?text=NO+PHOTO";
         if (stream) {
@@ -203,8 +195,9 @@
         let jam = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
 
         dbAbsen.push({ n: n.toUpperCase(), no: nr.padStart(2, '0'), s: s.toUpperCase(), jam: jam, tgl: getNow(), img: foto });
-        localStorage.setItem('db_final_v16', JSON.stringify(dbAbsen));
+        localStorage.setItem('db_final_v9', JSON.stringify(dbAbsen));
         renderList();
+
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
         document.getElementById('stat').selectedIndex = 0;
@@ -219,7 +212,9 @@
                     <img src="${item.img}" class="foto-hasil">
                     <div class="info">
                         <b>${item.n}</b>
-                        NO: ${item.no} | PUKUL: ${item.jam}
+                        NOMOR ABSENSI : ${item.no}<br>
+                        TANGGAL : ${item.tgl}<br>
+                        PUKUL : ${item.jam}
                     </div>
                     <span class="badge" style="background:${COLORS[item.s]}">${item.s}</span>
                 </div>`;
@@ -232,24 +227,32 @@
         let html = `<html><head><style>
             * { text-transform: uppercase; font-family: sans-serif; }
             table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th { background: #000; color: white; padding: 12px; }
+            th { background: #000; color: white; padding: 10px; }
             td { padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold; font-size: 12px; }
-            img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+            img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; }
         </style></head><body onload="window.print()">
-            <h2 style="text-align:center;">LAPORAN DATA ABSENSI</h2>
-            <table><tr><th>FOTO</th><th>NO</th><th>NAMA SISWA</th><th>WAKTU</th><th>STATUS</th></tr>`;
+            <h2 style="text-align:center;">LAPORAN ABSENSI SISWA</h2>
+            <table><tr><th>FOTO</th><th>NOMOR ABSENSI</th><th>NAMA SISWA</th><th>WAKTU</th><th>STATUS</th></tr>`;
         dbAbsen.forEach(i => {
-            html += `<tr><td><img src="${i.img}"></td><td>${i.no}</td><td style="text-align:left">${i.n}</td><td>${i.tgl}<br>${i.jam}</td><td>${i.s}</td></tr>`;
+            html += `<tr>
+                <td><img src="${i.img}"></td>
+                <td>${i.no}</td>
+                <td style="text-align:left">${i.n}</td>
+                <td>TANGGAL : ${i.tgl}<br>PUKUL : ${i.jam}</td>
+                <td>${i.s}</td>
+            </tr>`;
         });
         html += `</table></body></html>`;
         win.document.write(html);
         win.document.close();
     }
 
-    function resetData() { if(confirm("Hapus seluruh data?")) { dbAbsen = []; localStorage.removeItem('db_final_v16'); renderList(); } }
+    function resetData() { 
+        if(confirm("Hapus semua data absensi?")) { dbAbsen = []; localStorage.removeItem('db_final_v9'); renderList(); } 
+    }
 
     window.onload = () => {
-        applyTheme(localStorage.getItem('theme_v16') || 'light');
+        applyTheme(localStorage.getItem('theme_v9') || 'light');
         setDateHeader();
         renderList();
     };
