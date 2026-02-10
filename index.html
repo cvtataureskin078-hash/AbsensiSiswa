@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa - Final Konsisten</title>
+    <title>Absensi Siswa - Konsisten v8</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #f1f3f6; --card: #ffffff; --text: #2d3436; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
-        [data-theme="dark"] { --bg: #121212; --card: #1e1e1e; --text: #ffffff; --accent: #6c5ce7; }
+        
+        /* Dark Mode: Tulisan Judul & Label Jadi Putih */
+        [data-theme="dark"] { 
+            --bg: #121212; 
+            --card: #1e1e1e; 
+            --text: #ffffff; 
+            --accent: #ffffff; /* Mengubah warna aksen tulisan jadi putih */
+        }
         
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; transition: 0.3s; }
         
@@ -32,10 +39,9 @@
             .left-panel, .right-panel { border: none; padding: 20px; }
         }
 
-        .header-title { margin: 0 0 3px 0; font-weight: 800; font-size: 19px; text-transform: uppercase; }
-        .date-display { font-size: 12px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; }
+        .header-title { margin: 0 0 3px 0; font-weight: 800; font-size: 19px; text-transform: uppercase; color: var(--text); }
+        .date-display { font-size: 12px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; color: var(--text); }
 
-        /* Kamera TANPA Bingkai sama sekali */
         #cam-box { width: 100%; height: 210px; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         
@@ -45,7 +51,10 @@
         button { border: none; border-radius: 10px; cursor: pointer; font-weight: 800; padding: 12px; width: 100%; transition: 0.3s; font-size: 12px; text-transform: uppercase; }
         .btn-cam { background: #2f3542; color: white; margin-bottom: 15px; }
         .btn-cam.active { background: var(--red); }
-        .btn-add { background: var(--accent); color: white; height: 50px; font-size: 14px; box-shadow: 0 5px 15px rgba(72, 52, 212, 0.2); }
+        
+        /* Tombol Simpan Tetap Berwarna untuk Identitas Aksi */
+        .btn-add { background: #4834d4; color: white; height: 50px; font-size: 14px; box-shadow: 0 5px 15px rgba(72, 52, 212, 0.2); }
+        [data-theme="dark"] .btn-add { background: #5f4dee; }
         
         .btn-csv { background: var(--green); color: white; margin-top: 15px; }
         .btn-reset { background: var(--red); color: white; margin-top: 8px; font-size: 9px; padding: 6px; opacity: 0.8; }
@@ -58,7 +67,7 @@
         .badge { padding: 5px 12px; border-radius: 6px; color: #fff; font-size: 9px; font-weight: 800; text-align: center; min-width: 60px; }
         
         #list::-webkit-scrollbar { width: 4px; }
-        #list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        #list::-webkit-scrollbar-thumb { background: var(--text); border-radius: 10px; }
     </style>
 </head>
 <body data-theme="light">
@@ -109,7 +118,7 @@
     </div>
 
 <script>
-    let dbAbsen = JSON.parse(localStorage.getItem('db_absen_v7')) || [];
+    let dbAbsen = JSON.parse(localStorage.getItem('db_absen_v8')) || [];
     let video = document.getElementById('video');
     let canvas = document.getElementById('canvas');
     let stream = null;
@@ -119,7 +128,7 @@
     function applyTheme(t) {
         document.body.setAttribute('data-theme', t);
         document.getElementById('tBtn').innerHTML = t === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
-        localStorage.setItem('theme', t);
+        localStorage.setItem('theme_v8', t);
     }
 
     function toggleTheme() {
@@ -171,7 +180,7 @@
         let jam = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
 
         dbAbsen.push({ n: n.toUpperCase(), no: nr.padStart(2, '0'), s: s.toUpperCase(), jam: jam, tgl: getNow(), img: foto });
-        localStorage.setItem('db_absen_v7', JSON.stringify(dbAbsen));
+        localStorage.setItem('db_absen_v8', JSON.stringify(dbAbsen));
         renderList();
 
         document.getElementById('nama').value = '';
@@ -224,11 +233,11 @@
     }
 
     function resetData() { 
-        if(confirm("Hapus semua data absensi?")) { dbAbsen = []; localStorage.removeItem('db_absen_v7'); renderList(); } 
+        if(confirm("Hapus semua data absensi?")) { dbAbsen = []; localStorage.removeItem('db_absen_v8'); renderList(); } 
     }
 
     window.onload = () => {
-        applyTheme(localStorage.getItem('theme') || 'light');
+        applyTheme(localStorage.getItem('theme_v8') || 'light');
         setDateHeader();
         renderList();
     };
