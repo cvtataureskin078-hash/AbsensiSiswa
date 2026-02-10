@@ -15,45 +15,46 @@
             background: var(--card); width: 100%; max-width: 1000px; 
             display: flex; border-radius: 20px; color: var(--text); 
             position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
-            overflow: visible; 
+            overflow: visible !important; 
         }
 
-        /* TOMBOL DI KANAN - UKURAN LEBIH GEDE DIKIT */
+        /* TOMBOL TETAP DI KANAN & UKURANNYA MANTAP */
         .theme-toggle { 
-            position: absolute; 
-            top: 15px; 
-            right: 15px; 
-            padding: 12px 22px; /* Diperlebar biar mantap */
+            position: absolute !important; 
+            top: 15px !important; 
+            right: 15px !important; 
+            left: auto !important;
+            padding: 12px 24px !important; 
             border-radius: 50px;
             display: flex; 
             align-items: center; 
             gap: 8px;
             cursor: pointer; 
             border: none; 
-            font-size: 12px; /* Font naik dikit biar kebaca */
+            font-size: 12px; 
             font-weight: 800; 
             z-index: 1000;
             white-space: nowrap; 
             transition: 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        [data-theme="light"] .theme-toggle { background: #2f3542; color: #ffffff; }
+        [data-theme="light"] .theme-toggle { background: #1e272e; color: #ffffff; }
         [data-theme="dark"] .theme-toggle { background: #ffffff; color: #1e272e; }
 
         .left-panel { flex: 1.2; padding: 35px; }
         .right-panel { flex: 1; padding: 30px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); border-radius: 0 20px 20px 0; display: flex; flex-direction: column; }
         
         @media (max-width: 850px) { 
-            .main-card { flex-direction: column; margin-top: 20px; } 
+            .main-card { flex-direction: column; margin-top: 25px; } 
             .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); border-radius: 0 0 20px 20px; } 
             .theme-toggle { 
-                top: 15px; 
-                right: 15px; 
-                padding: 10px 20px; /* Ukuran pas untuk jempol di HP */
+                top: 12px !important; 
+                right: 12px !important; 
+                padding: 10px 20px !important; 
                 font-size: 11px;
             }
-            .left-panel { padding: 40px 20px 25px 20px; }
+            .left-panel { padding: 45px 20px 25px 20px; }
         }
 
         .date-header { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; }
@@ -69,7 +70,9 @@
         .btn-cam.active { background: var(--red); }
         .btn-add { background: var(--accent); color: white; font-size: 16px; height: 55px; box-shadow: 0 4px 12px rgba(72, 52, 212, 0.2); }
         .btn-csv { background: var(--green); color: white; margin-top: 15px; }
-        .btn-reset { background: transparent; color: var(--red); margin-top: 10px; font-size: 11px; text-decoration: underline; }
+        
+        /* TULISAN DIKEMBALIKAN KE ASLINYA */
+        .btn-reset { background: var(--red); color: white; margin-top: 8px; font-size: 11px; }
 
         #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
         .item { background: var(--card); padding: 12px; margin-bottom: 10px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); }
@@ -99,13 +102,13 @@
             
             <div style="display: flex; gap: 10px;">
                 <div style="flex: 1;">
-                    <label>NO. ABSEN</label>
+                    <label>NOMOR ABSENSI</label>
                     <input type="number" id="no" placeholder="..." min="1">
                 </div>
                 <div style="flex: 1.5;">
                     <label>STATUS</label>
                     <select id="stat">
-                        <option value="" selected disabled>-- Pilih Status --</option>
+                        <option value="" selected disabled>-- Pilih --</option>
                         <option value="Hadir">Hadir</option>
                         <option value="Izin">Izin</option>
                         <option value="Sakit">Sakit</option>
@@ -121,7 +124,7 @@
             <h3 style="margin:0; font-weight: 800;">DAFTAR HADIR</h3>
             <div id="list"></div>
             <button class="btn-csv" onclick="ekspor()">EKSPOR DAFTAR HADIR</button>
-            <button class="btn-reset" onclick="hapusSemua()">Hapus Semua Riwayat</button>
+            <button class="btn-reset" onclick="hapusSemua()">KOSONGKAN DAFTAR HADIR</button>
         </div>
     </div>
 
@@ -139,7 +142,7 @@
 
     function gantiTema() {
         var skrg = document.body.getAttribute('data-theme');
-        var baru = skrg === 'light' ? 'dark' : 'light';
+        var baru = (skrg === 'light') ? 'dark' : 'light';
         pasangTema(baru);
     }
 
