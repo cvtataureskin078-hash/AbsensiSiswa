@@ -12,20 +12,25 @@
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; transition: 0.3s; }
         .main-card { background: var(--card); width: 100%; max-width: 1000px; display: flex; border-radius: 20px; overflow: hidden; color: var(--text); position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s; }
 
-        /* FIX TOMBOL TEMA: Light Mode jadi Putih, Dark Mode jadi Gelap */
+        /* MODIFIKASI TOMBOL SESUAI REQUEST */
         .theme-toggle { 
             position: absolute; top: 20px; right: 20px; 
             width: auto; padding: 8px 15px; border-radius: 50px;
-            background: #ffffff; color: #1e272e; 
             display: flex; align-items: center; gap: 8px;
-            cursor: pointer; border: 1px solid #ddd; font-size: 10px;
+            cursor: pointer; border: 1px solid rgba(0,0,0,0.1); font-size: 10px;
             font-weight: 800; z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             white-space: nowrap; transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        
+
+        /* Saat Light Mode: Tombol justru berwarna Gelap (untuk ke Dark) */
+        [data-theme="light"] .theme-toggle {
+            background: #2f3542; color: #ffffff; border-color: #2f3542;
+        }
+
+        /* Saat Dark Mode: Tombol justru berwarna Putih (untuk ke Light) */
         [data-theme="dark"] .theme-toggle { 
-            background: #2f3542; color: #ffffff; border: 1px solid #444; 
+            background: #ffffff; color: #1e272e; border-color: #ffffff;
         }
 
         .left-panel { flex: 1.2; padding: 30px; }
@@ -106,7 +111,7 @@
     </div>
 
 <script>
-    var dataAbsen = JSON.parse(localStorage.getItem('absen_v_final_fix')) || [];
+    var dataAbsen = JSON.parse(localStorage.getItem('absen_v_fix_banget')) || [];
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
     var streamLocal = null;
@@ -115,7 +120,9 @@
         var b = document.body;
         var isL = b.getAttribute('data-theme') === 'light';
         b.setAttribute('data-theme', isL ? 'dark' : 'light');
-        document.getElementById('tBtn').innerHTML = isL ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+        
+        var isNowDark = b.getAttribute('data-theme') === 'dark';
+        document.getElementById('tBtn').innerHTML = isNowDark ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
     }
 
     function getFormattedDate() {
@@ -169,7 +176,7 @@
         var jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
         
         dataAbsen.push({ n: n, no: no2, s: s, jam: jam, tgl: getFormattedDate(), img: foto });
-        localStorage.setItem('absen_v_final_fix', JSON.stringify(dataAbsen));
+        localStorage.setItem('absen_v_fix_banget', JSON.stringify(dataAbsen));
         
         render();
         document.getElementById('nama').value = '';
@@ -211,7 +218,7 @@
 
     function hapusSemua() { 
         dataAbsen = []; 
-        localStorage.removeItem('absen_v_final_fix'); 
+        localStorage.removeItem('absen_v_fix_banget'); 
         render(); 
     }
     
