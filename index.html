@@ -15,9 +15,9 @@
             background: var(--card); width: 100%; max-width: 1000px; 
             display: flex; border-radius: 20px; color: var(--text); 
             position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
-            overflow: visible !important;
         }
 
+        /* TOMBOL TEMA: Skala Pas (1.05) */
         .theme-toggle { 
             position: absolute !important; 
             top: 20px !important; 
@@ -49,11 +49,7 @@
         @media (max-width: 850px) { 
             .main-card { flex-direction: column; margin-top: 20px; } 
             .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); border-radius: 0 0 20px 20px; } 
-            .theme-toggle { 
-                top: 15px !important; 
-                right: 15px !important; 
-                transform: scale(1.03) !important; 
-            }
+            .theme-toggle { top: 15px !important; right: 15px !important; transform: scale(1.03) !important; }
             .left-panel { padding: 45px 20px 25px 20px; }
         }
 
@@ -93,10 +89,10 @@
             </div>
             <canvas id="canvas"></canvas>
 
-            <button id="camBtn" class="btn-cam" onclick="nyalainKamera()">NYALAKAN KAMERA</button>
+            <button id="camBtn" class="btn-cam" onclick="nyalainKamera()">📸 NYALAKAN KAMERA</button>
             
             <label>NAMA SISWA</label>
-            <input type="text" id="nama" placeholder="Ketik nama lengkap...">
+            <input type="text" id="nama" placeholder="Masukkan nama lengkap...">
             
             <div style="display: flex; gap: 10px;">
                 <div style="flex: 1;">
@@ -115,7 +111,7 @@
                 </div>
             </div>
             
-            <button class="btn-add" onclick="tambah()">SIMPAN & FOTO</button>
+            <button class="btn-add" onclick="tambah()">SIMPAN DATA & FOTO</button>
         </div>
 
         <div class="right-panel">
@@ -162,14 +158,14 @@
             .then(function(s) {
                 aliranKamera = s;
                 video.srcObject = s;
-                btn.innerText = "MATIKAN KAMERA";
+                btn.innerText = "🚫 MATIKAN KAMERA";
                 btn.classList.add('active');
-            }).catch(function(e) {});
+            }).catch(function(e) { alert("Gagal akses kamera"); });
         } else {
             aliranKamera.getTracks().forEach(t => t.stop());
             video.srcObject = null;
             aliranKamera = null;
-            btn.innerText = "NYALAKAN KAMERA";
+            btn.innerText = "📸 NYALAKAN KAMERA";
             btn.classList.remove('active');
         }
     }
@@ -178,7 +174,7 @@
         var n = document.getElementById('nama').value;
         var nr = document.getElementById('no').value;
         var s = document.getElementById('stat').value;
-        if(!n || !nr || !s) return;
+        if(!n || !nr || !s) { alert("Isi semua data!"); return; }
 
         var noAbsen = nr.toString().padStart(2, '0');
         var gambar = "https://via.placeholder.com/150?text=No+Photo";
@@ -196,6 +192,8 @@
         dataLokal.push({ n: n, no: noAbsen, s: s, jam: waktu, tgl: formatTanggal(), img: gambar });
         localStorage.setItem('catatan_absen_siswa', JSON.stringify(dataLokal));
         render();
+        
+        // Reset Form
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
         document.getElementById('stat').selectedIndex = 0;
@@ -233,7 +231,11 @@
     }
 
     function hapusSemua() { 
-        dataLokal = []; localStorage.removeItem('catatan_absen_siswa'); render(); 
+        if(confirm("Hapus semua riwayat absen?")) {
+            dataLokal = []; 
+            localStorage.removeItem('catatan_absen_siswa'); 
+            render(); 
+        }
     }
     
     window.onload = function() { 
