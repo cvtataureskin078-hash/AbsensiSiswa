@@ -31,19 +31,29 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
         }
 
-        /* Tombol Pill dengan Tulisan Sesuai Request */
+        /* --- TOMBOL DARK MODE PENDEK (FIXED) --- */
         .theme-toggle { 
-            position: absolute; top: 20px; right: 20px; 
-            padding: 10px 18px; border-radius: 50px;
-            background: #2f3542; color: #fff; 
-            display: flex; align-items: center; gap: 10px;
-            cursor: pointer; border: none; font-size: 11px; font-weight: 800; z-index: 10;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: 0.3s;
-            letter-spacing: 0.5px;
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            width: auto; /* Biar lebarnya ngikutin tulisan saja */
+            padding: 8px 15px; 
+            border-radius: 50px;
+            background: #2f3542; 
+            color: #fff; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            cursor: pointer; 
+            border: none; 
+            font-size: 10px; /* Tulisan dikecilkan biar manis */
+            font-weight: 800; 
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            white-space: nowrap; /* Biar tulisan nggak turun ke bawah */
         }
         
         [data-theme="dark"] .theme-toggle { background: #f1c40f; color: #000; }
-        .theme-toggle:hover { transform: translateY(-2px); }
 
         .left-panel { flex: 1.2; padding: 30px; }
         .right-panel { 
@@ -52,14 +62,12 @@
         }
         
         @media (max-width: 850px) { 
-            .main-card { flex-direction: column; } 
+            .main-card { flex-direction: column; margin-top: 50px; } 
             .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); }
-            .theme-toggle { top: 10px; right: 10px; padding: 8px 14px; font-size: 10px; }
+            .theme-toggle { top: -45px; right: 0; } /* Posisi di atas kartu kalau di HP */
         }
 
         .date { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; }
-
-        /* Kamera Bersih Tanpa Bingkai */
         #cam-box { width: 100%; height: 240px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         canvas { display: none; }
@@ -83,7 +91,7 @@
             background: var(--card); padding: 10px; margin-bottom: 10px; border-radius: 12px; 
             display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05); 
         }
-        .foto-hasil { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #eee; }
+        .foto-hasil { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
         .info { flex-grow: 1; font-size: 12px; }
         .badge { padding: 4px 8px; border-radius: 5px; color: #fff; font-size: 9px; font-weight: 800; }
     </style>
@@ -151,9 +159,7 @@
     function setTgl() {
         var d = new Date();
         var hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-        var tgl = String(d.getDate()).padStart(2, '0');
-        var bln = String(d.getMonth() + 1).padStart(2, '0');
-        document.getElementById('tglDisplay').innerText = hari[d.getDay()] + ", " + tgl + "/" + bln + "/" + d.getFullYear();
+        document.getElementById('tglDisplay').innerText = hari[d.getDay()] + ", " + String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
     }
 
     function toggleCam() {
@@ -179,10 +185,9 @@
         var n = document.getElementById('nama').value;
         var nr = document.getElementById('no').value;
         var s = document.getElementById('stat').value;
+        if(!n || !nr || !s) return alert("Lengkapi data!");
 
-        if(!n || !nr || s === null) return alert("Harap isi Nama, Nomor, dan Pilih Status!");
-
-        var no2Digit = nr.toString().padStart(2, '0');
+        var no2 = nr.toString().padStart(2, '0');
         var foto = "https://via.placeholder.com/150?text=No+Photo";
 
         if (streamLocal) {
@@ -195,10 +200,8 @@
 
         var d = new Date();
         var jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-        
-        dataAbsen.push({ n: n, no: no2Digit, s: s, jam: jam, img: foto });
+        dataAbsen.push({ n: n, no: no2, s: s, jam: jam, img: foto });
         localStorage.setItem('absen_v_final_foto', JSON.stringify(dataAbsen));
-        
         render();
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
@@ -209,43 +212,25 @@
         var kontainer = document.getElementById('list');
         kontainer.innerHTML = '';
         var colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
-
         for (var i = dataAbsen.length - 1; i >= 0; i--) {
             var x = dataAbsen[i];
-            kontainer.innerHTML += `
-                <div class="item">
-                    <img src="${x.img}" class="foto-hasil">
-                    <div class="info">
-                        <b>${x.n}</b><br>
-                        No: ${x.no} | Jam: ${x.jam}
-                    </div>
-                    <span class="badge" style="background:${colors[x.s]}">${x.s}</span>
-                </div>`;
+            kontainer.innerHTML += `<div class="item"><img src="${x.img}" class="foto-hasil"><div class="info"><b>${x.n}</b><br>No: ${x.no} | Jam: ${x.jam}</div><span class="badge" style="background:${colors[x.s]}">${x.s}</span></div>`;
         }
     }
 
     function ekspor() {
-        if(dataAbsen.length === 0) return alert("Data masih kosong!");
-        let htmlLaporan = `<html><head><title>Laporan Absensi</title><style>body { font-family: sans-serif; padding: 30px; background: #f9f9f9; }.header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }table { width: 100%; border-collapse: collapse; background: white; }th, td { border: 1px solid #ddd; padding: 15px; text-align: left; }th { background-color: #4834d4; color: white; }img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; }</style></head><body><div class="header"><h1>LAPORAN KEHADIRAN SISWA</h1><p>Dicetak pada: ${document.getElementById('tglDisplay').innerText}</p></div><table><thead><tr><th>Wajah</th><th>No</th><th>Nama Lengkap</th><th>Jam</th><th>Status</th></tr></thead><tbody>`;
-        dataAbsen.forEach(function(x) {
-            htmlLaporan += `<tr><td><img src="${x.img}"></td><td>${x.no}</td><td>${x.n}</td><td>${x.jam}</td><td>${x.s}</td></tr>`;
-        });
-        htmlLaporan += `</tbody></table><script>window.print();<\/script></body></html>`;
-        var blob = new Blob([htmlLaporan], { type: 'text/html' });
+        if(dataAbsen.length === 0) return alert("Kosong!");
+        let h = `<html><head><title>Laporan</title><style>table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:10px;}img{width:60px;height:60px;border-radius:5px;}</style></head><body><h2>LAPORAN ABSENSI</h2><table><tr><th>Foto</th><th>No</th><th>Nama</th><th>Jam</th><th>Status</th></tr>`;
+        dataAbsen.forEach(x => { h += `<tr><td><img src="${x.img}"></td><td>${x.no}</td><td>${x.n}</td><td>${x.jam}</td><td>${x.s}</td></tr>`; });
+        h += `</table><script>window.print();<\/script></body></html>`;
+        var blob = new Blob([h], { type: 'text/html' });
         var link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "Laporan_Absensi_Bergambar.html";
+        link.download = "Laporan_Absen.html";
         link.click();
     }
 
-    function hapusSemua() {
-        if(confirm("Hapus semua data log?")) {
-            dataAbsen = [];
-            localStorage.removeItem('absen_v_final_foto');
-            render();
-        }
-    }
-
+    function hapusSemua() { if(confirm("Hapus semua?")) { dataAbsen = []; localStorage.removeItem('absen_v_final_foto'); render(); } }
     window.onload = function() { setTgl(); render(); };
 </script>
 </body>
