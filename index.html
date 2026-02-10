@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa - Fix UI v15</title>
+    <title>Absensi Siswa - Kembali Ke Desain Utama v16</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
-        /* --- TEMA WARNA TETAP --- */
+        /* --- TEMA WARNA ASLI (DESAIN UTAMA) --- */
         :root { 
-            --bg-page: #f1f3f6; 
+            --bg-page: #f8f9fa; 
             --card-bg: #ffffff; 
-            --text-main: #000000; 
+            --text-main: #2d3436; 
             --input-bg: #ffffff;
-            --purple-btn: #4834d4; /* Warna asli tombol simpan */
+            --purple-btn: #4834d4; 
             
-            /* HANYA INI YANG BERUBAH (INVERT) */
-            --btn-invert-bg: #000000;   /* Light: Hitam */
-            --btn-invert-text: #ffffff; /* Light: Putih */
+            /* HANYA 2 BLOK INI YANG BERUBAH */
+            --btn-special-bg: #000000;   /* Light: Hitam */
+            --btn-special-text: #ffffff; /* Light: Putih */
         }
         
         [data-theme="dark"] { 
@@ -26,81 +26,82 @@
             --text-main: #ffffff; 
             --input-bg: #2d2d2d;
             
-            /* HANYA INI YANG BERUBAH (INVERT) */
-            --btn-invert-bg: #ffffff;   /* Dark: Putih */
-            --btn-invert-text: #000000; /* Dark: Hitam */
+            /* HANYA 2 BLOK INI YANG BERUBAH */
+            --btn-special-bg: #ffffff;   /* Dark: Putih */
+            --btn-special-text: #000000; /* Dark: Hitam */
         }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-page); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; transition: 0.3s; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-page); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; transition: 0.3s; }
         
         .main-card { 
-            background: var(--card-bg); width: 100%; max-width: 950px; 
-            display: flex; border-radius: 20px; color: var(--text-main); 
-            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;
+            background: var(--card-bg); width: 100%; max-width: 1000px; 
+            display: flex; border-radius: 25px; color: var(--text-main); 
+            position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.08); overflow: hidden;
+            min-height: 650px;
         }
 
         .theme-toggle { 
-            position: absolute !important; top: 15px !important; right: 15px !important; width: auto !important;
-            padding: 8px 15px !important; border-radius: 50px; cursor: pointer; border: none; font-size: 10px; font-weight: 800; z-index: 1000;
-            background: #000; color: #fff;
+            position: absolute !important; top: 20px !important; right: 20px !important; width: auto !important;
+            padding: 8px 16px !important; border-radius: 50px; cursor: pointer; border: none; font-size: 10px; font-weight: 800; z-index: 1000;
+            background: #2d3436; color: #fff; text-transform: uppercase;
         }
         [data-theme="dark"] .theme-toggle { background: #fff; color: #000; }
 
-        .left-panel { flex: 1.1; padding: 40px; border-right: 1px solid rgba(0,0,0,0.05); }
-        .right-panel { flex: 1; padding: 40px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; }
+        .left-panel { flex: 1.1; padding: 45px; border-right: 1px solid rgba(0,0,0,0.05); }
+        .right-panel { flex: 1; padding: 45px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; }
         
-        @media (max-width: 800px) { .main-card { flex-direction: column; } .left-panel, .right-panel { border: none; padding: 25px; } }
+        @media (max-width: 850px) { .main-card { flex-direction: column; } .left-panel, .right-panel { border: none; padding: 30px; } }
 
-        .header-title { margin: 0 0 5px 0; font-weight: 800; font-size: 22px; text-transform: uppercase; }
-        .date-display { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; }
+        .header-title { margin: 0 0 5px 0; font-weight: 800; font-size: 24px; text-transform: uppercase; letter-spacing: -0.5px; }
+        .date-display { font-size: 13px; opacity: 0.6; font-weight: 600; margin-bottom: 25px; text-transform: uppercase; }
 
-        #cam-box { width: 100%; height: 250px; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 20px; border: 2px solid #4834d4; }
+        #cam-box { width: 100%; height: 260px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         
-        label { font-size: 10px; font-weight: 800; display: block; margin-bottom: 6px; opacity: 0.9; }
+        label { font-size: 10px; font-weight: 800; display: block; margin-bottom: 8px; opacity: 0.8; }
         input, select { 
-            width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid rgba(128,128,128,0.2); 
+            width: 100%; padding: 14px; border-radius: 12px; border: 1.5px solid rgba(0,0,0,0.1); 
             background: var(--input-bg); color: var(--text-main); box-sizing: border-box; font-family: inherit; 
-            margin-bottom: 15px; font-size: 14px; outline: none; 
+            margin-bottom: 18px; font-size: 14px; outline: none; 
         }
 
-        button { border: none; border-radius: 12px; cursor: pointer; font-weight: 800; padding: 14px; width: 100%; transition: 0.3s; font-size: 14px; text-transform: uppercase; }
+        button { border: none; border-radius: 12px; cursor: pointer; font-weight: 800; padding: 15px; width: 100%; transition: 0.2s; font-size: 14px; text-transform: uppercase; }
         
-        .btn-cam { background: #353b48; color: white; margin-bottom: 20px; }
+        .btn-cam { background: #34495e; color: white; margin-bottom: 25px; }
         
-        /* TOMBOL SIMPAN (WARNA UNGU ASLI) */
+        /* TOMBOL SIMPAN (TETAP WARNA UNGU ASLI) */
         .btn-simpan { 
             background: var(--purple-btn); 
             color: white; 
             height: 60px;
-            box-shadow: 0 5px 15px rgba(72, 52, 212, 0.3);
+            box-shadow: 0 8px 20px rgba(72, 52, 212, 0.25);
         }
 
-        /* 2 BLOK TARGET (INVERT MODE) */
-        .btn-target {
-            background: var(--btn-invert-bg) !important;
-            color: var(--btn-invert-text) !important;
-            height: 60px; /* Ukuran disamakan dengan Simpan Data */
+        /* 2 BLOK YANG DISERASIKAN (EKSPOR & KOSONGKAN) */
+        .btn-special {
+            background: var(--btn-special-bg) !important;
+            color: var(--btn-special-text) !important;
+            height: 60px; /* SAMA DENGAN TOMBOL SIMPAN */
             margin-top: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        #list { flex-grow: 1; overflow-y: auto; max-height: 450px; margin-top: 15px; }
+        #list { flex-grow: 1; overflow-y: auto; max-height: 420px; margin-top: 15px; }
         .item { 
-            background: var(--card-bg); padding: 15px; margin-bottom: 12px; border-radius: 15px; 
-            display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            background: var(--card-bg); padding: 18px; margin-bottom: 15px; border-radius: 18px; 
+            display: flex; align-items: center; gap: 20px; border: 1px solid rgba(0,0,0,0.04); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
-        .foto-hasil { width: 75px; height: 75px; border-radius: 10px; object-fit: cover; border: 2px solid var(--text-main); }
-        .info { flex-grow: 1; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-        .info b { font-size: 15px; color: #4834d4; display: block; margin-bottom: 2px; }
-        .badge { padding: 6px 12px; border-radius: 8px; color: #fff; font-size: 10px; font-weight: 800; min-width: 70px; text-align: center; }
+        .foto-hasil { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; border: 2px solid #eee; }
+        .info { flex-grow: 1; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .info b { font-size: 16px; color: var(--purple-btn); display: block; margin-bottom: 2px; }
+        .badge { padding: 8px 16px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: 800; min-width: 75px; text-align: center; }
     </style>
 </head>
 <body data-theme="light">
 
     <div class="main-card">
-        <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙 DARK</button>
+        <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙 DARK MODE</button>
 
         <div class="left-panel">
             <h2 class="header-title">ABSENSI SISWA</h2>
@@ -111,18 +112,18 @@
 
             <button id="camBtn" class="btn-cam" onclick="toggleCam()">AKTIFKAN KAMERA</button>
             
-            <label>NAMA LENGKAP</label>
-            <input type="text" id="nama" placeholder="MASUKKAN NAMA..." style="text-transform: uppercase;">
+            <label>NAMA LENGKAP SISWA</label>
+            <input type="text" id="nama" placeholder="INPUT NAMA..." style="text-transform: uppercase;">
             
-            <div style="display: flex; gap: 15px;">
+            <div style="display: flex; gap: 20px;">
                 <div style="flex: 1;">
-                    <label>NO ABSENSI</label>
+                    <label>NOMOR ABSENSI</label>
                     <input type="text" id="no" placeholder="00" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 </div>
                 <div style="flex: 1;">
                     <label>STATUS</label>
                     <select id="stat">
-                        <option value="" selected disabled>- PILIH STATUS -</option>
+                        <option value="" selected disabled>- PILIH -</option>
                         <option value="HADIR">HADIR</option>
                         <option value="IZIN">IZIN</option>
                         <option value="SAKIT">SAKIT</option>
@@ -131,20 +132,20 @@
                 </div>
             </div>
             
-            <button class="btn-simpan" onclick="simpanData()">SIMPAN DATA</button>
+            <button class="btn-simpan" onclick="simpanData()">SIMPAN DATA ABSENSI</button>
         </div>
 
         <div class="right-panel">
             <h3 class="header-title" style="font-size: 18px;">DAFTAR HADIR</h3>
             <div id="list"></div>
             
-            <button class="btn-target" onclick="eksporLaporan()">EKSPOR LAPORAN (PRINT)</button>
-            <button class="btn-target" onclick="resetData()" style="margin-top: 10px;">KOSONGKAN DATA</button>
+            <button class="btn-special" onclick="eksporLaporan()">EKSPOR LAPORAN (PRINT)</button>
+            <button class="btn-special" onclick="resetData()" style="margin-top: 12px;">KOSONGKAN DATABASE</button>
         </div>
     </div>
 
 <script>
-    let dbAbsen = JSON.parse(localStorage.getItem('db_final_v15')) || [];
+    let dbAbsen = JSON.parse(localStorage.getItem('db_final_v16')) || [];
     let video = document.getElementById('video');
     let canvas = document.getElementById('canvas');
     let stream = null;
@@ -153,8 +154,8 @@
 
     function applyTheme(t) {
         document.body.setAttribute('data-theme', t);
-        document.getElementById('tBtn').innerHTML = t === 'dark' ? '☀️ LIGHT' : '🌙 DARK';
-        localStorage.setItem('theme_v15', t);
+        document.getElementById('tBtn').innerHTML = t === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+        localStorage.setItem('theme_v16', t);
     }
 
     function toggleTheme() {
@@ -165,8 +166,7 @@
     function getNow() {
         const d = new Date();
         const days = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU"];
-        const tgl = String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
-        return days[d.getDay()] + ", " + tgl;
+        return days[d.getDay()] + ", " + String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
     }
 
     function setDateHeader() { document.getElementById('tglDisplay').innerText = getNow(); }
@@ -176,11 +176,11 @@
         if (!stream) {
             navigator.mediaDevices.getUserMedia({ video: true })
             .then(s => { stream = s; video.srcObject = s; btn.innerText = "MATIKAN KAMERA"; btn.style.background = "#ff4757"; })
-            .catch(() => alert("Kamera error!"));
+            .catch(() => alert("Kamera tidak aktif!"));
         } else {
             stream.getTracks().forEach(t => t.stop());
             video.srcObject = null; stream = null;
-            btn.innerText = "AKTIFKAN KAMERA"; btn.style.background = "#353b48";
+            btn.innerText = "AKTIFKAN KAMERA"; btn.style.background = "#34495e";
         }
     }
 
@@ -188,7 +188,7 @@
         let n = document.getElementById('nama').value;
         let nr = document.getElementById('no').value;
         let s = document.getElementById('stat').value;
-        if(!n || !nr || !s) return alert("Isi data dulu!");
+        if(!n || !nr || !s) return alert("Mohon lengkapi data!");
 
         let foto = "https://via.placeholder.com/150?text=NO+PHOTO";
         if (stream) {
@@ -203,7 +203,7 @@
         let jam = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
 
         dbAbsen.push({ n: n.toUpperCase(), no: nr.padStart(2, '0'), s: s.toUpperCase(), jam: jam, tgl: getNow(), img: foto });
-        localStorage.setItem('db_final_v15', JSON.stringify(dbAbsen));
+        localStorage.setItem('db_final_v16', JSON.stringify(dbAbsen));
         renderList();
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
@@ -219,7 +219,7 @@
                     <img src="${item.img}" class="foto-hasil">
                     <div class="info">
                         <b>${item.n}</b>
-                        NO: ${item.no} | ${item.jam}<br>${item.tgl}
+                        NO: ${item.no} | PUKUL: ${item.jam}
                     </div>
                     <span class="badge" style="background:${COLORS[item.s]}">${item.s}</span>
                 </div>`;
@@ -236,8 +236,8 @@
             td { padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold; font-size: 12px; }
             img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
         </style></head><body onload="window.print()">
-            <h2 style="text-align:center;">LAPORAN ABSENSI</h2>
-            <table><tr><th>FOTO</th><th>NO</th><th>NAMA</th><th>WAKTU</th><th>STATUS</th></tr>`;
+            <h2 style="text-align:center;">LAPORAN DATA ABSENSI</h2>
+            <table><tr><th>FOTO</th><th>NO</th><th>NAMA SISWA</th><th>WAKTU</th><th>STATUS</th></tr>`;
         dbAbsen.forEach(i => {
             html += `<tr><td><img src="${i.img}"></td><td>${i.no}</td><td style="text-align:left">${i.n}</td><td>${i.tgl}<br>${i.jam}</td><td>${i.s}</td></tr>`;
         });
@@ -246,10 +246,10 @@
         win.document.close();
     }
 
-    function resetData() { if(confirm("Hapus semua data?")) { dbAbsen = []; localStorage.removeItem('db_final_v15'); renderList(); } }
+    function resetData() { if(confirm("Hapus seluruh data?")) { dbAbsen = []; localStorage.removeItem('db_final_v16'); renderList(); } }
 
     window.onload = () => {
-        applyTheme(localStorage.getItem('theme_v15') || 'light');
+        applyTheme(localStorage.getItem('theme_v16') || 'light');
         setDateHeader();
         renderList();
     };
