@@ -15,53 +15,67 @@
             background: var(--card); width: 100%; max-width: 1000px; 
             display: flex; border-radius: 20px; color: var(--text); 
             position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
-            overflow: visible; /* Biar tombol nggak kepotong */
+            overflow: visible; 
         }
 
-        /* TOMBOL DIGEDEIN DIKIT & TETAP DI POJOK */
+        /* TOMBOL DI KANAN - UKURAN LEBIH GEDE DIKIT */
         .theme-toggle { 
-            position: absolute; top: 15px; right: 15px; 
-            padding: 10px 20px; border-radius: 50px;
-            display: flex; align-items: center; gap: 8px;
-            cursor: pointer; border: none; font-size: 11px;
-            font-weight: 800; z-index: 999;
-            white-space: nowrap; transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: absolute; 
+            top: 15px; 
+            right: 15px; 
+            padding: 12px 22px; /* Diperlebar biar mantap */
+            border-radius: 50px;
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            cursor: pointer; 
+            border: none; 
+            font-size: 12px; /* Font naik dikit biar kebaca */
+            font-weight: 800; 
+            z-index: 1000;
+            white-space: nowrap; 
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         [data-theme="light"] .theme-toggle { background: #2f3542; color: #ffffff; }
         [data-theme="dark"] .theme-toggle { background: #ffffff; color: #1e272e; }
 
-        .left-panel { flex: 1.2; padding: 30px; }
+        .left-panel { flex: 1.2; padding: 35px; }
         .right-panel { flex: 1; padding: 30px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); border-radius: 0 20px 20px 0; display: flex; flex-direction: column; }
         
         @media (max-width: 850px) { 
             .main-card { flex-direction: column; margin-top: 20px; } 
             .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); border-radius: 0 0 20px 20px; } 
-            .theme-toggle { top: 12px; right: 12px; padding: 10px 18px; font-size: 10px; }
-            .left-panel { padding: 30px 20px 20px 20px; }
+            .theme-toggle { 
+                top: 15px; 
+                right: 15px; 
+                padding: 10px 20px; /* Ukuran pas untuk jempol di HP */
+                font-size: 11px;
+            }
+            .left-panel { padding: 40px 20px 25px 20px; }
         }
 
         .date-header { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; }
-        #cam-box { width: 100%; height: 220px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
+        #cam-box { width: 100%; height: 230px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         canvas { display: none; }
 
         label { font-size: 11px; font-weight: 700; display: block; margin-bottom: 5px; opacity: 0.7; }
-        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; margin-bottom: 15px; outline: none; }
+        input, select { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1); background: var(--card); color: var(--text); box-sizing: border-box; font-family: inherit; margin-bottom: 15px; outline: none; }
         
-        button { border: none; border-radius: 10px; cursor: pointer; font-weight: 800; padding: 12px; width: 100%; transition: 0.3s; }
+        button { border: none; border-radius: 12px; cursor: pointer; font-weight: 800; padding: 14px; width: 100%; transition: 0.3s; }
         .btn-cam { background: #2f3542; color: white; margin-bottom: 10px; font-size: 12px; }
         .btn-cam.active { background: var(--red); }
-        .btn-add { background: var(--accent); color: white; font-size: 16px; height: 55px; }
+        .btn-add { background: var(--accent); color: white; font-size: 16px; height: 55px; box-shadow: 0 4px 12px rgba(72, 52, 212, 0.2); }
         .btn-csv { background: var(--green); color: white; margin-top: 15px; }
-        .btn-reset { background: var(--red); color: white; margin-top: 8px; font-size: 11px; }
+        .btn-reset { background: transparent; color: var(--red); margin-top: 10px; font-size: 11px; text-decoration: underline; }
 
-        #list { flex-grow: 1; overflow-y: auto; max-height: 380px; margin-top: 10px; padding-right: 5px; }
-        .item { background: var(--card); padding: 10px; margin-bottom: 10px; border-radius: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05); }
-        .foto-hasil { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; }
-        .info { flex-grow: 1; font-size: 11px; line-height: 1.5; }
-        .badge { padding: 4px 8px; border-radius: 5px; color: #fff; font-size: 9px; font-weight: 800; }
+        #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
+        .item { background: var(--card); padding: 12px; margin-bottom: 10px; border-radius: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); }
+        .foto-hasil { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; }
+        .info { flex-grow: 1; font-size: 12px; line-height: 1.5; }
+        .badge { padding: 5px 10px; border-radius: 8px; color: #fff; font-size: 10px; font-weight: 800; }
     </style>
 </head>
 <body data-theme="light">
@@ -84,14 +98,14 @@
             <input type="text" id="nama" placeholder="Ketik nama lengkap...">
             
             <div style="display: flex; gap: 10px;">
-                <div style="flex: 1.2;">
-                    <label>NOMOR ABSENSI</label>
+                <div style="flex: 1;">
+                    <label>NO. ABSEN</label>
                     <input type="number" id="no" placeholder="..." min="1">
                 </div>
-                <div style="flex: 1;">
+                <div style="flex: 1.5;">
                     <label>STATUS</label>
                     <select id="stat">
-                        <option value="" selected disabled>-- Pilih --</option>
+                        <option value="" selected disabled>-- Pilih Status --</option>
                         <option value="Hadir">Hadir</option>
                         <option value="Izin">Izin</option>
                         <option value="Sakit">Sakit</option>
@@ -107,7 +121,7 @@
             <h3 style="margin:0; font-weight: 800;">DAFTAR HADIR</h3>
             <div id="list"></div>
             <button class="btn-csv" onclick="ekspor()">EKSPOR DAFTAR HADIR</button>
-            <button class="btn-reset" onclick="hapusSemua()">KOSONGKAN DAFTAR HADIR</button>
+            <button class="btn-reset" onclick="hapusSemua()">Hapus Semua Riwayat</button>
         </div>
     </div>
 
