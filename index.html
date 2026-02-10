@@ -57,7 +57,7 @@
 </head>
 <body data-theme="light">
 
-    <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙 DARK MODE</button>
+    <button class="theme-toggle" onclick="gantiTema()" id="tBtn">🌙 DARK MODE</button>
 
     <div class="main-card">
         <div class="left-panel">
@@ -69,7 +69,7 @@
             </div>
             <canvas id="canvas"></canvas>
 
-            <button id="camBtn" class="btn-cam" onclick="toggleCam()">NYALAKAN KAMERA</button>
+            <button id="camBtn" class="btn-cam" onclick="nyalainKamera()">NYALAKAN KAMERA</button>
             
             <label>NAMA SISWA</label>
             <input type="text" id="nama" placeholder="Ketik nama lengkap...">
@@ -103,25 +103,26 @@
     </div>
 
 <script>
-    var dataAbsen = JSON.parse(localStorage.getItem('absen_v_final_permanent')) || [];
+    // variabel buat simpan data absen ke browser
+    var dataLokal = JSON.parse(localStorage.getItem('catatan_absen_siswa')) || [];
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
-    var streamLocal = null;
+    var aliranKamera = null;
 
-    // FUNGSI TEMA DENGAN MEMORI (LOCAL STORAGE)
-    function applyTheme(theme) {
-        document.body.setAttribute('data-theme', theme);
-        document.getElementById('tBtn').innerHTML = theme === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
-        localStorage.setItem('user_theme', theme);
+    // buat setel tema
+    function pasangTema(pilihan) {
+        document.body.setAttribute('data-theme', pilihan);
+        document.getElementById('tBtn').innerHTML = pilihan === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+        localStorage.setItem('setelan_tema', pilihan);
     }
 
-    function toggleTheme() {
-        var current = document.body.getAttribute('data-theme');
-        var target = current === 'light' ? 'dark' : 'light';
-        applyTheme(target);
+    function gantiTema() {
+        var skrg = document.body.getAttribute('data-theme');
+        var baru = skrg === 'light' ? 'dark' : 'light';
+        pasangTema(baru);
     }
 
-    function getFormattedDate() {
+    function formatTanggal() {
         var d = new Date();
         return String(d.getDate()).padStart(2, '0') + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + d.getFullYear();
     }
@@ -129,23 +130,23 @@
     function setTgl() {
         var d = new Date();
         var hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-        document.getElementById('tglDisplay').innerText = hari[d.getDay()] + ", " + getFormattedDate();
+        document.getElementById('tglDisplay').innerText = hari[d.getDay()] + ", " + formatTanggal();
     }
 
-    function toggleCam() {
+    function nyalainKamera() {
         var btn = document.getElementById('camBtn');
-        if (!streamLocal) {
+        if (!aliranKamera) {
             navigator.mediaDevices.getUserMedia({ video: { width: 400, height: 300 } })
-            .then(function(stream) {
-                streamLocal = stream;
-                video.srcObject = stream;
+            .then(function(s) {
+                aliranKamera = s;
+                video.srcObject = s;
                 btn.innerText = "MATIKAN KAMERA";
                 btn.classList.add('active');
-            }).catch(function(err) { alert("Izin kamera ditolak!"); });
+            }).catch(function(e) { alert("Yah, kamera gak bisa dibuka!"); });
         } else {
-            streamLocal.getTracks().forEach(track => track.stop());
+            aliranKamera.getTracks().forEach(t => t.stop());
             video.srcObject = null;
-            streamLocal = null;
+            aliranKamera = null;
             btn.innerText = "NYALAKAN KAMERA";
             btn.classList.remove('active');
         }
@@ -155,79 +156,80 @@
         var n = document.getElementById('nama').value;
         var nr = document.getElementById('no').value;
         var s = document.getElementById('stat').value;
-        if(!n || !nr || !s) return alert("Lengkapi data!");
+        
+        if(!n || !nr || !s) return alert("Isi dulu dong datanya!");
 
-        var no2 = nr.toString().padStart(2, '0');
-        var foto = "https://via.placeholder.com/150?text=No+Photo";
+        var noAbsen = nr.toString().padStart(2, '0');
+        var gambar = "https://via.placeholder.com/150?text=No+Photo";
 
-        if (streamLocal) {
+        if (aliranKamera) {
             canvas.width = 150; canvas.height = 110;
             var ctx = canvas.getContext('2d');
             ctx.translate(canvas.width, 0); ctx.scale(-1, 1);
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            foto = canvas.toDataURL('image/jpeg', 0.7);
+            gambar = canvas.toDataURL('image/jpeg', 0.7);
         }
 
         var d = new Date();
-        var jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
+        var waktu = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
         
-        dataAbsen.push({ n: n, no: no2, s: s, jam: jam, tgl: getFormattedDate(), img: foto });
-        localStorage.setItem('absen_v_final_permanent', JSON.stringify(dataAbsen));
+        dataLokal.push({ n: n, no: noAbsen, s: s, jam: waktu, tgl: formatTanggal(), img: gambar });
+        localStorage.setItem('catatan_absen_siswa', JSON.stringify(dataLokal));
         
         render();
+        // kosongin input abis simpan
         document.getElementById('nama').value = '';
         document.getElementById('no').value = '';
         document.getElementById('stat').selectedIndex = 0;
     }
 
     function render() {
-        var kontainer = document.getElementById('list');
-        kontainer.innerHTML = '';
-        var colors = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
-        for (var i = dataAbsen.length - 1; i >= 0; i--) {
-            var x = dataAbsen[i];
-            kontainer.innerHTML += `
+        var tempatList = document.getElementById('list');
+        tempatList.innerHTML = '';
+        var warnaLabel = {'Hadir': '#10ac84', 'Izin': '#f1c40f', 'Sakit': '#e67e22', 'Alfa': '#ee5253'};
+        
+        for (var i = dataLokal.length - 1; i >= 0; i--) {
+            var item = dataLokal[i];
+            tempatList.innerHTML += `
                 <div class="item">
-                    <img src="${x.img}" class="foto-hasil">
+                    <img src="${item.img}" class="foto-hasil">
                     <div class="info">
-                        <b>${x.n}</b><br>
-                        Nomor Absensi: ${x.no}<br>
-                        Tanggal: ${x.tgl}<br>
-                        Pukul: ${x.jam}
+                        <b>${item.n}</b><br>
+                        Nomor Absensi: ${item.no}<br>
+                        Tanggal: ${item.tgl}<br>
+                        Pukul: ${item.jam}
                     </div>
-                    <span class="badge" style="background:${colors[x.s]}">${x.s}</span>
+                    <span class="badge" style="background:${warnaLabel[item.s]}">${item.s}</span>
                 </div>`;
         }
     }
 
     function ekspor() {
-        if(dataAbsen.length === 0) return alert("Kosong!");
-        let h = `<html><head><title>Laporan</title><style>body{font-family:sans-serif;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:10px;}img{width:60px;height:60px;border-radius:5px;}</style></head><body><h2>LAPORAN ABSENSI</h2><table><tr><th>Foto</th><th>Nomor Absensi</th><th>Nama</th><th>Tanggal</th><th>Jam</th><th>Status</th></tr>`;
-        dataAbsen.forEach(x => { h += `<tr><td><img src="${x.img}"></td><td>${x.no}</td><td>${x.n}</td><td>${x.tgl}</td><td>${x.jam}</td><td>${x.s}</td></tr>`; });
-        h += `</table><script>window.print();<\/script></body></html>`;
-        var blob = new Blob([h], { type: 'text/html' });
-        var link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Laporan_Absen.html";
-        link.click();
+        if(dataLokal.length === 0) return alert("Belum ada datanya!");
+        let isi = `<html><head><title>Laporan</title><style>body{font-family:sans-serif;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:10px;}img{width:60px;height:60px;border-radius:5px;}</style></head><body><h2>LAPORAN ABSENSI</h2><table><tr><th>Foto</th><th>Nomor Absensi</th><th>Nama</th><th>Tanggal</th><th>Jam</th><th>Status</th></tr>`;
+        dataLokal.forEach(item => { isi += `<tr><td><img src="${item.img}"></td><td>${item.no}</td><td>${item.n}</td><td>${item.tgl}</td><td>${item.jam}</td><td>${item.s}</td></tr>`; });
+        isi += `</table><script>window.print();<\/script></body></html>`;
+        
+        var file = new Blob([isi], { type: 'text/html' });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(file);
+        a.download = "Laporan_Absen_Siswa.html";
+        a.click();
     }
 
     function hapusSemua() { 
-        dataAbsen = []; 
-        localStorage.removeItem('absen_v_final_permanent'); 
+        dataLokal = []; 
+        localStorage.removeItem('catatan_absen_siswa'); 
         render(); 
     }
     
-    // CEK TEMA SAAT HALAMAN DIBUKA
+    // jalanin pas web dibuka
     window.onload = function() { 
-        var savedTheme = localStorage.getItem('user_theme') || 'light';
-        applyTheme(savedTheme);
+        var temaDulu = localStorage.getItem('setelan_tema') || 'light';
+        pasangTema(temaDulu);
         setTgl(); 
         render(); 
     };
 </script>
 </body>
 </html>
-
-
-
