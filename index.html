@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Pro + Foto Laporan</title>
+    <title>Absensi Pro Camera</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
@@ -31,18 +31,19 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
         }
 
-        /* Tombol Toggle Bulat & Minimalis */
+        /* Tombol Pill dengan Tulisan Sesuai Request */
         .theme-toggle { 
             position: absolute; top: 20px; right: 20px; 
-            width: 40px; height: 40px; border-radius: 50%;
+            padding: 10px 18px; border-radius: 50px;
             background: #2f3542; color: #fff; 
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; border: none; font-size: 18px; z-index: 10;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s;
+            display: flex; align-items: center; gap: 10px;
+            cursor: pointer; border: none; font-size: 11px; font-weight: 800; z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: 0.3s;
+            letter-spacing: 0.5px;
         }
         
-        [data-theme="dark"] .theme-toggle { background: #f0f2f5; color: #1e272e; }
-        .theme-toggle:hover { transform: scale(1.1); }
+        [data-theme="dark"] .theme-toggle { background: #f1c40f; color: #000; }
+        .theme-toggle:hover { transform: translateY(-2px); }
 
         .left-panel { flex: 1.2; padding: 30px; }
         .right-panel { 
@@ -53,11 +54,12 @@
         @media (max-width: 850px) { 
             .main-card { flex-direction: column; } 
             .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); }
-            .theme-toggle { top: 10px; right: 10px; width: 35px; height: 35px; }
+            .theme-toggle { top: 10px; right: 10px; padding: 8px 14px; font-size: 10px; }
         }
 
         .date { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; }
 
+        /* Kamera Bersih Tanpa Bingkai */
         #cam-box { width: 100%; height: 240px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         canvas { display: none; }
@@ -88,7 +90,7 @@
 </head>
 <body data-theme="light">
 
-    <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙</button>
+    <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙 DARK MODE</button>
 
     <div class="main-card">
         <div class="left-panel">
@@ -108,7 +110,7 @@
             <div style="display: flex; gap: 10px;">
                 <div style="flex: 1;">
                     <label>NO ABSEN</label>
-                    <input type="number" id="no" placeholder="Contoh: 1">
+                    <input type="number" id="no" placeholder="...">
                 </div>
                 <div style="flex: 2;">
                     <label>STATUS</label>
@@ -143,12 +145,9 @@
         var b = document.body;
         var isL = b.getAttribute('data-theme') === 'light';
         b.setAttribute('data-theme', isL ? 'dark' : 'light');
-        document.getElementById('tBtn').innerText = isL ? '☀️' : '🌙';
+        document.getElementById('tBtn').innerHTML = isL ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
     }
 
-    // ... Sisa kode JavaScript lainnya (setTgl, toggleCam, tambah, render, ekspor, hapusSemua) 
-    // tetap sama persis seperti kode sebelumnya ...
-    
     function setTgl() {
         var d = new Date();
         var hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -227,60 +226,11 @@
 
     function ekspor() {
         if(dataAbsen.length === 0) return alert("Data masih kosong!");
-        
-        let htmlLaporan = `
-            <html>
-            <head>
-                <title>Laporan Absensi</title>
-                <style>
-                    body { font-family: sans-serif; padding: 30px; background: #f9f9f9; }
-                    .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
-                    table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-                    th, td { border: 1px solid #ddd; padding: 15px; text-align: left; }
-                    th { background-color: #4834d4; color: white; text-transform: uppercase; font-size: 12px; }
-                    img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1px solid #ddd; }
-                    .status-box { font-weight: bold; padding: 5px 10px; border-radius: 4px; border: 1px solid #333; }
-                </style>
-            </head>
-            <body>
-                <div class="header">
-                    <h1>LAPORAN KEHADIRAN SISWA</h1>
-                    <p>Dicetak pada: ${document.getElementById('tglDisplay').innerText}</p>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Wajah</th>
-                            <th>No</th>
-                            <th>Nama Lengkap</th>
-                            <th>Jam Absen</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-        `;
-
+        let htmlLaporan = `<html><head><title>Laporan Absensi</title><style>body { font-family: sans-serif; padding: 30px; background: #f9f9f9; }.header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }table { width: 100%; border-collapse: collapse; background: white; }th, td { border: 1px solid #ddd; padding: 15px; text-align: left; }th { background-color: #4834d4; color: white; }img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; }</style></head><body><div class="header"><h1>LAPORAN KEHADIRAN SISWA</h1><p>Dicetak pada: ${document.getElementById('tglDisplay').innerText}</p></div><table><thead><tr><th>Wajah</th><th>No</th><th>Nama Lengkap</th><th>Jam</th><th>Status</th></tr></thead><tbody>`;
         dataAbsen.forEach(function(x) {
-            htmlLaporan += `
-                <tr>
-                    <td><img src="${x.img}"></td>
-                    <td>${x.no}</td>
-                    <td>${x.n}</td>
-                    <td>${x.jam}</td>
-                    <td><span class="status-box">${x.s}</span></td>
-                </tr>
-            `;
+            htmlLaporan += `<tr><td><img src="${x.img}"></td><td>${x.no}</td><td>${x.n}</td><td>${x.jam}</td><td>${x.s}</td></tr>`;
         });
-
-        htmlLaporan += `
-                    </tbody>
-                </table>
-                <p style="margin-top:30px; text-align:right;">Sistem Absensi Digital Pro</p>
-                <script>window.print();<\/script>
-            </body>
-            </html>
-        `;
-
+        htmlLaporan += `</tbody></table><script>window.print();<\/script></body></html>`;
         var blob = new Blob([htmlLaporan], { type: 'text/html' });
         var link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
