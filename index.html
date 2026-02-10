@@ -3,83 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Kamera Simpel</title>
+    <title>Absensi Pro + Foto Laporan</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        :root { --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; --accent: #4834d4; --green: #10ac84; --red: #ff4757; }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; }
+        :root { 
+            --bg: #f0f2f5; --card: #ffffff; --text: #1e272e; 
+            --accent: #4834d4; --green: #10ac84; --red: #ff4757; 
+        }
+        
+        [data-theme="dark"] { 
+            --bg: #0a0a0a; --card: #1e1e1e; --text: #ffffff; 
+            --accent: #4d3df2; --green: #14bd91; --red: #ff5252; 
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; background: var(--bg); 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; 
+            transition: 0.3s; 
+        }
         
         .main-card { 
             background: var(--card); width: 100%; max-width: 1000px; 
-            display: flex; border-radius: 20px; overflow: hidden; color: var(--text);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex; border-radius: 20px; overflow: hidden; 
+            color: var(--text); position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
         }
 
-        .left-panel { flex: 1.2; padding: 25px; }
-        .right-panel { flex: 1; padding: 25px; background: rgba(0,0,0,0.02); border-left: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .left-panel { flex: 1.2; padding: 30px; }
+        .right-panel { 
+            flex: 1; padding: 30px; background: rgba(0,0,0,0.02); 
+            border-left: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; 
+        }
         
-        @media (max-width: 850px) { .main-card { flex-direction: column; } }
+        @media (max-width: 850px) { .main-card { flex-direction: column; } .right-panel { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); } }
 
-        /* Kamera Tanpa Bingkai */
-        #cam-box {
-            width: 100%; height: 240px; background: #000; border-radius: 15px; 
-            overflow: hidden; position: relative; margin-bottom: 15px;
+        .theme-toggle { 
+            position: absolute; top: 15px; right: 15px; background: #2f3542; 
+            color: #fff; padding: 6px 12px; font-size: 10px; border-radius: 8px; 
+            cursor: pointer; border: none; font-weight: 800; z-index: 10; 
         }
+        
+        [data-theme="dark"] .theme-toggle { background: #f0f2f5; color: #1e272e; }
+
+        .date { font-size: 13px; opacity: 0.7; font-weight: 600; margin-bottom: 15px; }
+
+        #cam-box { width: 100%; height: 240px; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         canvas { display: none; }
 
-        .input-group { margin-bottom: 10px; }
         label { font-size: 11px; font-weight: 700; display: block; margin-bottom: 5px; opacity: 0.7; }
-        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-family: inherit; outline: none; }
+        input, select { 
+            width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1); 
+            background: var(--card); color: var(--text); box-sizing: border-box; 
+            font-family: inherit; margin-bottom: 15px; outline: none; 
+        }
         
         button { border: none; border-radius: 10px; cursor: pointer; font-weight: 800; padding: 12px; width: 100%; transition: 0.3s; }
-        .btn-cam { background: #2f3542; color: white; margin-bottom: 10px; }
-        .btn-cam.active { background: var(--red); } /* Warna merah kalau mau matiin */
-        
-        .btn-add { background: var(--accent); color: white; font-size: 16px; }
+        .btn-cam { background: #2f3542; color: white; margin-bottom: 10px; font-size: 12px; }
+        .btn-cam.active { background: var(--red); }
+        .btn-add { background: var(--accent); color: white; font-size: 16px; height: 55px; }
         .btn-csv { background: var(--green); color: white; margin-top: 15px; }
         .btn-reset { background: var(--red); color: white; margin-top: 8px; font-size: 11px; }
 
-        #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
+        #list { flex-grow: 1; overflow-y: auto; max-height: 380px; margin-top: 10px; padding-right: 5px; }
         .item { 
             background: var(--card); padding: 10px; margin-bottom: 10px; border-radius: 12px; 
-            display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05); 
         }
-        .foto-hasil { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+        .foto-hasil { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #eee; }
         .info { flex-grow: 1; font-size: 12px; }
         .badge { padding: 4px 8px; border-radius: 5px; color: #fff; font-size: 9px; font-weight: 800; }
     </style>
 </head>
-<body>
+<body data-theme="light">
+
+    <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">DARK MODE</button>
 
     <div class="main-card">
         <div class="left-panel">
-            <h2 style="margin:0;">ABSENSI CAMERA</h2>
-            <p id="status" style="font-size: 12px; color: var(--red); margin-bottom: 15px;">● KAMERA NONAKTIF</p>
+            <h2 style="margin:0; font-weight: 800;">ABSENSI CAMERA</h2>
+            <div class="date" id="tglDisplay"></div>
             
             <div id="cam-box">
                 <video id="video" autoplay muted playsinline></video>
             </div>
             <canvas id="canvas"></canvas>
 
-            <button id="camBtn" class="btn-cam" onclick="toggleCam()">📸 NYALAKAN KAMERA</button>
+            <button id="camBtn" class="btn-cam" onclick="toggleCam()">NYALAKAN KAMERA</button>
             
-            <div class="input-group">
-                <label>NAMA SISWA</label>
-                <input type="text" id="nama" placeholder="Ketik nama...">
-            </div>
+            <label>NAMA SISWA</label>
+            <input type="text" id="nama" placeholder="Ketik nama lengkap...">
             
-            <div style="display: flex; gap: 10px;" class="input-group">
+            <div style="display: flex; gap: 10px;">
                 <div style="flex: 1;">
                     <label>NO ABSEN</label>
-                    <input type="number" id="no" placeholder="...">
+                    <input type="number" id="no" placeholder="Contoh: 1">
                 </div>
                 <div style="flex: 2;">
                     <label>STATUS</label>
                     <select id="stat">
-                        <option value="" selected disabled>-- Pilih Status --</option>
+                        <option value="" selected disabled>Pilih Status</option>
                         <option value="Hadir">Hadir</option>
                         <option value="Izin">Izin</option>
                         <option value="Sakit">Sakit</option>
@@ -88,48 +113,54 @@
                 </div>
             </div>
             
-            <button class="btn-add" onclick="tambah()">SIMPAN DATA</button>
+            <button class="btn-add" onclick="tambah()">SIMPAN & FOTO</button>
         </div>
 
         <div class="right-panel">
-            <h3 style="margin:0;">Log Absensi</h3>
+            <h3 style="margin:0; font-weight: 800;">Log Kehadiran</h3>
             <div id="list"></div>
-            <button class="btn-csv" onclick="ekspor()">📊 EXPORT EXCEL</button>
-            <button class="btn-reset" onclick="hapusSemua()">🗑️ KOSONGKAN LIST</button>
+            <button class="btn-csv" onclick="ekspor()">EKSPOR LAPORAN</button>
+            <button class="btn-reset" onclick="hapusSemua()">KOSONGKAN DAFTAR HADIR</button>
         </div>
     </div>
 
 <script>
-    var dataAbsen = JSON.parse(localStorage.getItem('absen_cam_v4')) || [];
+    var dataAbsen = JSON.parse(localStorage.getItem('absen_v_final_foto')) || [];
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
     var streamLocal = null;
 
+    function toggleTheme() {
+        var b = document.body;
+        var isL = b.getAttribute('data-theme') === 'light';
+        b.setAttribute('data-theme', isL ? 'dark' : 'light');
+        document.getElementById('tBtn').innerText = isL ? 'LIGHT MODE' : 'DARK MODE';
+    }
+
+    function setTgl() {
+        var d = new Date();
+        var hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        var tgl = String(d.getDate()).padStart(2, '0');
+        var bln = String(d.getMonth() + 1).padStart(2, '0');
+        document.getElementById('tglDisplay').innerText = hari[d.getDay()] + ", " + tgl + "/" + bln + "/" + d.getFullYear();
+    }
+
     function toggleCam() {
         var btn = document.getElementById('camBtn');
-        var statText = document.getElementById('status');
-
         if (!streamLocal) {
-            // Nyalakan Kamera
             navigator.mediaDevices.getUserMedia({ video: { width: 400, height: 300 } })
             .then(function(stream) {
                 streamLocal = stream;
                 video.srcObject = stream;
-                btn.innerText = "🛑 MATIKAN KAMERA";
+                btn.innerText = "MATIKAN KAMERA";
                 btn.classList.add('active');
-                statText.innerText = "● KAMERA AKTIF";
-                statText.style.color = "var(--green)";
-            })
-            .catch(function(err) { alert("Akses kamera ditolak!"); });
+            }).catch(function(err) { alert("Izin kamera ditolak!"); });
         } else {
-            // Matikan Kamera
             streamLocal.getTracks().forEach(track => track.stop());
             video.srcObject = null;
             streamLocal = null;
-            btn.innerText = "📸 NYALAKAN KAMERA";
+            btn.innerText = "NYALAKAN KAMERA";
             btn.classList.remove('active');
-            statText.innerText = "● KAMERA NONAKTIF";
-            statText.style.color = "var(--red)";
         }
     }
 
@@ -138,25 +169,24 @@
         var nr = document.getElementById('no').value;
         var s = document.getElementById('stat').value;
 
-        if(!n || !nr || s === "") return alert("Lengkapi Nama, Nomor, dan Status!");
+        if(!n || !nr || s === null) return alert("Harap isi Nama, Nomor, dan Pilih Status!");
 
-        // Ambil foto kalau kamera nyala, kalau mati pake gambar kosong
-        var fotoData = "https://via.placeholder.com/150?text=No+Photo";
+        var no2Digit = nr.toString().padStart(2, '0');
+        var foto = "https://via.placeholder.com/150?text=No+Photo";
+
         if (streamLocal) {
-            canvas.width = 150;
-            canvas.height = 110;
+            canvas.width = 150; canvas.height = 110;
             var ctx = canvas.getContext('2d');
-            ctx.translate(canvas.width, 0);
-            ctx.scale(-1, 1);
+            ctx.translate(canvas.width, 0); ctx.scale(-1, 1);
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            fotoData = canvas.toDataURL('image/jpeg', 0.7);
+            foto = canvas.toDataURL('image/jpeg', 0.7);
         }
 
-        var tgl = new Date();
-        var jam = tgl.getHours().toString().padStart(2, '0') + ":" + tgl.getMinutes().toString().padStart(2, '0');
+        var d = new Date();
+        var jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
         
-        dataAbsen.push({ n: n, no: nr, s: s, jam: jam, img: fotoData });
-        localStorage.setItem('absen_cam_v4', JSON.stringify(dataAbsen));
+        dataAbsen.push({ n: n, no: no2Digit, s: s, jam: jam, img: foto });
+        localStorage.setItem('absen_v_final_foto', JSON.stringify(dataAbsen));
         
         render();
         document.getElementById('nama').value = '';
@@ -184,23 +214,77 @@
     }
 
     function ekspor() {
-        if(dataAbsen.length === 0) return alert("Data kosong!");
-        var csv = "sep=,\nNama,No Absen,Jam,Status\n";
-        dataAbsen.forEach(function(x) { csv += `"${x.n}","${x.no}","${x.jam}","${x.s}"\n`; });
-        var blob = new Blob(["\uFEFF" + csv], { type: 'text/csv' });
+        if(dataAbsen.length === 0) return alert("Data masih kosong!");
+        
+        let htmlLaporan = `
+            <html>
+            <head>
+                <title>Laporan Absensi</title>
+                <style>
+                    body { font-family: sans-serif; padding: 30px; background: #f9f9f9; }
+                    .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+                    table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                    th, td { border: 1px solid #ddd; padding: 15px; text-align: left; }
+                    th { background-color: #4834d4; color: white; text-transform: uppercase; font-size: 12px; }
+                    img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1px solid #ddd; }
+                    .status-box { font-weight: bold; padding: 5px 10px; border-radius: 4px; border: 1px solid #333; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>LAPORAN KEHADIRAN SISWA</h1>
+                    <p>Dicetak pada: ${document.getElementById('tglDisplay').innerText}</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Wajah</th>
+                            <th>No</th>
+                            <th>Nama Lengkap</th>
+                            <th>Jam Absen</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+
+        dataAbsen.forEach(function(x) {
+            htmlLaporan += `
+                <tr>
+                    <td><img src="${x.img}"></td>
+                    <td>${x.no}</td>
+                    <td>${x.n}</td>
+                    <td>${x.jam}</td>
+                    <td><span class="status-box">${x.s}</span></td>
+                </tr>
+            `;
+        });
+
+        htmlLaporan += `
+                    </tbody>
+                </table>
+                <p style="margin-top:30px; text-align:right;">Sistem Absensi Digital Pro</p>
+                <script>window.print();<\/script>
+            </body>
+            </html>
+        `;
+
+        var blob = new Blob([htmlLaporan], { type: 'text/html' });
         var link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "Data_Absensi.csv";
+        link.download = "Laporan_Absensi_Bergambar.html";
         link.click();
     }
 
     function hapusSemua() {
-        dataAbsen = [];
-        localStorage.removeItem('absen_cam_v4');
-        render();
+        if(confirm("Hapus semua data log?")) {
+            dataAbsen = [];
+            localStorage.removeItem('absen_v_final_foto');
+            render();
+        }
     }
 
-    window.onload = render;
+    window.onload = function() { setTgl(); render(); };
 </script>
 </body>
 </html>
