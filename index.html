@@ -9,12 +9,14 @@
         
         :root { 
             --bg-page: #f1f3f6; --card-bg: #ffffff; --text-main: #000000; 
-            --input-bg: #ffffff; --btn-action-bg: #000000; --btn-action-text: #ffffff;
+            --input-bg: #ffffff; --btn-action-bg: #2d3436; --btn-action-text: #ffffff;
+            --border-color: rgba(0,0,0,0.08); /* Warna garis halus sesuai BG */
         }
         
         [data-theme="dark"] { 
             --bg-page: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; 
             --input-bg: #2d2d2d; --btn-action-bg: #ffffff; --btn-action-text: #000000;
+            --border-color: rgba(255,255,255,0.1);
         }
         
         body { font-family: 'Poppins', sans-serif; background: var(--bg-page); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; transition: 0.3s; }
@@ -28,12 +30,11 @@
         .theme-toggle { 
             position: absolute; top: 15px; right: 15px; 
             padding: 10px 20px; border-radius: 50px; cursor: pointer; border: none; font-size: 11px; font-weight: 800; z-index: 1000;
-            background: #000; color: #fff;
+            background: #2d3436; color: #fff;
         }
-        [data-theme="dark"] .theme-toggle { background: #fff; color: #000; }
 
-        .left-panel { flex: 1; padding: 40px; border-right: 1px solid rgba(0,0,0,0.05); }
-        .right-panel { flex: 1.1; padding: 40px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; }
+        .left-panel { flex: 1; padding: 40px; border-right: 1px solid var(--border-color); }
+        .right-panel { flex: 1.1; padding: 40px; background: rgba(0,0,0,0.02); display: flex; flex-direction: column; }
         
         @media (min-width: 801px) { .main-card { flex-direction: row; } }
         @media (max-width: 800px) { .main-card { flex-direction: column; } .left-panel, .right-panel { border: none; padding: 25px; } }
@@ -48,7 +49,7 @@
 
         label { font-size: 11px; font-weight: 800; display: block; margin-bottom: 6px; opacity: 0.9; }
         input, select { 
-            width: 100%; padding: 14px; border-radius: 10px; border: 1.5px solid rgba(128,128,128,0.2); 
+            width: 100%; padding: 14px; border-radius: 10px; border: 1.5px solid var(--border-color); 
             background: var(--input-bg); color: var(--text-main); box-sizing: border-box; font-family: inherit; 
             margin-bottom: 15px; font-size: 14px; outline: none; 
         }
@@ -64,12 +65,11 @@
         #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
         .item { 
             background: var(--card-bg); padding: 15px; margin-bottom: 12px; border-radius: 14px; 
-            display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); 
+            display: flex; align-items: center; gap: 15px; border: 1px solid var(--border-color); 
         }
         
-        .foto-container { width: 80px; height: 80px; border-radius: 7px; overflow: hidden; border: 1px solid var(--text-main); background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .foto-container { width: 80px; height: 80px; border-radius: 7px; overflow: hidden; border: 1px solid var(--border-color); background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .foto-hasil { width: 100%; height: 100%; object-fit: cover; }
-        .txt-no-foto { font-size: 10px; font-weight: 800; color: #000; text-align: center; }
 
         .info { flex-grow: 1; font-size: 11px; font-weight: 400; color: #000; text-transform: uppercase; line-height: 1.5; }
         [data-theme="dark"] .info { color: #fff; }
@@ -90,7 +90,7 @@
             <label>NAMA LENGKAP</label>
             <input type="text" id="nama" placeholder="INPUT NAMA SISWA..." style="text-transform: uppercase;">
             <div style="display: flex; gap: 15px;">
-                <div style="flex: 1;"><label>NOMOR ABSENSI</label><input type="text" id="no" placeholder="00" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
+                <div style="flex: 1;"><label>NOMOR ABSENSI</label><input type="text" id="no" placeholder="00"></div>
                 <div style="flex: 1;"><label>STATUS</label>
                     <select id="stat"><option value="" selected disabled>- PILIH -</option><option value="HADIR">HADIR</option><option value="IZIN">IZIN</option><option value="SAKIT">SAKIT</option><option value="ALFA">ALFA</option></select>
                 </div>
@@ -152,65 +152,43 @@
     function renderList() {
         let area = document.getElementById('list'); area.innerHTML = '';
         dbAbsen.slice().reverse().forEach(i => {
-            let imgHTML = i.img ? `<img src="${i.img}" class="foto-hasil">` : `<div class="txt-no-foto">TANPA<br>FOTO</div>`;
-            area.innerHTML += `<div class="item"><div class="foto-container">${imgHTML}</div><div class="info"><b>${i.n}</b>NOMOR ABSENSI: ${i.no}<br>ABSENSI : ${i.tgl}<br>PUKUL : ${i.jam}</div><span class="badge" style="background:${COLORS[i.s]}">${i.s}</span></div>`;
+            let imgHTML = i.img ? `<img src="${i.img}" class="foto-hasil">` : `<div style="font-size:9px; text-align:center;">NO FOTO</div>`;
+            area.innerHTML += `<div class="item"><div class="foto-container">${imgHTML}</div><div class="info"><b>${i.n}</b>NO ABSEN: ${i.no} | ${i.tgl}</div><span class="badge" style="background:${COLORS[i.s]}">${i.s}</span></div>`;
         });
     }
 
     function bukaLaporan() {
         if(dbAbsen.length === 0) return alert("Data kosong!");
-        const d = new Date();
-        const tglFile = d.getDate().toString().padStart(2,'0') + "-" + (d.getMonth()+1).toString().padStart(2,'0') + "-" + d.getFullYear();
         const win = window.open('', '_blank');
-        
         let rows = dbAbsen.map(i => {
-            let img = i.img ? `<img src="${i.img}" style="width:100%; height:100px; object-fit:cover; display:block;">` : `<div style="font-size:10px; font-weight:800; text-align:center; padding: 20px 0;">TANPA FOTO</div>`;
-            return `<tr><td style="padding:0; width:120px; border: 1px solid #ddd; overflow:hidden;">${img}</td><td style="font-weight:800; border: 1px solid #ddd;">${i.no}</td><td style="font-weight:800; text-align:left; padding-left:15px; border: 1px solid #ddd;">${i.n}</td><td style="font-weight:400; border: 1px solid #ddd; text-align:left; padding-left:15px;">ABSENSI : ${i.tgl}<br>PUKUL : ${i.jam}</td><td style="border: 1px solid #ddd;"><span style="background:${COLORS[i.s]}; color:white; padding:5px 12px; border-radius:6px; font-size:10px; font-weight:800;">${i.s}</span></td></tr>`;
+            let img = i.img ? `<img src="${i.img}" style="width:100%; height:95px; object-fit:cover; display:block;">` : `<div style="padding:35px 0; text-align:center; font-size:10px;">NO FOTO</div>`;
+            return `<tr><td style="padding:0; width:120px; border: 1px solid rgba(0,0,0,0.05); overflow:hidden;">${img}</td><td style="border: 1px solid rgba(0,0,0,0.05); font-weight:800;">${i.no}</td><td style="border: 1px solid rgba(0,0,0,0.05); font-weight:800; text-align:left; padding-left:15px;">${i.n}</td><td style="border: 1px solid rgba(0,0,0,0.05); text-align:left; padding-left:15px;">${i.tgl}<br>${i.jam}</td><td style="border: 1px solid rgba(0,0,0,0.05);"><span style="background:${COLORS[i.s]}; color:white; padding:5px 12px; border-radius:6px; font-size:10px; font-weight:800;">${i.s}</span></td></tr>`;
         }).join('');
         
         win.document.write(`
             <html>
             <head>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>LAPORAN_ABSENSI_${tglFile}</title>
+                <title>LAPORAN_ABSENSI</title>
                 <style>
-                    body{font-family:'Poppins', sans-serif; background:#f1f3f6; margin:0; padding:20px; display:flex; flex-direction:column; align-items:center;}
-                    .btn-save-wrap { width: 100%; display: flex; justify-content: center; margin-bottom: 20px; }
-                    .btn-save-pdf { background: #2ecc71; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(46,204,113,0.3); font-size: 12px; text-transform: uppercase; }
-                    .container{background:white; padding:25px; border-radius:15px; width:95%; max-width:1100px; box-shadow:0 5px 20px rgba(0,0,0,0.05); text-align:center;}
-                    h2{margin:0; font-weight:800; text-transform:uppercase; font-size:18px; letter-spacing: 0.5px;}
-                    .line{border-bottom: 2px solid #333; width: 100%; margin: 15px 0 25px 0;}
-                    .table-wrapper{overflow:hidden; border-radius:8px; border: 1px solid #ddd;}
-                    table{width:100%; border-collapse:collapse; background:white; table-layout: fixed;}
-                    th{background:#f8f9fa; color:#333; padding:15px; font-size:11px; text-transform:uppercase; border: 1px solid #ddd; font-weight:800;}
-                    td{padding:10px; font-size:11px; vertical-align:middle; color:#000; border: 1px solid #ddd;}
-
-                    @media print {
-                        @page { size: A4 landscape; margin: 10mm; }
-                        .btn-save-wrap { display: none; }
-                        body { background: white; padding: 0; }
-                        .container { width: 100%; max-width: none; box-shadow: none; padding: 0; border-radius: 0; }
-                        .line { border-bottom: 1.5px solid #000; }
-                        th { background: #eee !important; color: #000 !important; }
-                        td, th { border: 1px solid #aaa !important; }
-                    }
+                    body{font-family:'Poppins', sans-serif; background:#f1f3f6; padding:30px; display:flex; flex-direction:column; align-items:center;}
+                    .container{background:white; padding:30px; border-radius:20px; width:95%; max-width:1100px; box-shadow:0 5px 25px rgba(0,0,0,0.05); text-align:center;}
+                    .line{border-bottom: 3px solid rgba(0,0,0,0.05); width: 100%; margin: 15px 0 30px 0;}
+                    table{width:100%; border-collapse:collapse; table-layout: fixed; border-radius:12px; overflow:hidden; border: 1px solid rgba(0,0,0,0.05);}
+                    th{background:rgba(0,0,0,0.02); color:#2d3436; padding:18px; font-size:11px; text-transform:uppercase; border: 1px solid rgba(0,0,0,0.05); font-weight:800;}
+                    td{padding:10px; font-size:11px; vertical-align:middle; border: 1px solid rgba(0,0,0,0.05);}
+                    .btn-save { background: #2ecc71; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; margin-bottom: 20px; }
                 </style>
             </head>
             <body>
-                <div class="btn-save-wrap"><button class="btn-save-pdf" onclick="window.print()">💾 SIMPAN PDF (DOWNLOAD)</button></div>
+                <button class="btn-save" onclick="window.print()">💾 DOWNLOAD PDF</button>
                 <div class="container">
-                    <h2>LAPORAN DATA ABSENSI SISWA</h2>
+                    <h2 style="margin:0">LAPORAN DATA ABSENSI</h2>
                     <div class="line"></div>
-                    <div class="table-wrapper">
-                        <table>
-                            <thead><tr><th style="width:120px;">FOTO</th><th style="width:80px;">NO ABSEN</th><th>NAMA LENGKAP</th><th style="width:250px;">WAKTU & TANGGAL</th><th style="width:110px;">STATUS</th></tr></thead>
-                            <tbody>${rows}</tbody>
-                        </table>
-                    </div>
+                    <table>
+                        <thead><tr><th style="width:120px;">FOTO</th><th style="width:80px;">NO</th><th>NAMA LENGKAP</th><th style="width:250px;">WAKTU</th><th style="width:110px;">STATUS</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
                 </div>
-                <script>
-                    document.title = "LAPORAN_ABSENSI_${tglFile}";
-                <\/script>
             </body>
             </html>
         `);
@@ -218,12 +196,7 @@
     }
 
     function resetData() { if(confirm("Hapus semua data?")) { dbAbsen = []; localStorage.removeItem('db_v92'); renderList(); } }
-
-    window.onload = () => { 
-        if(localStorage.getItem('theme_v92') === 'dark') toggleTheme(); 
-        renderList(); 
-        document.getElementById('tglDisplay').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase(); 
-    };
+    window.onload = () => { renderList(); document.getElementById('tglDisplay').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase(); };
 </script>
 </body>
 </html>
