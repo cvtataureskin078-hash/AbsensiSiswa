@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Absensi v91 - Balanced Scale</title>
+    <title>Sistem Absensi v92 - Mobile Fixed</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
@@ -19,7 +19,6 @@
         
         body { font-family: 'Poppins', sans-serif; background: var(--bg-page); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; transition: 0.3s; }
         
-        /* UKURAN APLIKASI: Dinaikkan ke 1050px supaya Daftar Hadir tidak sempit */
         .main-card { 
             background: var(--card-bg); width: 100%; max-width: 1050px; 
             display: flex; border-radius: 18px; color: var(--text-main); 
@@ -36,7 +35,10 @@
         .left-panel { flex: 1; padding: 40px; border-right: 1px solid rgba(0,0,0,0.05); }
         .right-panel { flex: 1.1; padding: 40px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; }
         
-        @media (max-width: 800px) { .main-card { flex-direction: column; } .left-panel, .right-panel { border: none; padding: 25px; } }
+        @media (max-width: 800px) { 
+            .main-card { flex-direction: column; } 
+            .left-panel, .right-panel { border: none; padding: 25px; } 
+        }
 
         .header-title { margin: 0 0 5px 0; font-weight: 800; font-size: 22px; text-transform: uppercase; }
         .date-display { font-size: 14px; color: #000; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; }
@@ -108,7 +110,7 @@
     </div>
 
 <script>
-    let dbAbsen = JSON.parse(localStorage.getItem('db_v91')) || [];
+    let dbAbsen = JSON.parse(localStorage.getItem('db_v92')) || [];
     let video = document.getElementById('video'), canvas = document.getElementById('canvas'), stream = null;
     const COLORS = { 'HADIR': '#10ac84', 'IZIN': '#f1c40f', 'SAKIT': '#e67e22', 'ALFA': '#ee5253' };
 
@@ -117,7 +119,7 @@
         let next = current === 'light' ? 'dark' : 'light';
         document.body.setAttribute('data-theme', next);
         document.getElementById('tBtn').innerHTML = next === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
-        localStorage.setItem('theme_v91', next);
+        localStorage.setItem('theme_v92', next);
     }
 
     async function toggleCam() {
@@ -145,7 +147,7 @@
         const jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
         const tgl = d.toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase();
         dbAbsen.push({ n: n.toUpperCase(), no: nr.padStart(2, '0'), s: s, jam: jam, tgl: tgl, img: stream ? canvas.toDataURL('image/jpeg', 0.8) : null });
-        localStorage.setItem('db_v91', JSON.stringify(dbAbsen));
+        localStorage.setItem('db_v92', JSON.stringify(dbAbsen));
         renderList(); document.getElementById('nama').value = ''; document.getElementById('no').value = '';
     }
 
@@ -162,19 +164,57 @@
         const d = new Date();
         const tglFile = d.getDate().toString().padStart(2,'0') + "-" + (d.getMonth()+1).toString().padStart(2,'0') + "-" + d.getFullYear();
         const win = window.open('', '_blank');
+        
         let rows = dbAbsen.map(i => {
             let img = i.img ? `<img src="${i.img}" style="width:100%; height:80px; object-fit:cover; display:block;">` : `<div style="font-size:10px; font-weight:800; text-align:center;">TANPA<br>FOTO</div>`;
             return `<tr><td style="padding:0; width:120px; border: 0.5px solid #000;">${img}</td><td style="font-weight:800; width:110px; border: 0.5px solid #000; font-size:13px;">${i.no}</td><td style="font-weight:800; text-align:left; padding-left:15px; border: 0.5px solid #000;">${i.n}</td><td style="font-weight:400; width:260px; border: 0.5px solid #000; text-align:left; padding-left:15px; line-height:1.6;">ABSENSI : ${i.tgl}<br>PUKUL : ${i.jam}</td><td style="border: 0.5px solid #000;"><span style="background:${COLORS[i.s]}; color:white; padding:5px 12px; border-radius:6px; font-size:10px; font-weight:800;">${i.s}</span></td></tr>`;
         }).join('');
         
-        win.document.write(`<html><head><title>LAPORAN_ABSENSI_${tglFile}</title><style>body{font-family:'Poppins', sans-serif; background:#f1f3f6; margin:0; padding:40px 20px; display:flex; flex-direction:column; align-items:center;}.btn-save-wrap { width: 100%; display: flex; justify-content: center; margin-bottom: 30px; }.btn-save-pdf { background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(46,204,113,0.3); font-size: 11px; text-transform: uppercase; }.container{background:white; padding:40px; border-radius:25px; width:95%; max-width:1100px; box-shadow:0 5px 20px rgba(0,0,0,0.05); text-align:center;}h2{margin:0; font-weight:800; text-transform:uppercase; font-size:19px; letter-spacing: 0.5px;}.line{border-bottom: 4px solid #000; width: 100%; margin: 15px 0 25px 0;}.table-wrapper{border-radius:15px; overflow:hidden; border: 0.5px solid #000;}table{width:100%; border-collapse:collapse; background:white; border-style:hidden;}th{background:#000; color:#fff; padding:18px; font-size:10px; text-transform:uppercase; letter-spacing: 1px; border: 0.5px solid #000;}td{padding:15px; font-size:11px; vertical-align:middle; color:#000; border: 0.5px solid #000;}</style></head><body><div class="btn-save-wrap"><button class="btn-save-pdf" onclick="window.print()">💾 SIMPAN PDF (DOWNLOAD)</button></div><div class="container"><h2>LAPORAN DATA ABSENSI SISWA</h2><div class="line"></div><div class="table-wrapper"><table><thead><tr><th>FOTO</th><th>NOMOR ABSENSI</th><th>NAMA LENGKAP</th><th>WAKTU & TANGGAL</th><th>STATUS</th></tr></thead><tbody>${rows}</tbody></table></div></div></body></html>`);
+        // Perbaikan: Menambahkan viewport dan title agar tidak about:blank dan tidak kecil di HP
+        win.document.write(`
+            <html>
+            <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>LAPORAN_ABSENSI_${tglFile}</title>
+                <style>
+                    body{font-family:'Poppins', sans-serif; background:#f1f3f6; margin:0; padding:20px; display:flex; flex-direction:column; align-items:center;}
+                    .btn-save-wrap { width: 100%; display: flex; justify-content: center; margin-bottom: 20px; }
+                    .btn-save-pdf { background: #2ecc71; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(46,204,113,0.3); font-size: 12px; text-transform: uppercase; }
+                    .container{background:white; padding:25px; border-radius:20px; width:95%; max-width:1100px; box-shadow:0 5px 20px rgba(0,0,0,0.05); text-align:center;}
+                    h2{margin:0; font-weight:800; text-transform:uppercase; font-size:18px; letter-spacing: 0.5px;}
+                    .line{border-bottom: 4px solid #000; width: 100%; margin: 15px 0 25px 0;}
+                    .table-wrapper{overflow-x:auto; border-radius:12px; border: 0.5px solid #000;}
+                    table{width:100%; border-collapse:collapse; background:white; min-width: 600px;}
+                    th{background:#000; color:#fff; padding:15px; font-size:10px; text-transform:uppercase; border: 0.5px solid #000;}
+                    td{padding:10px; font-size:11px; vertical-align:middle; color:#000; border: 0.5px solid #000;}
+                </style>
+            </head>
+            <body>
+                <div class="btn-save-wrap"><button class="btn-save-pdf" onclick="window.print()">💾 SIMPAN PDF (DOWNLOAD)</button></div>
+                <div class="container">
+                    <h2>LAPORAN DATA ABSENSI SISWA</h2>
+                    <div class="line"></div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead><tr><th>FOTO</th><th>NOMOR ABSENSI</th><th>NAMA LENGKAP</th><th>WAKTU & TANGGAL</th><th>STATUS</th></tr></thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>
+                </div>
+                <script>
+                    // Memaksa browser mengenali judul file saat diprint
+                    document.title = "LAPORAN_ABSENSI_${tglFile}";
+                <\/script>
+            </body>
+            </html>
+        `);
         win.document.close();
     }
 
-    function resetData() { dbAbsen = []; localStorage.removeItem('db_v91'); renderList(); }
+    function resetData() { dbAbsen = []; localStorage.removeItem('db_v92'); renderList(); }
 
     window.onload = () => { 
-        if(localStorage.getItem('theme_v91') === 'dark') toggleTheme(); 
+        if(localStorage.getItem('theme_v92') === 'dark') toggleTheme(); 
         renderList(); 
         document.getElementById('tglDisplay').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase(); 
     };
