@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Absensi v92 - Professional Desktop</title>
+    <title>Sistem Absensi v92 - Fixed Color</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         :root { 
             --bg-page: #f1f3f6; --card-bg: #ffffff; --text-main: #000000; 
-            --input-bg: #ffffff; --btn-action-bg: #2d3436; --btn-action-text: #ffffff;
-            --border-color: rgba(0,0,0,0.08); /* Warna garis halus sesuai BG */
+            --warna-tombol-cam: #2d3436; /* Warna Gelap Selaras Tombol */
+            --text-di-bg-gelap: #ffffff;
+            --border-color: rgba(0,0,0,0.08);
         }
         
         [data-theme="dark"] { 
             --bg-page: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; 
-            --input-bg: #2d2d2d; --btn-action-bg: #ffffff; --btn-action-text: #000000;
+            --warna-tombol-cam: #ffffff; /* Warna Putih Selaras Tombol */
+            --text-di-bg-gelap: #000000;
             --border-color: rgba(255,255,255,0.1);
         }
         
@@ -30,7 +32,7 @@
         .theme-toggle { 
             position: absolute; top: 15px; right: 15px; 
             padding: 10px 20px; border-radius: 50px; cursor: pointer; border: none; font-size: 11px; font-weight: 800; z-index: 1000;
-            background: #2d3436; color: #fff;
+            background: var(--warna-tombol-cam); color: var(--text-di-bg-gelap);
         }
 
         .left-panel { flex: 1; padding: 40px; border-right: 1px solid var(--border-color); }
@@ -40,41 +42,56 @@
         @media (max-width: 800px) { .main-card { flex-direction: column; } .left-panel, .right-panel { border: none; padding: 25px; } }
 
         .header-title { margin: 0 0 5px 0; font-weight: 800; font-size: 22px; text-transform: uppercase; }
-        .date-display { font-size: 14px; color: #000; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; }
-        [data-theme="dark"] .date-display { color: #fff; }
+        .date-display { font-size: 14px; color: var(--text-main); font-weight: 800; margin-bottom: 20px; text-transform: uppercase; }
 
         #cam-box { width: 100%; height: 280px; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 18px; position: relative; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: none; }
         .cam-placeholder { position: absolute; top:0; left:0; width:100%; height:100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 800; }
 
-        label { font-size: 11px; font-weight: 800; display: block; margin-bottom: 6px; opacity: 0.9; }
+        label { font-size: 11px; font-weight: 800; display: block; margin-bottom: 6px; opacity: 0.9; color: var(--text-main); }
+        
+        /* PAKSA WARNA INPUT DISINI */
         input, select { 
             width: 100%; padding: 14px; border-radius: 10px; border: 1.5px solid var(--border-color); 
-            background: var(--input-bg); color: var(--text-main); box-sizing: border-box; font-family: inherit; 
-            margin-bottom: 15px; font-size: 14px; outline: none; 
+            background: var(--warna-tombol-cam) !important; 
+            color: var(--text-di-bg-gelap) !important; 
+            box-sizing: border-box; font-family: inherit; 
+            margin-bottom: 15px; font-size: 14px; outline: none; font-weight: 600; transition: 0.3s;
         }
+        input::placeholder { color: var(--text-di-bg-gelap); opacity: 0.6; }
 
-        .btn-cam { background: #2f3542; color: white; border:none; padding: 13px; border-radius: 11px; cursor:pointer; width: 100%; font-weight: 800; margin-bottom: 18px; font-size: 11px; }
+        .btn-cam { 
+            background: var(--warna-tombol-cam); color: var(--text-di-bg-gelap); 
+            border:none; padding: 13px; border-radius: 11px; cursor:pointer; width: 100%; 
+            font-weight: 800; margin-bottom: 18px; font-size: 11px; transition: 0.3s;
+        }
 
         .btn-action { 
             border: none; border-radius: 12px; cursor: pointer; font-weight: 800; width: 100%; transition: 0.3s; font-size: 12px; text-transform: uppercase;
-            background: var(--btn-action-bg) !important; color: var(--btn-action-text) !important; height: 55px; 
+            background: var(--warna-tombol-cam) !important; color: var(--text-di-bg-gelap) !important; height: 55px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px;
         }
 
         #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
+        
         .item { 
             background: var(--card-bg); padding: 15px; margin-bottom: 12px; border-radius: 14px; 
             display: flex; align-items: center; gap: 15px; border: 1px solid var(--border-color); 
         }
-        
-        .foto-container { width: 80px; height: 80px; border-radius: 7px; overflow: hidden; border: 1px solid var(--border-color); background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .foto-hasil { width: 100%; height: 100%; object-fit: cover; }
 
-        .info { flex-grow: 1; font-size: 11px; font-weight: 400; color: #000; text-transform: uppercase; line-height: 1.5; }
-        [data-theme="dark"] .info { color: #fff; }
+        /* PAKSA WARNA KOTAK FOTO DISINI */
+        .foto-container { 
+            width: 80px; height: 80px; border-radius: 10px; overflow: hidden; 
+            border: 1px solid var(--border-color); 
+            background: var(--warna-tombol-cam) !important; 
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
+        }
+        .foto-hasil { width: 100%; height: 100%; object-fit: cover; }
+        .no-photo-txt { font-size: 9px; font-weight: 800; text-align: center; color: var(--text-di-bg-gelap); }
+
+        .info { flex-grow: 1; font-size: 11px; color: var(--text-main); text-transform: uppercase; line-height: 1.5; }
         .info b { font-size: 16px; font-weight: 800; display: block; margin-bottom: 2px; color: var(--text-main); }
-        .badge { padding: 6px 14px; border-radius: 7px; color: #fff; font-size: 11px; font-weight: 800; min-width: 60px; text-align: center; }
+        .badge { padding: 8px 15px; border-radius: 8px; color: #fff; font-size: 11px; font-weight: 800; min-width: 70px; text-align: center; }
     </style>
 </head>
 <body data-theme="light">
@@ -87,8 +104,10 @@
             <div id="cam-box"><div id="p-holder" class="cam-placeholder">KAMERA NON-AKTIF</div><video id="video" autoplay muted playsinline></video></div>
             <canvas id="canvas" style="display:none;"></canvas>
             <button id="camBtn" class="btn-cam" onclick="toggleCam()">AKTIFKAN KAMERA</button>
+            
             <label>NAMA LENGKAP</label>
             <input type="text" id="nama" placeholder="INPUT NAMA SISWA..." style="text-transform: uppercase;">
+            
             <div style="display: flex; gap: 15px;">
                 <div style="flex: 1;"><label>NOMOR ABSENSI</label><input type="text" id="no" placeholder="00"></div>
                 <div style="flex: 1;"><label>STATUS</label>
@@ -118,6 +137,7 @@
         document.body.setAttribute('data-theme', next);
         document.getElementById('tBtn').innerHTML = next === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
         localStorage.setItem('theme_v92', next);
+        renderList(); // Render ulang agar kotak foto berubah warna seketika
     }
 
     async function toggleCam() {
@@ -126,12 +146,14 @@
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
                 video.srcObject = stream; video.style.display = 'block'; holder.style.display = 'none';
-                btn.innerText = "MATIKAN KAMERA"; btn.style.background = "#ff4757";
+                btn.innerText = "MATIKAN KAMERA";
+                if(document.body.getAttribute('data-theme') === 'light') btn.style.background = "#ff4757";
             } catch (err) { alert("Izinkan kamera!"); }
         } else {
             stream.getTracks().forEach(t => t.stop()); stream = null;
             video.style.display = 'none'; holder.style.display = 'flex';
-            btn.innerText = "AKTIFKAN KAMERA"; btn.style.background = "#2f3542";
+            btn.innerText = "AKTIFKAN KAMERA";
+            btn.style.background = ""; 
         }
     }
 
@@ -152,8 +174,17 @@
     function renderList() {
         let area = document.getElementById('list'); area.innerHTML = '';
         dbAbsen.slice().reverse().forEach(i => {
-            let imgHTML = i.img ? `<img src="${i.img}" class="foto-hasil">` : `<div style="font-size:9px; text-align:center;">NO FOTO</div>`;
-            area.innerHTML += `<div class="item"><div class="foto-container">${imgHTML}</div><div class="info"><b>${i.n}</b>NO ABSEN: ${i.no} | ${i.tgl}</div><span class="badge" style="background:${COLORS[i.s]}">${i.s}</span></div>`;
+            let imgHTML = i.img ? `<img src="${i.img}" class="foto-hasil">` : `<div class="no-photo-txt">TANPA<br>FOTO</div>`;
+            area.innerHTML += `
+                <div class="item">
+                    <div class="foto-container">${imgHTML}</div>
+                    <div class="info">
+                        <b>${i.n}</b>
+                        NO ABSEN: ${i.no} | ${i.tgl}<br>
+                        PUKUL: ${i.jam}
+                    </div>
+                    <div class="badge" style="background:${COLORS[i.s]}">${i.s}</div>
+                </div>`;
         });
     }
 
@@ -161,8 +192,8 @@
         if(dbAbsen.length === 0) return alert("Data kosong!");
         const win = window.open('', '_blank');
         let rows = dbAbsen.map(i => {
-            let img = i.img ? `<img src="${i.img}" style="width:100%; height:95px; object-fit:cover; display:block;">` : `<div style="padding:35px 0; text-align:center; font-size:10px;">NO FOTO</div>`;
-            return `<tr><td style="padding:0; width:120px; border: 1px solid rgba(0,0,0,0.05); overflow:hidden;">${img}</td><td style="border: 1px solid rgba(0,0,0,0.05); font-weight:800;">${i.no}</td><td style="border: 1px solid rgba(0,0,0,0.05); font-weight:800; text-align:left; padding-left:15px;">${i.n}</td><td style="border: 1px solid rgba(0,0,0,0.05); text-align:left; padding-left:15px;">${i.tgl}<br>${i.jam}</td><td style="border: 1px solid rgba(0,0,0,0.05);"><span style="background:${COLORS[i.s]}; color:white; padding:5px 12px; border-radius:6px; font-size:10px; font-weight:800;">${i.s}</span></td></tr>`;
+            let img = i.img ? `<img src="${i.img}" style="width:100%; height:95px; object-fit:cover; display:block;">` : `<div style="padding:35px 0; text-align:center; font-size:10px; color:#000; font-weight:800;">TANPA FOTO</div>`;
+            return `<tr><td style="padding:0; width:120px; border: 1px solid rgba(0,0,0,0.05); overflow:hidden;">${img}</td><td style="border: 1px solid rgba(0,0,0,0.05); font-weight:800; color:#000;">${i.no}</td><td style="border: 1px solid rgba(0,0,0,0.05); font-weight:800; text-align:left; padding-left:15px; color:#000;">${i.n}</td><td style="border: 1px solid rgba(0,0,0,0.05); text-align:left; padding-left:15px; color:#000;">${i.tgl}<br>${i.jam}</td><td style="border: 1px solid rgba(0,0,0,0.05);"><span style="background:${COLORS[i.s]}; color:white; padding:5px 12px; border-radius:6px; font-size:10px; font-weight:800;">${i.s}</span></td></tr>`;
         }).join('');
         
         win.document.write(`
@@ -174,18 +205,18 @@
                     .container{background:white; padding:30px; border-radius:20px; width:95%; max-width:1100px; box-shadow:0 5px 25px rgba(0,0,0,0.05); text-align:center;}
                     .line{border-bottom: 3px solid rgba(0,0,0,0.05); width: 100%; margin: 15px 0 30px 0;}
                     table{width:100%; border-collapse:collapse; table-layout: fixed; border-radius:12px; overflow:hidden; border: 1px solid rgba(0,0,0,0.05);}
-                    th{background:rgba(0,0,0,0.02); color:#2d3436; padding:18px; font-size:11px; text-transform:uppercase; border: 1px solid rgba(0,0,0,0.05); font-weight:800;}
+                    th{background:#000; color:#fff; padding:18px; font-size:11px; text-transform:uppercase; border: 1px solid #222; font-weight:800;}
                     td{padding:10px; font-size:11px; vertical-align:middle; border: 1px solid rgba(0,0,0,0.05);}
                     .btn-save { background: #2ecc71; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; margin-bottom: 20px; }
                 </style>
             </head>
             <body>
-                <button class="btn-save" onclick="window.print()">💾 DOWNLOAD PDF</button>
+                <button class="btn-save" onclick="window.print()">💾 SIMPAN PDF (DOWNLOAD)</button>
                 <div class="container">
-                    <h2 style="margin:0">LAPORAN DATA ABSENSI</h2>
+                    <h2 style="margin:0">LAPORAN DATA ABSENSI SISWA</h2>
                     <div class="line"></div>
                     <table>
-                        <thead><tr><th style="width:120px;">FOTO</th><th style="width:80px;">NO</th><th>NAMA LENGKAP</th><th style="width:250px;">WAKTU</th><th style="width:110px;">STATUS</th></tr></thead>
+                        <thead><tr><th style="width:120px;">FOTO</th><th style="width:80px;">NO ABSEN</th><th>NAMA LENGKAP</th><th style="width:250px;">WAKTU & TANGGAL</th><th style="width:110px;">STATUS</th></tr></thead>
                         <tbody>${rows}</tbody>
                     </table>
                 </div>
