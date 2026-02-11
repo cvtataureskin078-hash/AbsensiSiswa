@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sistem Absensi v95</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Absensi v96 - Original Style</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
@@ -17,143 +17,106 @@
             --input-bg: #2d2d2d; --btn-action-bg: #ffffff; --btn-action-text: #000000;
         }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-page); margin: 0; padding: 10px; transition: 0.3s; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-page); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; transition: 0.3s; }
         
+        /* KEMBALI KE UKURAN V91 YANG BOS SUKA */
         .main-card { 
-            background: var(--card-bg); width: 100%; max-width: 1000px; 
+            background: var(--card-bg); width: 100%; max-width: 1050px; 
             display: flex; border-radius: 18px; color: var(--text-main); 
-            margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;
+            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;
         }
 
-        .left-panel { flex: 1; padding: 30px; border-right: 1px solid rgba(0,0,0,0.05); }
-        .right-panel { flex: 1.1; padding: 30px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; }
+        .theme-toggle { 
+            position: absolute; top: 15px; right: 15px; 
+            padding: 10px 20px; border-radius: 50px; cursor: pointer; border: none; font-size: 11px; font-weight: 800; z-index: 1000;
+            background: #000; color: #fff;
+        }
+        [data-theme="dark"] .theme-toggle { background: #fff; color: #000; }
+
+        .left-panel { flex: 1; padding: 40px; border-right: 1px solid rgba(0,0,0,0.05); }
+        .right-panel { flex: 1.1; padding: 40px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; }
         
-        @media (max-width: 800px) { 
-            .main-card { flex-direction: column; margin-top: 10px; } 
-            .left-panel, .right-panel { border: none; padding: 20px; } 
-        }
+        @media (max-width: 800px) { .main-card { flex-direction: column; } .left-panel, .right-panel { border: none; padding: 25px; } }
 
-        .header-title { margin: 0 0 5px 0; font-weight: 800; font-size: 20px; text-transform: uppercase; }
-        .date-display { font-size: 13px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; opacity: 0.7; }
+        .header-title { margin: 0 0 5px 0; font-weight: 800; font-size: 22px; text-transform: uppercase; }
+        .date-display { font-size: 14px; color: #000; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; }
+        [data-theme="dark"] .date-display { color: #fff; }
 
-        #cam-box { width: 100%; height: 250px; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 15px; position: relative; }
+        #cam-box { width: 100%; height: 280px; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 18px; position: relative; }
         video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: none; }
-        .cam-placeholder { position: absolute; top:0; left:0; width:100%; height:100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 800; }
+        .cam-placeholder { position: absolute; top:0; left:0; width:100%; height:100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 800; }
 
-        label { font-size: 10px; font-weight: 800; display: block; margin-bottom: 5px; }
+        label { font-size: 11px; font-weight: 800; display: block; margin-bottom: 6px; opacity: 0.9; }
         input, select { 
-            width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid rgba(128,128,128,0.2); 
+            width: 100%; padding: 14px; border-radius: 10px; border: 1.5px solid rgba(128,128,128,0.2); 
             background: var(--input-bg); color: var(--text-main); box-sizing: border-box; font-family: inherit; 
-            margin-bottom: 12px; font-size: 13px; outline: none; 
+            margin-bottom: 15px; font-size: 14px; outline: none; 
         }
 
-        .btn-cam { background: #2f3542; color: white; border:none; padding: 12px; border-radius: 10px; cursor:pointer; width: 100%; font-weight: 800; margin-bottom: 15px; font-size: 10px; }
+        .btn-cam { background: #2f3542; color: white; border:none; padding: 13px; border-radius: 11px; cursor:pointer; width: 100%; font-weight: 800; margin-bottom: 18px; font-size: 11px; }
 
         .btn-action { 
-            border: none; border-radius: 12px; cursor: pointer; font-weight: 800; width: 100%; transition: 0.3s; font-size: 11px; text-transform: uppercase;
-            background: var(--btn-action-bg) !important; color: var(--btn-action-text) !important; height: 50px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 8px;
+            border: none; border-radius: 12px; cursor: pointer; font-weight: 800; width: 100%; transition: 0.3s; font-size: 12px; text-transform: uppercase;
+            background: var(--btn-action-bg) !important; color: var(--btn-action-text) !important; height: 55px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px;
         }
 
-        #list { flex-grow: 1; overflow-y: auto; max-height: 350px; }
-        .item { background: var(--card-bg); padding: 12px; margin-bottom: 10px; border-radius: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(0,0,0,0.05); }
-        .foto-container { width: 65px; height: 65px; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: #eee; flex-shrink: 0; }
-        .foto-hasil { width: 100%; height: 100%; object-fit: cover; }
-        .info { flex-grow: 1; font-size: 10px; line-height: 1.4; color: var(--text-main); }
-        .info b { font-size: 14px; font-weight: 800; display: block; }
-        .badge { padding: 5px 10px; border-radius: 6px; color: #fff; font-size: 10px; font-weight: 800; text-align: center; }
-
-        /* OVERLAY LAPORAN - FIX SIZE */
-        #report-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #f1f3f6; z-index: 9999; display: none; overflow-y: auto; padding: 10px; box-sizing: border-box;
+        #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
+        .item { 
+            background: var(--card-bg); padding: 15px; margin-bottom: 12px; border-radius: 14px; 
+            display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.05); 
         }
-        .report-container { background: white; padding: 15px; border-radius: 12px; width: 100%; max-width: 900px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .report-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid #000; border-radius: 8px; }
         
-        table { width: 100%; border-collapse: collapse; min-width: 600px; } /* Ukuran Tabel Pas */
-        th { background: #000; color: #fff; padding: 10px; font-size: 10px; border: 1px solid #000; }
-        td { padding: 8px; font-size: 11px; border: 1px solid #000; color: #000; text-align: center; }
-
-        @media print {
-            body * { visibility: hidden; }
-            #report-overlay, #report-overlay * { visibility: visible; }
-            #report-overlay { position: absolute; left: 0; top: 0; width: 100%; padding: 0; background: white; }
-            .no-print { display: none !important; }
-        }
+        .foto-container { width: 80px; height: 80px; border-radius: 7px; overflow: hidden; border: 1px solid var(--text-main); background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .foto-hasil { width: 100%; height: 100%; object-fit: cover; }
+        .info { flex-grow: 1; font-size: 11px; font-weight: 400; color: #000; text-transform: uppercase; line-height: 1.5; }
+        [data-theme="dark"] .info { color: #fff; }
+        .info b { font-size: 16px; font-weight: 800; display: block; margin-bottom: 2px; color: var(--text-main); }
+        .badge { padding: 6px 14px; border-radius: 7px; color: #fff; font-size: 11px; font-weight: 800; min-width: 60px; text-align: center; }
     </style>
 </head>
 <body data-theme="light">
 
     <div class="main-card">
+        <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙 DARK MODE</button>
         <div class="left-panel">
             <h2 class="header-title">ABSENSI SISWA</h2>
             <div class="date-display" id="tglDisplay"></div>
-            <div id="cam-box">
-                <div id="p-holder" class="cam-placeholder">KAMERA NON-AKTIF</div>
-                <video id="video" autoplay muted playsinline></video>
-            </div>
+            <div id="cam-box"><div id="p-holder" class="cam-placeholder">KAMERA NON-AKTIF</div><video id="video" autoplay muted playsinline></video></div>
             <canvas id="canvas" style="display:none;"></canvas>
             <button id="camBtn" class="btn-cam" onclick="toggleCam()">AKTIFKAN KAMERA</button>
-            
             <label>NAMA LENGKAP</label>
-            <input type="text" id="nama" placeholder="NAMA..." style="text-transform: uppercase;">
-            
-            <div style="display: flex; gap: 10px;">
-                <div style="flex: 1;"><label>NO ABSEN</label><input type="text" id="no" placeholder="00"></div>
+            <input type="text" id="nama" placeholder="INPUT NAMA SISWA..." style="text-transform: uppercase;">
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 1;"><label>NOMOR ABSENSI</label><input type="text" id="no" placeholder="00" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
                 <div style="flex: 1;"><label>STATUS</label>
-                    <select id="stat">
-                        <option value="" selected disabled>PILIH</option>
-                        <option value="HADIR">HADIR</option>
-                        <option value="IZIN">IZIN</option>
-                        <option value="SAKIT">SAKIT</option>
-                        <option value="ALFA">ALFA</option>
-                    </select>
+                    <select id="stat"><option value="" selected disabled>- PILIH -</option><option value="HADIR">HADIR</option><option value="IZIN">IZIN</option><option value="SAKIT">SAKIT</option><option value="ALFA">ALFA</option></select>
                 </div>
             </div>
-            <button class="btn-action" onclick="simpanData()">SIMPAN ABSENSI</button>
+            <button class="btn-action" onclick="simpanData()">SIMPAN DATA ABSENSI</button>
         </div>
-
         <div class="right-panel">
-            <h3 class="header-title" style="font-size: 16px;">DAFTAR HADIR</h3>
+            <h3 class="header-title" style="font-size: 18px;">DAFTAR HADIR</h3>
             <div id="list"></div>
-            <div style="margin-top: 15px;">
-                <button class="btn-action" onclick="showReport()">BUKA LAPORAN</button>
-                <button class="btn-action" style="background: #7f8c8d !important;" onclick="resetData()">RESET</button>
+            <div style="margin-top: auto; padding-top: 15px;">
+                <button class="btn-action" onclick="bukaLaporan()">BUKA LAPORAN (TABLE)</button>
+                <button class="btn-action" onclick="resetData()">KOSONGKAN DATA</button>
             </div>
-        </div>
-    </div>
-
-    <div id="report-overlay">
-        <div class="no-print" style="margin-bottom: 15px; display: flex; gap: 10px; justify-content: center;">
-            <button class="btn-action" style="width: 150px; background: #2ecc71 !important;" onclick="window.print()">💾 PDF</button>
-            <button class="btn-action" style="width: 150px; background: #e74c3c !important;" onclick="closeReport()">❌ TUTUP</button>
-        </div>
-        <div class="report-container">
-            <h2 style="text-align:center; font-size: 16px; margin: 0;">LAPORAN DATA ABSENSI</h2>
-            <hr style="border: 2px solid #000; margin: 10px 0;">
-            <div class="report-table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>FOTO</th>
-                            <th>NO</th>
-                            <th>NAMA LENGKAP</th>
-                            <th>WAKTU</th>
-                            <th>STATUS</th>
-                        </tr>
-                    </thead>
-                    <tbody id="report-body"></tbody>
-                </table>
-            </div>
-            <p class="no-print" style="font-size: 9px; text-align: center; margin-top: 10px; font-weight: 800;">* GESER TABEL KE SAMPING JIKA TERPOTONG</p>
         </div>
     </div>
 
 <script>
-    let dbAbsen = JSON.parse(localStorage.getItem('db_v95')) || [];
+    let dbAbsen = JSON.parse(localStorage.getItem('db_v96')) || [];
     let video = document.getElementById('video'), canvas = document.getElementById('canvas'), stream = null;
     const COLORS = { 'HADIR': '#10ac84', 'IZIN': '#f1c40f', 'SAKIT': '#e67e22', 'ALFA': '#ee5253' };
+
+    function toggleTheme() {
+        let current = document.body.getAttribute('data-theme');
+        let next = current === 'light' ? 'dark' : 'light';
+        document.body.setAttribute('data-theme', next);
+        document.getElementById('tBtn').innerHTML = next === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+        localStorage.setItem('theme_v96', next);
+    }
 
     async function toggleCam() {
         let btn = document.getElementById('camBtn'), holder = document.getElementById('p-holder');
@@ -173,41 +136,83 @@
     function simpanData() {
         let n = document.getElementById('nama').value, nr = document.getElementById('no').value, s = document.getElementById('stat').value;
         if(!n || !nr || !s) return alert("Lengkapi data!");
-        canvas.width = 300; canvas.height = 225;
+        canvas.width = 400; canvas.height = 300;
         let ctx = canvas.getContext('2d');
         if (stream) { ctx.translate(canvas.width, 0); ctx.scale(-1, 1); ctx.drawImage(video, 0, 0, canvas.width, canvas.height); }
         const d = new Date();
         const jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-        const tgl = d.toLocaleDateString('id-ID', { weekday: 'short', day: '2-digit', month: '2-digit' }).toUpperCase();
-        dbAbsen.push({ n: n.toUpperCase(), no: nr.padStart(2, '0'), s: s, jam: jam, tgl: tgl, img: stream ? canvas.toDataURL('image/jpeg', 0.7) : null });
-        localStorage.setItem('db_v95', JSON.stringify(dbAbsen));
+        const tgl = d.toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase();
+        dbAbsen.push({ n: n.toUpperCase(), no: nr.padStart(2, '0'), s: s, jam: jam, tgl: tgl, img: stream ? canvas.toDataURL('image/jpeg', 0.8) : null });
+        localStorage.setItem('db_v96', JSON.stringify(dbAbsen));
         renderList(); document.getElementById('nama').value = ''; document.getElementById('no').value = '';
     }
 
     function renderList() {
         let area = document.getElementById('list'); area.innerHTML = '';
         dbAbsen.slice().reverse().forEach(i => {
-            let imgHTML = i.img ? `<img src="${i.img}" class="foto-hasil">` : `<div style="font-size:8px;text-align:center;padding-top:20px;">NO FOTO</div>`;
-            area.innerHTML += `<div class="item"><div class="foto-container">${imgHTML}</div><div class="info"><b>${i.n}</b>ABSEN: ${i.no} | ${i.jam}</div><span class="badge" style="background:${COLORS[i.s]}">${i.s}</span></div>`;
+            let imgHTML = i.img ? `<img src="${i.img}" class="foto-hasil">` : `<div class="txt-no-foto">TANPA<br>FOTO</div>`;
+            area.innerHTML += `<div class="item"><div class="foto-container">${imgHTML}</div><div class="info"><b>${i.n}</b>NOMOR ABSENSI: ${i.no}<br>ABSENSI : ${i.tgl}<br>PUKUL : ${i.jam}</div><span class="badge" style="background:${COLORS[i.s]}">${i.s}</span></div>`;
         });
     }
 
-    function showReport() {
+    function bukaLaporan() {
         if(dbAbsen.length === 0) return alert("Data kosong!");
-        let body = document.getElementById('report-body'); body.innerHTML = '';
-        dbAbsen.forEach(i => {
-            let img = i.img ? `<img src="${i.img}" style="width:80px; height:60px; object-fit:cover; display:block; margin:auto;">` : `NO FOTO`;
-            body.innerHTML += `<tr><td>${img}</td><td style="font-weight:800;">${i.no}</td><td style="font-weight:800; text-align:left;">${i.n}</td><td>${i.tgl}<br>${i.jam}</td><td><span style="background:${COLORS[i.s]}; color:white; padding:4px 8px; border-radius:4px; font-size:9px; font-weight:800;">${i.s}</span></td></tr>`;
-        });
-        document.getElementById('report-overlay').style.display = 'block';
-        window.scrollTo(0,0);
-        document.title = "LAPORAN_ABSENSI_" + new Date().toLocaleDateString('id-ID').replace(/\//g,'-');
+        const d = new Date();
+        const tglFile = d.getDate().toString().padStart(2,'0') + "-" + (d.getMonth()+1).toString().padStart(2,'0') + "-" + d.getFullYear();
+        const win = window.open('', '_blank');
+        
+        let rows = dbAbsen.map(i => {
+            let img = i.img ? `<img src="${i.img}" style="width:100%; height:80px; object-fit:cover; display:block;">` : `<div style="font-size:10px; font-weight:800; text-align:center;">TANPA<br>FOTO</div>`;
+            return `<tr><td style="padding:0; width:120px; border: 0.5px solid #000;">${img}</td><td style="font-weight:800; width:110px; border: 0.5px solid #000; font-size:13px;">${i.no}</td><td style="font-weight:800; text-align:left; padding-left:15px; border: 0.5px solid #000;">${i.n}</td><td style="font-weight:400; width:260px; border: 0.5px solid #000; text-align:left; padding-left:15px; line-height:1.6;">ABSENSI : ${i.tgl}<br>PUKUL : ${i.jam}</td><td style="border: 0.5px solid #000;"><span style="background:${COLORS[i.s]}; color:white; padding:5px 12px; border-radius:6px; font-size:10px; font-weight:800;">${i.s}</span></td></tr>`;
+        }).join('');
+        
+        // FIX: Menambahkan Judul dan Viewport di Jendela Laporan agar Pas di HP
+        win.document.write(`
+            <html>
+            <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>LAPORAN_ABSENSI_${tglFile}</title>
+                <style>
+                    body{font-family:'Poppins', sans-serif; background:#f1f3f6; margin:0; padding:20px; display:flex; flex-direction:column; align-items:center;}
+                    .btn-save-wrap { width: 100%; display: flex; justify-content: center; margin-bottom: 20px; }
+                    .btn-save-pdf { background: #2ecc71; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(46,204,113,0.3); font-size: 12px; text-transform: uppercase; }
+                    .container{background:white; padding:25px; border-radius:20px; width:95%; max-width:1100px; box-shadow:0 5px 20px rgba(0,0,0,0.05); text-align:center;}
+                    h2{margin:0; font-weight:800; text-transform:uppercase; font-size:18px; letter-spacing: 0.5px;}
+                    .line{border-bottom: 4px solid #000; width: 100%; margin: 15px 0 25px 0;}
+                    .table-wrapper{overflow-x:auto; border-radius:12px; border: 0.5px solid #000;}
+                    table{width:100%; border-collapse:collapse; background:white; min-width: 700px;}
+                    th{background:#000; color:#fff; padding:15px; font-size:10px; text-transform:uppercase; border: 0.5px solid #000;}
+                    td{padding:10px; font-size:11px; vertical-align:middle; color:#000; border: 0.5px solid #000;}
+                </style>
+            </head>
+            <body>
+                <div class="btn-save-wrap"><button class="btn-save-pdf" onclick="window.print()">💾 SIMPAN PDF (DOWNLOAD)</button></div>
+                <div class="container">
+                    <h2>LAPORAN DATA ABSENSI SISWA</h2>
+                    <div class="line"></div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead><tr><th>FOTO</th><th>NOMOR ABSENSI</th><th>NAMA LENGKAP</th><th>WAKTU & TANGGAL</th><th>STATUS</th></tr></thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>
+                </div>
+                <script>
+                    document.title = "LAPORAN_ABSENSI_${tglFile}";
+                <\/script>
+            </body>
+            </html>
+        `);
+        win.document.close();
     }
 
-    function closeReport() { document.getElementById('report-overlay').style.display = 'none'; document.title = "Sistem Absensi v95"; }
-    function resetData() { if(confirm("Hapus semua data?")) { dbAbsen = []; localStorage.removeItem('db_v95'); renderList(); } }
+    function resetData() { if(confirm("Hapus semua data?")) { dbAbsen = []; localStorage.removeItem('db_v96'); renderList(); } }
 
-    window.onload = () => { renderList(); document.getElementById('tglDisplay').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase(); };
+    window.onload = () => { 
+        if(localStorage.getItem('theme_v96') === 'dark') toggleTheme(); 
+        renderList(); 
+        document.getElementById('tglDisplay').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase(); 
+    };
 </script>
 </body>
 </html>
