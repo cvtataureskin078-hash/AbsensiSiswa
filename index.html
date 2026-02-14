@@ -14,7 +14,7 @@
         html, body { height: 100%; margin: 0; background-color: #f8fafc; font-size: 15px; }
         body { font-family: 'Outfit', sans-serif; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; color: #1e3a8a !important; }
         .main-wrapper { display: flex; min-height: 100vh; background: transparent; }
-        .content-area { flex: 1; padding: 1.5rem; background-color: #f8fafc; }
+        .content-area { flex: 1; padding: 2rem; background-color: #f8fafc; transition: all 0.3s; }
         
         .text-navy { color: #1e3a8a !important; }
         .bg-navy { background-color: #1e3a8a !important; }
@@ -26,11 +26,11 @@
         .nav-link i { color: #1e3a8a !important; } 
         .nav-link.active { background-color: #eff6ff; color: #1e3a8a !important; font-weight: 800; }
         
-        #pageTitle { font-size: 28px !important; display: block !important; line-height: 1.2; text-align: center; color: #1e3a8a !important; font-weight: 900; }
+        #pageTitle { font-size: 30px !important; display: block !important; line-height: 1.2; text-align: center; color: #1e3a8a !important; font-weight: 900; }
         
-        .clock-badge { background: white; padding: 10px 20px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(30, 58, 138, 0.05); border: none !important; }
-        .clock-badge i { color: #1e3a8a !important; font-size: 18px; } 
-        .clock-badge span { font-size: 16px !important; font-weight: 400 !important; color: #1e3a8a !important; } 
+        .clock-badge { background: white; padding: 12px 25px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(30, 58, 138, 0.05); border: none !important; }
+        .clock-badge i { color: #1e3a8a !important; font-size: 20px; } 
+        .clock-badge span { font-size: 18px !important; font-weight: 400 !important; color: #1e3a8a !important; } 
 
         .form-control label.label { color: #1e3a8a !important; font-weight: 800; font-size: 12px; justify-content: center; }
         
@@ -53,8 +53,24 @@
         .page-content { display: none; }
         .page-content.active { display: block; }
 
-        .report-table thead th, .history-table thead th, .dashboard-table thead th { background-color: #1e3a8a !important; color: #ffffff !important; text-align: center; font-weight: 700; border: 1.5px solid #000000 !important; padding: 12px; text-transform: uppercase; font-size: 12px; }
-        .report-table tbody td, .history-table tbody td, .dashboard-table tbody td { border: 1.5px solid #000000 !important; padding: 12px; text-align: center; color: #1e3a8a !important; font-size: 14px; }
+        .report-table thead th, .history-table thead th, .dashboard-table thead th { 
+            background-color: #1e3a8a !important; 
+            color: #ffffff !important; 
+            text-align: center; 
+            font-weight: 700; 
+            border: 1.5px solid #000000 !important; 
+            padding: 12px; 
+            text-transform: uppercase; 
+            font-size: 12px; 
+        }
+        
+        .report-table tbody td, .history-table tbody td, .dashboard-table tbody td { 
+            border: 1.5px solid #000000 !important; 
+            padding: 12px; 
+            text-align: center; 
+            color: #1e3a8a !important; 
+            font-size: 14px; 
+        }
         .report-table, .history-table, .dashboard-table { border-collapse: collapse !important; width: 100%; border: 1px solid #000000 !important; }
         
         .status-label { display: inline-block; padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 11px; text-align: center; min-width: 80px; border: none !important; }
@@ -67,17 +83,34 @@
         .student-name-cell { font-weight: 800 !important; font-size: 16px !important; color: #1e3a8a !important; text-transform: uppercase; }
         
         .btn-hapus { background-color: #fff1f2; color: #be123c; padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 11px; border: none !important; cursor: pointer; }
+        
+        /* LOGOUT NAVY */
         .btn-logout-navy { background-color: #1e3a8a !important; color: #ffffff !important; border: none !important; }
         .btn-logout-navy:hover { background-color: #172e6d !important; }
 
-        #login-page, #register-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: #f1f5f9; padding: 1rem; }
-        .login-card { width: 100%; max-width: 400px; padding: 2rem !important; }
+        #login-page, #register-page { display: flex; align-items: center; justify-content: center; height: 100vh; background-color: #f1f5f9; }
+        .login-card { width: 100%; max-width: 400px; padding: 2.5rem !important; }
         .btn-link-navy { color: #1e3a8a !important; font-size: 12px; font-weight: 800; background: none; border: none; cursor: pointer; text-transform: uppercase; text-decoration: underline; }
+
+        /* HAMBURGER & SIDEBAR MOBILE */
+        #hamburger-btn { display: none; position: fixed; top: 1.5rem; left: 1.5rem; z-index: 100; background: #1e3a8a; color: white; padding: 10px 14px; border-radius: 12px; cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
+        .sidebar-wrapper { width: 18rem; background: white; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); z-index: 50; display: flex; flex-direction: column; transition: transform 0.3s ease; }
+
+        @media (max-width: 1024px) {
+            #hamburger-btn { display: block; }
+            .sidebar-wrapper { position: fixed; height: 100vh; left: 0; top: 0; transform: translateX(-100%); }
+            .sidebar-wrapper.open { transform: translateX(0); }
+            .content-area { padding-top: 5rem; }
+        }
 
         @media print { .no-print { display: none !important; } .content-area { margin-left: 0 !important; padding: 0 !important; } body { background: white !important; } }
     </style>
 </head>
 <body>
+
+<button id="hamburger-btn" class="no-print" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
 
 <div id="login-page">
     <div class="card-custom login-card text-center">
@@ -144,8 +177,8 @@
     </div>
 </div>
 
-<div id="main-app" class="main-wrapper flex flex-col lg:flex-row" style="display: none;">
-    <div class="w-full lg:w-72 bg-white p-6 shadow-xl z-10 flex flex-col lg:fixed lg:h-full no-print">
+<div id="main-app" class="main-wrapper" style="display: none;">
+    <div id="sidebar" class="sidebar-wrapper no-print">
         <div class="flex items-center gap-3 mb-10">
             <div class="w-12 h-12 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg">
                 <i class="fas fa-graduation-cap text-xl"></i>
@@ -155,8 +188,12 @@
 
         <nav class="space-y-1.5 flex-1 text-left">
             <p class="text-[10px] font-bold text-slate-400 ml-3 mb-3 uppercase tracking-[0.2em]">Menu Utama</p>
-            <button onclick="showPage('dashboard')" id="btn-dashboard" class="nav-link active flex items-center w-full gap-3 p-3.5 rounded-xl transition-all"><i class="fas fa-th-large"></i> Dashboard</button>
-            <button onclick="showPage('history')" id="btn-history" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all"><i class="fas fa-list-ul"></i> Riwayat Input</button>
+            <button onclick="showPage('dashboard')" id="btn-dashboard" class="nav-link active flex items-center w-full gap-3 p-3.5 rounded-xl transition-all">
+                <i class="fas fa-th-large"></i> Dashboard
+            </button>
+            <button onclick="showPage('history')" id="btn-history" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all">
+                <i class="fas fa-list-ul"></i> Riwayat Input
+            </button>
             <p class="text-[10px] font-bold text-slate-400 ml-3 mt-6 mb-3 uppercase tracking-[0.2em]">Laporan</p>
             <button onclick="showPage('weekly')" id="btn-weekly" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all text-left"><i class="fas fa-calendar-week"></i> Rekap Mingguan</button>
             <button onclick="showPage('monthly')" id="btn-monthly" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all text-left"><i class="fas fa-calendar-alt"></i> Rekap Bulanan</button>
@@ -164,17 +201,21 @@
         </nav>
         
         <div class="mt-auto pt-5 border-t border-slate-100 mb-6 px-2 space-y-2">
-            <button onclick="handleLogout()" class="btn btn-logout-navy btn-block h-12 rounded-xl font-black text-[12px] border-none"><i class="fas fa-sign-out-alt mr-2"></i> LOGOUT</button>
-            <button onclick="resetData()" class="btn btn bg-rose-600 hover:bg-rose-700 text-white btn-block h-14 rounded-2xl font-black text-[14px] border-none"><i class="fas fa-sync-alt text-lg mr-3"></i> RESET DATA</button>
+            <button onclick="handleLogout()" class="btn btn-logout-navy btn-block h-12 rounded-xl font-black text-[12px] border-none">
+                <i class="fas fa-sign-out-alt mr-2"></i> LOGOUT
+            </button>
+            <button onclick="resetData()" class="btn btn-reset-new btn bg-rose-600 hover:bg-rose-700 text-white btn-block h-14 rounded-2xl font-black text-[14px] border-none">
+                <i class="fas fa-sync-alt text-lg mr-3"></i> RESET DATA
+            </button>
         </div>
     </div>
 
-    <div class="content-area lg:ml-72">
+    <div class="content-area">
         <div class="mb-8 flex flex-col items-center">
             <h1 id="pageTitle" class="font-black text-navy uppercase">RINGKASAN UTAMA</h1>
             <div id="clockContainer" class="no-print">
                 <div class="clock-badge">
-                    <i class="far fa-clock"></i> 
+                    <i class="far fa-clock text-lg"></i> 
                     <div class="flex items-center gap-2">
                         <span id="currentDate">Memuat...</span>
                         <span class="text-navy mx-1">|</span>
@@ -204,16 +245,16 @@
                     </div>
                 </div>
                 <div class="lg:col-span-2 text-left">
-                    <div class="card-custom">
-                        <h3 class="font-black text-navy mb-6 uppercase text-[12px] tracking-widest text-left">Aktivitas Hari Ini</h3>
-                        <div class="overflow-x-auto"><table class="dashboard-table"><thead><tr><th>Waktu</th><th>Nama Siswa</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="recentTable"></tbody></table></div>
+                    <div class="card-custom overflow-x-auto">
+                        <h3 class="font-black text-navy mb-6 uppercase text-[12px] tracking-widest text-left">Aktivitas Terbaru Hari Ini</h3>
+                        <table class="dashboard-table"><thead><tr><th>Waktu</th><th>Nama Siswa</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="recentTable"></tbody></table>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="page-history" class="page-content">
-            <div class="card-custom text-left"><div class="overflow-x-auto"><table class="history-table"><thead><tr><th class="py-4">Tanggal</th><th>Nama Siswa</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="historyTableBody"></tbody></table></div></div>
+            <div class="card-custom text-left overflow-x-auto"><table class="history-table"><thead><tr><th class="py-4">Tanggal</th><th>Nama Siswa</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="historyTableBody"></tbody></table></div>
         </div>
 
         <div id="rekapContainer" class="page-content text-left">
@@ -231,7 +272,12 @@
 <script>
     let db = JSON.parse(localStorage.getItem('edu_abs_pro_2026_final')) || [];
 
-    // FUNGSI AKUN
+    // SIDEBAR TOGGLE (HAMBURGER)
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // FUNGSI AUTH
     function getAccount() {
         let acc = JSON.parse(localStorage.getItem('edu_user_acc'));
         if(!acc) acc = { u: "admin", p: "123456" };
@@ -272,13 +318,13 @@
     }
 
     function customResetLogin() {
-        const confirmReset = confirm("Lupa Akun? Klik OK untuk menimpa akun lama dengan Nama & Password baru.");
+        const confirmReset = confirm("Lupa Username/Password? Klik OK untuk mengatur Nama & Password baru.");
         if(confirmReset) {
             const userBaru = prompt("Username Baru:");
             const passBaru = prompt("Password Baru:");
             if(userBaru && passBaru) {
                 localStorage.setItem('edu_user_acc', JSON.stringify({ u: userBaru.trim(), p: passBaru.trim() }));
-                alert("Berhasil! Silahkan login dengan akun baru.");
+                alert("Berhasil! Silahkan login.");
             }
         }
     }
@@ -324,6 +370,11 @@
             renderRekap(pageId);
         } else {
             document.getElementById('page-' + pageId).classList.add('active');
+        }
+        
+        // Tutup sidebar otomatis di mobile setelah pilih menu
+        if (window.innerWidth <= 1024) {
+            document.getElementById('sidebar').classList.remove('open');
         }
         renderUI();
     }
