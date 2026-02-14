@@ -3,231 +3,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Absensi v92 - Fixed Color</title>
+    <title>EduPresent - Absensi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        html { zoom: 0.9; }
+        html, body { height: 100%; margin: 0; background-color: #f8fafc; font-size: 15px; }
+        body { font-family: 'Outfit', sans-serif; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; color: #1e3a8a !important; }
+        .main-wrapper { display: flex; min-height: 100vh; background: transparent; }
+        .content-area { flex: 1; padding: 1.5rem; background-color: #f8fafc; }
         
-        :root { 
-            --bg-page: #f1f3f6; --card-bg: #ffffff; --text-main: #000000; 
-            --warna-tombol-cam: #2d3436; /* Warna Gelap Selaras Tombol */
-            --text-di-bg-gelap: #ffffff;
-            --border-color: rgba(0,0,0,0.08);
-        }
+        .text-navy { color: #1e3a8a !important; }
+        .bg-navy { background-color: #1e3a8a !important; }
+        .stat-navy { color: #1e3a8a !important; opacity: 1 !important; font-weight: 800 !important; }
         
-        [data-theme="dark"] { 
-            --bg-page: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; 
-            --warna-tombol-cam: #ffffff; /* Warna Putih Selaras Tombol */
-            --text-di-bg-gelap: #000000;
-            --border-color: rgba(255,255,255,0.1);
-        }
+        .card-custom { background: white; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.05); border: none; }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-page); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; transition: 0.3s; }
+        .nav-link { color: #1e3a8a !important; font-size: 15px; font-weight: 500; }
+        .nav-link i { color: #1e3a8a !important; } 
+        .nav-link.active { background-color: #eff6ff; color: #1e3a8a !important; font-weight: 800; }
         
-        .main-card { 
-            background: var(--card-bg); width: 100%; max-width: 1050px; 
-            display: flex; border-radius: 18px; color: var(--text-main); 
-            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;
-        }
+        #pageTitle { font-size: 28px !important; display: block !important; line-height: 1.2; text-align: center; color: #1e3a8a !important; font-weight: 900; }
+        
+        .clock-badge { background: white; padding: 10px 20px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(30, 58, 138, 0.05); border: none !important; }
+        .clock-badge i { color: #1e3a8a !important; font-size: 18px; } 
+        .clock-badge span { font-size: 16px !important; font-weight: 400 !important; color: #1e3a8a !important; } 
 
-        .theme-toggle { 
-            position: absolute; top: 15px; right: 15px; 
-            padding: 10px 20px; border-radius: 50px; cursor: pointer; border: none; font-size: 11px; font-weight: 800; z-index: 1000;
-            background: var(--warna-tombol-cam); color: var(--text-di-bg-gelap);
-        }
-
-        .left-panel { flex: 1; padding: 40px; border-right: 1px solid var(--border-color); }
-        .right-panel { flex: 1.1; padding: 40px; background: rgba(0,0,0,0.02); display: flex; flex-direction: column; }
+        .form-control label.label { color: #1e3a8a !important; font-weight: 800; font-size: 12px; justify-content: center; }
         
-        @media (min-width: 801px) { .main-card { flex-direction: row; } }
-        @media (max-width: 800px) { .main-card { flex-direction: column; } .left-panel, .right-panel { border: none; padding: 25px; } }
-
-        .header-title { margin: 0 0 5px 0; font-weight: 800; font-size: 22px; text-transform: uppercase; }
-        .date-display { font-size: 14px; color: var(--text-main); font-weight: 800; margin-bottom: 20px; text-transform: uppercase; }
-
-        #cam-box { width: 100%; height: 280px; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 18px; position: relative; }
-        video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: none; }
-        .cam-placeholder { position: absolute; top:0; left:0; width:100%; height:100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 800; }
-
-        label { font-size: 11px; font-weight: 800; display: block; margin-bottom: 6px; opacity: 0.9; color: var(--text-main); }
-        
-        /* PAKSA WARNA INPUT DISINI */
         input, select { 
-            width: 100%; padding: 14px; border-radius: 10px; border: 1.5px solid var(--border-color); 
-            background: var(--warna-tombol-cam) !important; 
-            color: var(--text-di-bg-gelap) !important; 
-            box-sizing: border-box; font-family: inherit; 
-            margin-bottom: 15px; font-size: 14px; outline: none; font-weight: 600; transition: 0.3s;
+            background-color: #ffffff !important; 
+            color: #1e3a8a !important; 
+            font-weight: 600; 
+            border: 1.5px solid #000000 !important; 
+            font-size: 15px; 
+            height: 3.2rem !important; 
+            text-align: center; 
+            text-align-last: center; 
+            border-radius: 12px !important; 
         }
-        input::placeholder { color: var(--text-di-bg-gelap); opacity: 0.6; }
+        input:focus { border-color: #1e3a8a !important; outline: none; }
 
-        .btn-cam { 
-            background: var(--warna-tombol-cam); color: var(--text-di-bg-gelap); 
-            border:none; padding: 13px; border-radius: 11px; cursor:pointer; width: 100%; 
-            font-weight: 800; margin-bottom: 18px; font-size: 11px; transition: 0.3s;
-        }
+        .password-container { position: relative; width: 100%; }
+        .eye-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #1e3a8a; font-size: 18px; z-index: 10; }
 
-        .btn-action { 
-            border: none; border-radius: 12px; cursor: pointer; font-weight: 800; width: 100%; transition: 0.3s; font-size: 12px; text-transform: uppercase;
-            background: var(--warna-tombol-cam) !important; color: var(--text-di-bg-gelap) !important; height: 55px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px;
-        }
+        .page-content { display: none; }
+        .page-content.active { display: block; }
 
-        #list { flex-grow: 1; overflow-y: auto; max-height: 400px; margin-top: 10px; }
+        .report-table thead th, .history-table thead th, .dashboard-table thead th { background-color: #1e3a8a !important; color: #ffffff !important; text-align: center; font-weight: 700; border: 1.5px solid #000000 !important; padding: 12px; text-transform: uppercase; font-size: 12px; }
+        .report-table tbody td, .history-table tbody td, .dashboard-table tbody td { border: 1.5px solid #000000 !important; padding: 12px; text-align: center; color: #1e3a8a !important; font-size: 14px; }
+        .report-table, .history-table, .dashboard-table { border-collapse: collapse !important; width: 100%; border: 1px solid #000000 !important; }
         
-        .item { 
-            background: var(--card-bg); padding: 15px; margin-bottom: 12px; border-radius: 14px; 
-            display: flex; align-items: center; gap: 15px; border: 1px solid var(--border-color); 
-        }
+        .status-label { display: inline-block; padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 11px; text-align: center; min-width: 80px; border: none !important; }
+        .label-hadir { background-color: #dcfce7; color: #15803d; }
+        .label-izin { background-color: #fef3c7; color: #b45309; }
+        .label-sakit { background-color: #fee2e2; color: #b91c1c; }
+        .label-alpa { background-color: #f1f5f9; color: #1e293b; }
+        
+        .date-text-table, .day-text { color: #1e3a8a !important; font-weight: 400 !important; font-size: 14px !important; text-transform: uppercase; }
+        .student-name-cell { font-weight: 800 !important; font-size: 16px !important; color: #1e3a8a !important; text-transform: uppercase; }
+        
+        .btn-hapus { background-color: #fff1f2; color: #be123c; padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 11px; border: none !important; cursor: pointer; }
+        .btn-logout-navy { background-color: #1e3a8a !important; color: #ffffff !important; border: none !important; }
+        .btn-logout-navy:hover { background-color: #172e6d !important; }
 
-        /* PAKSA WARNA KOTAK FOTO DISINI */
-        .foto-container { 
-            width: 80px; height: 80px; border-radius: 10px; overflow: hidden; 
-            border: 1px solid var(--border-color); 
-            background: var(--warna-tombol-cam) !important; 
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
-        }
-        .foto-hasil { width: 100%; height: 100%; object-fit: cover; }
-        .no-photo-txt { font-size: 9px; font-weight: 800; text-align: center; color: var(--text-di-bg-gelap); }
+        #login-page, #register-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: #f1f5f9; padding: 1rem; }
+        .login-card { width: 100%; max-width: 400px; padding: 2rem !important; }
+        .btn-link-navy { color: #1e3a8a !important; font-size: 12px; font-weight: 800; background: none; border: none; cursor: pointer; text-transform: uppercase; text-decoration: underline; }
 
-        .info { flex-grow: 1; font-size: 11px; color: var(--text-main); text-transform: uppercase; line-height: 1.5; }
-        .info b { font-size: 16px; font-weight: 800; display: block; margin-bottom: 2px; color: var(--text-main); }
-        .badge { padding: 8px 15px; border-radius: 8px; color: #fff; font-size: 11px; font-weight: 800; min-width: 70px; text-align: center; }
+        @media print { .no-print { display: none !important; } .content-area { margin-left: 0 !important; padding: 0 !important; } body { background: white !important; } }
     </style>
 </head>
-<body data-theme="light">
+<body>
 
-    <div class="main-card">
-        <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙 DARK MODE</button>
-        <div class="left-panel">
-            <h2 class="header-title">ABSENSI SISWA</h2>
-            <div class="date-display" id="tglDisplay"></div>
-            <div id="cam-box"><div id="p-holder" class="cam-placeholder">KAMERA NON-AKTIF</div><video id="video" autoplay muted playsinline></video></div>
-            <canvas id="canvas" style="display:none;"></canvas>
-            <button id="camBtn" class="btn-cam" onclick="toggleCam()">AKTIFKAN KAMERA</button>
-            
-            <label>NAMA LENGKAP</label>
-            <input type="text" id="nama" placeholder="INPUT NAMA SISWA..." style="text-transform: uppercase;">
-            
-            <div style="display: flex; gap: 15px;">
-                <div style="flex: 1;"><label>NOMOR ABSENSI</label><input type="text" id="no" placeholder="00"></div>
-                <div style="flex: 1;"><label>STATUS</label>
-                    <select id="stat"><option value="" selected disabled>- PILIH -</option><option value="HADIR">HADIR</option><option value="IZIN">IZIN</option><option value="SAKIT">SAKIT</option><option value="ALFA">ALFA</option></select>
+<div id="login-page">
+    <div class="card-custom login-card text-center">
+        <div class="flex flex-col items-center mb-8">
+            <div class="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg mb-4">
+                <i class="fas fa-user-shield text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-black text-navy uppercase tracking-tighter">LOGIN EDUPRESENT</h2>
+            <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase tracking-[0.2em]">Silahkan Masuk</p>
+        </div>
+        <div class="space-y-5 text-left">
+            <div class="form-control">
+                <label class="label uppercase font-black text-navy">Username</label>
+                <input type="text" id="userInput" placeholder="Masukkan Username" class="input w-full" />
+            </div>
+            <div class="form-control">
+                <label class="label uppercase font-black text-navy">Password</label>
+                <div class="password-container">
+                    <input type="password" id="passInput" placeholder="Masukkan Password" class="input w-full" />
+                    <i class="fas fa-eye eye-icon" onclick="togglePass('passInput', this)"></i>
                 </div>
             </div>
-            <button class="btn-action" onclick="simpanData()">SIMPAN DATA ABSENSI</button>
-        </div>
-        <div class="right-panel">
-            <h3 class="header-title" style="font-size: 18px;">DAFTAR HADIR</h3>
-            <div id="list"></div>
-            <div style="margin-top: auto; padding-top: 15px;">
-                <button class="btn-action" onclick="bukaLaporan()">BUKA LAPORAN (TABLE)</button>
-                <button class="btn-action" onclick="resetData()">KOSONGKAN DATA</button>
+            <button onclick="handleLogin()" class="btn btn-block bg-navy hover:bg-blue-900 border-none text-white font-black rounded-xl h-14 mt-4 shadow-lg shadow-blue-900/20">MASUK APLIKASI</button>
+            <div class="text-center mt-6 space-y-3">
+                <div>
+                    <p class="text-[11px] font-bold text-slate-500 uppercase">Belum punya akun?</p>
+                    <button onclick="switchAuth('register')" class="btn-link-navy">Buat Akun Baru Disini</button>
+                </div>
+                <div class="pt-2 border-t border-slate-200">
+                    <button onclick="customResetLogin()" class="btn-link-navy text-rose-600">Lupa Username / Password?</button>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
+<div id="register-page" style="display: none;">
+    <div class="card-custom login-card text-center">
+        <div class="flex flex-col items-center mb-8">
+            <div class="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg mb-4">
+                <i class="fas fa-user-plus text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-black text-navy uppercase tracking-tighter">DAFTAR AKUN</h2>
+            <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase tracking-[0.2em]">EduPresent Absensi</p>
+        </div>
+        <div class="space-y-5 text-left">
+            <div class="form-control">
+                <label class="label uppercase font-black text-navy">Username Baru</label>
+                <input type="text" id="regUser" placeholder="Tentukan Username" class="input w-full" />
+            </div>
+            <div class="form-control">
+                <label class="label uppercase font-black text-navy">Password Baru</label>
+                <div class="password-container">
+                    <input type="password" id="regPass" placeholder="Tentukan Password" class="input w-full" />
+                    <i class="fas fa-eye eye-icon" onclick="togglePass('regPass', this)"></i>
+                </div>
+            </div>
+            <button onclick="handleRegister()" class="btn btn-block bg-navy hover:bg-blue-900 border-none text-white font-black rounded-xl h-14 mt-4 shadow-lg shadow-blue-900/20">DAFTAR SEKARANG</button>
+            <div class="text-center mt-6 space-y-2">
+                <p class="text-[11px] font-bold text-slate-500 uppercase">Sudah punya akun?</p>
+                <button onclick="switchAuth('login')" class="btn-link-navy">Kembali ke Login</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="main-app" class="main-wrapper flex flex-col lg:flex-row" style="display: none;">
+    <div class="w-full lg:w-72 bg-white p-6 shadow-xl z-10 flex flex-col lg:fixed lg:h-full no-print">
+        <div class="flex items-center gap-3 mb-10">
+            <div class="w-12 h-12 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg">
+                <i class="fas fa-graduation-cap text-xl"></i>
+            </div>
+            <h2 class="text-xl font-black text-navy tracking-tighter">EDUPRESENT</h2>
+        </div>
+
+        <nav class="space-y-1.5 flex-1 text-left">
+            <p class="text-[10px] font-bold text-slate-400 ml-3 mb-3 uppercase tracking-[0.2em]">Menu Utama</p>
+            <button onclick="showPage('dashboard')" id="btn-dashboard" class="nav-link active flex items-center w-full gap-3 p-3.5 rounded-xl transition-all"><i class="fas fa-th-large"></i> Dashboard</button>
+            <button onclick="showPage('history')" id="btn-history" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all"><i class="fas fa-list-ul"></i> Riwayat Input</button>
+            <p class="text-[10px] font-bold text-slate-400 ml-3 mt-6 mb-3 uppercase tracking-[0.2em]">Laporan</p>
+            <button onclick="showPage('weekly')" id="btn-weekly" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all text-left"><i class="fas fa-calendar-week"></i> Rekap Mingguan</button>
+            <button onclick="showPage('monthly')" id="btn-monthly" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all text-left"><i class="fas fa-calendar-alt"></i> Rekap Bulanan</button>
+            <button onclick="showPage('semester')" id="btn-semester" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all text-left"><i class="fas fa-book"></i> Rekap Semester</button>
+        </nav>
+        
+        <div class="mt-auto pt-5 border-t border-slate-100 mb-6 px-2 space-y-2">
+            <button onclick="handleLogout()" class="btn btn-logout-navy btn-block h-12 rounded-xl font-black text-[12px] border-none"><i class="fas fa-sign-out-alt mr-2"></i> LOGOUT</button>
+            <button onclick="resetData()" class="btn btn bg-rose-600 hover:bg-rose-700 text-white btn-block h-14 rounded-2xl font-black text-[14px] border-none"><i class="fas fa-sync-alt text-lg mr-3"></i> RESET DATA</button>
+        </div>
+    </div>
+
+    <div class="content-area lg:ml-72">
+        <div class="mb-8 flex flex-col items-center">
+            <h1 id="pageTitle" class="font-black text-navy uppercase">RINGKASAN UTAMA</h1>
+            <div id="clockContainer" class="no-print">
+                <div class="clock-badge">
+                    <i class="far fa-clock"></i> 
+                    <div class="flex items-center gap-2">
+                        <span id="currentDate">Memuat...</span>
+                        <span class="text-navy mx-1">|</span>
+                        <span id="digitalClock" class="font-black">00.00.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-dashboard" class="page-content active">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8 text-center">
+                <div class="card-custom border-t-4 border-navy p-3"><p class="stat-navy uppercase text-[10px]">Total</p><h3 class="text-2xl font-black stat-navy sTotal">0</h3></div>
+                <div class="card-custom border-t-4 border-emerald-500 p-3"><p class="stat-navy uppercase text-[10px]">Hadir</p><h3 class="text-2xl font-black stat-navy sHadir">0</h3></div>
+                <div class="card-custom border-t-4 border-amber-500 p-3"><p class="stat-navy uppercase text-[10px]">Izin</p><h3 class="text-2xl font-black stat-navy sIzin">0</h3></div>
+                <div class="card-custom border-t-4 border-rose-500 p-3"><p class="stat-navy uppercase text-[10px]">Sakit</p><h3 class="text-2xl font-black stat-navy sSakit">0</h3></div>
+                <div class="card-custom border-t-4 border-slate-900 p-3 col-span-2 md:col-span-1"><p class="stat-navy uppercase text-[10px]">Alpa</p><h3 class="text-2xl font-black stat-navy sAlpa">0</h3></div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1">
+                    <div class="card-custom text-center">
+                        <h3 class="font-black text-navy mb-6 uppercase text-[12px] tracking-widest text-center"><i class="fas fa-plus-circle"></i> Input Baru</h3>
+                        <div class="space-y-4">
+                            <div class="form-control text-center"><label class="label font-black text-navy">NAMA LENGKAP</label><input type="text" id="nameInp" placeholder="Nama..." class="input w-full" /></div>
+                            <div class="form-control text-center"><label class="label font-black text-navy">STATUS</label><select id="statusInp" class="select w-full"><option value="" selected disabled>- Pilih Status -</option><option value="Hadir">HADIR</option><option value="Izin">IZIN</option><option value="Sakit">SAKIT</option><option value="Alpa">ALPA</option></select></div>
+                            <button onclick="submitData()" class="btn btn-block h-12 bg-navy text-white font-black rounded-xl border-none">SIMPAN ABSENSI</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 text-left">
+                    <div class="card-custom">
+                        <h3 class="font-black text-navy mb-6 uppercase text-[12px] tracking-widest text-left">Aktivitas Hari Ini</h3>
+                        <div class="overflow-x-auto"><table class="dashboard-table"><thead><tr><th>Waktu</th><th>Nama Siswa</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="recentTable"></tbody></table></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-history" class="page-content">
+            <div class="card-custom text-left"><div class="overflow-x-auto"><table class="history-table"><thead><tr><th class="py-4">Tanggal</th><th>Nama Siswa</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="historyTableBody"></tbody></table></div></div>
+        </div>
+
+        <div id="rekapContainer" class="page-content text-left">
+            <div class="card-custom">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b-2 border-slate-100 pb-6 text-left gap-4">
+                    <div><h3 id="rekapTitle" class="text-2xl font-black text-navy uppercase mb-1 text-center md:text-left">Rekap</h3><p id="rekapDesc" class="text-navy font-normal text-[13px] text-center md:text-left"></p></div>
+                    <button onclick="window.print()" class="btn bg-navy text-white hover:bg-blue-900 border-none no-print px-6 rounded-xl font-bold text-[12px]"><i class="fas fa-print mr-2"></i> PRINT LAPORAN</button>
+                </div>
+                <div class="overflow-x-auto"><table class="report-table"><thead id="rekapTableHeader"></thead><tbody id="rekapTableBody"></tbody></table></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-    let dbAbsen = JSON.parse(localStorage.getItem('db_v92')) || [];
-    let video = document.getElementById('video'), canvas = document.getElementById('canvas'), stream = null;
-    const COLORS = { 'HADIR': '#10ac84', 'IZIN': '#f1c40f', 'SAKIT': '#e67e22', 'ALFA': '#ee5253' };
+    let db = JSON.parse(localStorage.getItem('edu_abs_pro_2026_final')) || [];
 
-    function toggleTheme() {
-        let current = document.body.getAttribute('data-theme');
-        let next = current === 'light' ? 'dark' : 'light';
-        document.body.setAttribute('data-theme', next);
-        document.getElementById('tBtn').innerHTML = next === 'dark' ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
-        localStorage.setItem('theme_v92', next);
-        renderList(); // Render ulang agar kotak foto berubah warna seketika
+    // FUNGSI AKUN
+    function getAccount() {
+        let acc = JSON.parse(localStorage.getItem('edu_user_acc'));
+        if(!acc) acc = { u: "admin", p: "123456" };
+        return acc;
     }
 
-    async function toggleCam() {
-        let btn = document.getElementById('camBtn'), holder = document.getElementById('p-holder');
-        if (!stream) {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                video.srcObject = stream; video.style.display = 'block'; holder.style.display = 'none';
-                btn.innerText = "MATIKAN KAMERA";
-                if(document.body.getAttribute('data-theme') === 'light') btn.style.background = "#ff4757";
-            } catch (err) { alert("Izinkan kamera!"); }
+    function switchAuth(target) {
+        if(target === 'register') {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('register-page').style.display = 'flex';
         } else {
-            stream.getTracks().forEach(t => t.stop()); stream = null;
-            video.style.display = 'none'; holder.style.display = 'flex';
-            btn.innerText = "AKTIFKAN KAMERA";
-            btn.style.background = ""; 
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('register-page').style.display = 'none';
         }
     }
 
-    function simpanData() {
-        let n = document.getElementById('nama').value, nr = document.getElementById('no').value, s = document.getElementById('stat').value;
-        if(!n || !nr || !s) return alert("Lengkapi data!");
-        canvas.width = 400; canvas.height = 300;
-        let ctx = canvas.getContext('2d');
-        if (stream) { ctx.translate(canvas.width, 0); ctx.scale(-1, 1); ctx.drawImage(video, 0, 0, canvas.width, canvas.height); }
-        const d = new Date();
-        const jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-        const tgl = d.toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase();
-        dbAbsen.push({ n: n.toUpperCase(), no: nr.padStart(2, '0'), s: s, jam: jam, tgl: tgl, img: stream ? canvas.toDataURL('image/jpeg', 0.8) : null });
-        localStorage.setItem('db_v92', JSON.stringify(dbAbsen));
-        renderList(); document.getElementById('nama').value = ''; document.getElementById('no').value = '';
+    function handleRegister() {
+        const u = document.getElementById('regUser').value.trim();
+        const p = document.getElementById('regPass').value.trim();
+        if(u && p) {
+            localStorage.setItem('edu_user_acc', JSON.stringify({ u: u, p: p }));
+            alert("Akun Berhasil Dibuat!");
+            switchAuth('login');
+        } else { alert("Isi Username & Password!"); }
     }
 
-    function renderList() {
-        let area = document.getElementById('list'); area.innerHTML = '';
-        dbAbsen.slice().reverse().forEach(i => {
-            let imgHTML = i.img ? `<img src="${i.img}" class="foto-hasil">` : `<div class="no-photo-txt">TANPA<br>FOTO</div>`;
-            area.innerHTML += `
-                <div class="item">
-                    <div class="foto-container">${imgHTML}</div>
-                    <div class="info">
-                        <b>${i.n}</b>
-                        NO ABSEN: ${i.no} | ${i.tgl}<br>
-                        PUKUL: ${i.jam}
-                    </div>
-                    <div class="badge" style="background:${COLORS[i.s]}">${i.s}</div>
-                </div>`;
-        });
+    function handleLogin() {
+        const acc = getAccount();
+        const u = document.getElementById('userInput').value;
+        const p = document.getElementById('passInput').value;
+        if(u === acc.u && p === acc.p) {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('register-page').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+            sessionStorage.setItem('isLoggedIn', 'true');
+            renderUI();
+        } else { alert("User atau Password salah!"); }
     }
 
-    function bukaLaporan() {
-        if(dbAbsen.length === 0) return alert("Data kosong!");
-        const win = window.open('', '_blank');
-        let rows = dbAbsen.map(i => {
-            let img = i.img ? `<img src="${i.img}" style="width:100%; height:95px; object-fit:cover; display:block;">` : `<div style="padding:35px 0; text-align:center; font-size:10px; color:#000; font-weight:800;">TANPA FOTO</div>`;
-            return `<tr><td style="padding:0; width:120px; border: 1px solid rgba(0,0,0,0.05); overflow:hidden;">${img}</td><td style="border: 1px solid rgba(0,0,0,0.05); font-weight:800; color:#000;">${i.no}</td><td style="border: 1px solid rgba(0,0,0,0.05); font-weight:800; text-align:left; padding-left:15px; color:#000;">${i.n}</td><td style="border: 1px solid rgba(0,0,0,0.05); text-align:left; padding-left:15px; color:#000;">${i.tgl}<br>${i.jam}</td><td style="border: 1px solid rgba(0,0,0,0.05);"><span style="background:${COLORS[i.s]}; color:white; padding:5px 12px; border-radius:6px; font-size:10px; font-weight:800;">${i.s}</span></td></tr>`;
-        }).join('');
+    function customResetLogin() {
+        const confirmReset = confirm("Lupa Akun? Klik OK untuk menimpa akun lama dengan Nama & Password baru.");
+        if(confirmReset) {
+            const userBaru = prompt("Username Baru:");
+            const passBaru = prompt("Password Baru:");
+            if(userBaru && passBaru) {
+                localStorage.setItem('edu_user_acc', JSON.stringify({ u: userBaru.trim(), p: passBaru.trim() }));
+                alert("Berhasil! Silahkan login dengan akun baru.");
+            }
+        }
+    }
+
+    function togglePass(id, el) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+            input.type = "text";
+            el.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+            input.type = "password";
+            el.classList.replace("fa-eye-slash", "fa-eye");
+        }
+    }
+
+    function handleLogout() { sessionStorage.removeItem('isLoggedIn'); location.reload(); }
+    if(sessionStorage.getItem('isLoggedIn') === 'true') { 
+        document.getElementById('login-page').style.display = 'none'; 
+        document.getElementById('register-page').style.display = 'none';
+        document.getElementById('main-app').style.display = 'flex'; 
+    }
+
+    function updateDateTime() {
+        const now = new Date();
+        const d = String(now.getDate()).padStart(2, '0');
+        const mNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
+        const dayStr = dayNames[now.getDay()];
+        const monthStr = mNames[now.getMonth()];
+        const yearStr = now.getFullYear();
+        document.getElementById('digitalClock').innerText = now.getHours().toString().padStart(2, '0') + "." + now.getMinutes().toString().padStart(2, '0') + "." + now.getSeconds().toString().padStart(2, '0');
+        document.getElementById('currentDate').innerText = `${dayStr}, ${d} ${monthStr} ${yearStr}`;
+    }
+    setInterval(updateDateTime, 1000); updateDateTime();
+
+    function showPage(pageId) {
+        document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        const btn = document.getElementById('btn-' + pageId);
+        if(btn) btn.classList.add('active');
+        if (['weekly', 'monthly', 'semester'].includes(pageId)) {
+            document.getElementById('rekapContainer').classList.add('active');
+            renderRekap(pageId);
+        } else {
+            document.getElementById('page-' + pageId).classList.add('active');
+        }
+        renderUI();
+    }
+
+    function getStatusLabel(status) {
+        if (!status) return `<span>-</span>`;
+        const s = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+        let colorClass = s === "Hadir" ? "label-hadir" : s === "Izin" ? "label-izin" : s === "Sakit" ? "label-sakit" : "label-alpa";
+        return `<span class="status-label ${colorClass}">${s.toUpperCase()}</span>`;
+    }
+
+    function submitData() {
+        const n = document.getElementById('nameInp');
+        const s = document.getElementById('statusInp');
+        if(!n.value.trim() || !s.value) return alert("Isi Nama & Status!");
+        const now = new Date();
+        const tgl = String(now.getDate()).padStart(2, '0');
+        const bln = String(now.getMonth() + 1).padStart(2, '0');
+        const fixDateStr = tgl + "/" + bln + "/" + now.getFullYear();
+        const dateKey = `${now.getFullYear()}-${bln}-${tgl}`;
+        db.push({ id: Date.now(), name: n.value.trim().toUpperCase(), status: s.value, timestamp: Date.now(), dateStr: fixDateStr, dateKey: dateKey, day: document.getElementById('currentDate').innerText.split(',')[0] });
+        localStorage.setItem('edu_abs_pro_2026_final', JSON.stringify(db));
+        n.value = ""; s.selectedIndex = 0; renderUI();
+    }
+
+    function remove(id) { db = db.filter(x => x.id !== id); localStorage.setItem('edu_abs_pro_2026_final', JSON.stringify(db)); renderUI(); }
+    function resetData() { if(confirm("Hapus semua data?")) { db = []; localStorage.removeItem('edu_abs_pro_2026_final'); location.reload(); } }
+
+    function getWeekInMonth(date) {
+        const d = date.getDate();
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+        const dayOffset = (firstDay === 0) ? 7 : firstDay; 
+        return Math.ceil((d + dayOffset - 1) / 7) - (dayOffset === 7 ? 1 : 0);
+    }
+
+    function renderUI() {
+        const recentT = document.getElementById('recentTable');
+        const historyT = document.getElementById('historyTableBody');
+        recentT.innerHTML = ""; historyT.innerHTML = "";
+        const now = new Date();
+        const tgl = String(now.getDate()).padStart(2, '0');
+        const bln = String(now.getMonth() + 1).padStart(2, '0');
+        const todayKey = `${now.getFullYear()}-${bln}-${tgl}`;
+        let stats = { Hadir: 0, Izin: 0, Sakit: 0, Alpa: 0 };
         
-        win.document.write(`
-            <html>
-            <head>
-                <title>LAPORAN_ABSENSI</title>
-                <style>
-                    body{font-family:'Poppins', sans-serif; background:#f1f3f6; padding:30px; display:flex; flex-direction:column; align-items:center;}
-                    .container{background:white; padding:30px; border-radius:20px; width:95%; max-width:1100px; box-shadow:0 5px 25px rgba(0,0,0,0.05); text-align:center;}
-                    .line{border-bottom: 3px solid rgba(0,0,0,0.05); width: 100%; margin: 15px 0 30px 0;}
-                    table{width:100%; border-collapse:collapse; table-layout: fixed; border-radius:12px; overflow:hidden; border: 1px solid rgba(0,0,0,0.05);}
-                    th{background:#000; color:#fff; padding:18px; font-size:11px; text-transform:uppercase; border: 1px solid #222; font-weight:800;}
-                    td{padding:10px; font-size:11px; vertical-align:middle; border: 1px solid rgba(0,0,0,0.05);}
-                    .btn-save { background: #2ecc71; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; margin-bottom: 20px; }
-                </style>
-            </head>
-            <body>
-                <button class="btn-save" onclick="window.print()">💾 SIMPAN PDF (DOWNLOAD)</button>
-                <div class="container">
-                    <h2 style="margin:0">LAPORAN DATA ABSENSI SISWA</h2>
-                    <div class="line"></div>
-                    <table>
-                        <thead><tr><th style="width:120px;">FOTO</th><th style="width:80px;">NO ABSEN</th><th>NAMA LENGKAP</th><th style="width:250px;">WAKTU & TANGGAL</th><th style="width:110px;">STATUS</th></tr></thead>
-                        <tbody>${rows}</tbody>
-                    </table>
-                </div>
-            </body>
-            </html>
-        `);
-        win.document.close();
+        let todayData = db.filter(item => item.dateKey === todayKey).sort((a, b) => a.name.localeCompare(b.name));
+        todayData.forEach((item) => {
+            recentT.innerHTML += `<tr><td>HARI INI</td><td class="student-name-cell">${item.name}</td><td>${getStatusLabel(item.status)}</td><td class="no-print"><button onclick="remove(${item.id})" class="btn-hapus">HAPUS</button></td></tr>`;
+        });
+
+        [...db].reverse().forEach((item) => {
+            stats[item.status]++;
+            historyT.innerHTML += `<tr><td><div class="date-text-table">${item.dateStr}</div><div class="day-text">${item.day}</div></td><td class="student-name-cell">${item.name}</td><td>${getStatusLabel(item.status)}</td><td class="no-print"><button onclick="remove(${item.id})" class="btn-hapus">HAPUS</button></td></tr>`;
+        });
+        document.querySelectorAll('.sTotal').forEach(el => el.innerText = db.length);
+        document.querySelectorAll('.sHadir').forEach(el => el.innerText = stats.Hadir);
+        document.querySelectorAll('.sIzin').forEach(el => el.innerText = stats.Izin);
+        document.querySelectorAll('.sSakit').forEach(el => el.innerText = stats.Sakit);
+        document.querySelectorAll('.sAlpa').forEach(el => el.innerText = stats.Alpa);
     }
 
-    function resetData() { if(confirm("Hapus semua data?")) { dbAbsen = []; localStorage.removeItem('db_v92'); renderList(); } }
-    window.onload = () => { renderList(); document.getElementById('tglDisplay').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase(); };
+    function getMonday(d) { d = new Date(d); var day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6 : 1); return new Date(d.setDate(diff)).setHours(0,0,0,0); }
+
+    function renderRekap(type) {
+        const thead = document.getElementById('rekapTableHeader');
+        const tbody = document.getElementById('rekapTableBody');
+        const titleEl = document.getElementById('rekapTitle');
+        const descEl = document.getElementById('rekapDesc');
+        tbody.innerHTML = "";
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+        const monthNames = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
+        let startYear = (currentMonth >= 6) ? currentYear : currentYear - 1;
+        const taStr = `T.A. ${startYear}/${startYear + 1}`;
+
+        if (type === 'weekly') {
+            titleEl.innerText = "REKAP MINGGUAN";
+            descEl.innerText = `Laporan kehadiran minggu ke - ${getWeekInMonth(now)} (${taStr})`;
+            thead.innerHTML = `<tr><th width="60">NO</th><th>NAMA SISWA</th><th>SENIN</th><th>SELASA</th><th>RABU</th><th>KAMIS</th><th>JUM'AT</th><th>SABTU</th></tr>`;
+            let summary = {};
+            const monday = getMonday(new Date());
+            const satLimit = monday + (6 * 24 * 60 * 60 * 1000);
+            db.filter(item => item.timestamp >= monday && item.timestamp <= satLimit).forEach(item => {
+                if(!summary[item.name]) summary[item.name] = { "Senin": "-", "Selasa": "-", "Rabu": "-", "Kamis": "-", "Jum'at": "-", "Sabtu": "-" };
+                if(summary[item.name].hasOwnProperty(item.day)) summary[item.name][item.day] = item.status;
+            });
+            Object.keys(summary).sort().forEach((name, idx) => {
+                const s = summary[name];
+                tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td>${getStatusLabel(s.Senin)}</td><td>${getStatusLabel(s.Selasa)}</td><td>${getStatusLabel(s.Rabu)}</td><td>${getStatusLabel(s.Kamis)}</td><td>${getStatusLabel(s["Jum'at"])}</td><td>${getStatusLabel(s.Sabtu)}</td></tr>`;
+            });
+        } else if (type === 'monthly') {
+            titleEl.innerText = `REKAP BULAN ${monthNames[currentMonth]} ${currentYear}`;
+            descEl.innerText = `Laporan kehadiran bulanan (${taStr})`;
+            thead.innerHTML = `<tr><th width="60">NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th style="background:#eff6ff; color:#1e3a8a">TOTAL</th></tr>`;
+            renderGeneralSummary(currentMonth, false);
+        } else {
+            const semNum = (currentMonth >= 6) ? "1" : "2";
+            titleEl.innerText = `REKAP SEMESTER ${semNum} (${taStr})`;
+            descEl.innerText = `Laporan kehadiran semester ${semNum}`;
+            thead.innerHTML = `<tr><th width="60">NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th style="background:#eff6ff; color:#1e3a8a">TOTAL</th></tr>`;
+            renderGeneralSummary(currentMonth, true);
+        }
+
+        function renderGeneralSummary(monthIdx, isSemester) {
+            let summary = {};
+            db.filter(item => isSemester || (new Date(item.timestamp).getMonth() === monthIdx)).forEach(item => {
+                if(!summary[item.name]) summary[item.name] = { Hadir: 0, Izin: 0, Sakit: 0, Alpa: 0 };
+                summary[item.name][item.status]++;
+            });
+            Object.keys(summary).sort().forEach((name, idx) => {
+                const s = summary[name];
+                tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td class="text-center font-black">${s.Hadir}</td><td class="text-center font-black">${s.Izin}</td><td class="text-center font-black">${s.Sakit}</td><td class="text-center font-black">${s.Alpa}</td><td style="background:#eff6ff; font-weight:900; color:#1e3a8a !important; text-align:center">${s.Hadir + s.Izin + s.Sakit + s.Alpa}</td></tr>`;
+            });
+        }
+    }
+    if(sessionStorage.getItem('isLoggedIn') === 'true') renderUI();
 </script>
 </body>
 </html>
