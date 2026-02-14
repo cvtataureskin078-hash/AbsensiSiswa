@@ -54,22 +54,11 @@
         .page-content.active { display: block; }
 
         .report-table thead th, .history-table thead th, .dashboard-table thead th { 
-            background-color: #1e3a8a !important; 
-            color: #ffffff !important; 
-            text-align: center; 
-            font-weight: 700; 
-            border: 1.5px solid #000000 !important; 
-            padding: 12px; 
-            text-transform: uppercase; 
-            font-size: 12px; 
+            background-color: #1e3a8a !important; color: #ffffff !important; text-align: center; font-weight: 700; border: 1.5px solid #000000 !important; padding: 12px; text-transform: uppercase; font-size: 12px; 
         }
         
         .report-table tbody td, .history-table tbody td, .dashboard-table tbody td { 
-            border: 1.5px solid #000000 !important; 
-            padding: 12px; 
-            text-align: center; 
-            color: #1e3a8a !important; 
-            font-size: 14px; 
+            border: 1.5px solid #000000 !important; padding: 12px; text-align: center; color: #1e3a8a !important; font-size: 14px; 
         }
         .report-table, .history-table, .dashboard-table { border-collapse: collapse !important; width: 100%; border: 1px solid #000000 !important; }
         
@@ -79,12 +68,10 @@
         .label-sakit { background-color: #fee2e2; color: #b91c1c; }
         .label-alpa { background-color: #f1f5f9; color: #1e293b; }
         
-        .date-text-table, .day-text { color: #1e3a8a !important; font-weight: 400 !important; font-size: 14px !important; text-transform: uppercase; }
         .student-name-cell { font-weight: 800 !important; font-size: 16px !important; color: #1e3a8a !important; text-transform: uppercase; }
         
         .btn-hapus { background-color: #fff1f2; color: #be123c; padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 11px; border: none !important; cursor: pointer; }
         
-        /* LOGOUT NAVY */
         .btn-logout-navy { background-color: #1e3a8a !important; color: #ffffff !important; border: none !important; }
         .btn-logout-navy:hover { background-color: #172e6d !important; }
 
@@ -92,7 +79,6 @@
         .login-card { width: 100%; max-width: 400px; padding: 2.5rem !important; }
         .btn-link-navy { color: #1e3a8a !important; font-size: 12px; font-weight: 800; background: none; border: none; cursor: pointer; text-transform: uppercase; text-decoration: underline; }
 
-        /* HAMBURGER DI KANAN */
         #hamburger-btn { display: none; position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100; background: #1e3a8a; color: white; padding: 10px 14px; border-radius: 12px; cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
         .sidebar-wrapper { width: 18rem; background: white; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); z-index: 50; display: flex; flex-direction: column; transition: transform 0.3s ease; }
 
@@ -115,9 +101,7 @@
 <div id="login-page">
     <div class="card-custom login-card text-center">
         <div class="flex flex-col items-center mb-8">
-            <div class="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg mb-4">
-                <i class="fas fa-user-shield text-2xl"></i>
-            </div>
+            <div class="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg mb-4"><i class="fas fa-user-shield text-2xl"></i></div>
             <h2 class="text-2xl font-black text-navy uppercase tracking-tighter">LOGIN EDUPRESENT</h2>
             <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase tracking-[0.2em]">Silahkan Masuk</p>
         </div>
@@ -150,9 +134,7 @@
 <div id="register-page" style="display: none;">
     <div class="card-custom login-card text-center">
         <div class="flex flex-col items-center mb-8">
-            <div class="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg mb-4">
-                <i class="fas fa-user-plus text-2xl"></i>
-            </div>
+            <div class="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg mb-4"><i class="fas fa-user-plus text-2xl"></i></div>
             <h2 class="text-2xl font-black text-navy uppercase tracking-tighter">DAFTAR AKUN</h2>
             <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase tracking-[0.2em]">EduPresent Absensi</p>
         </div>
@@ -180,20 +162,14 @@
 <div id="main-app" class="main-wrapper" style="display: none;">
     <div id="sidebar" class="sidebar-wrapper no-print">
         <div class="flex items-center gap-3 mb-10">
-            <div class="w-12 h-12 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg">
-                <i class="fas fa-graduation-cap text-xl"></i>
-            </div>
-            <h2 class="text-xl font-black text-navy tracking-tighter">EDUPRESENT</h2>
+            <div class="w-12 h-12 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg"><i class="fas fa-graduation-cap text-xl"></i></div>
+            <h2 class="text-xl font-black text-navy tracking-tighter uppercase">EDUPRESENT</h2>
         </div>
 
         <nav class="space-y-1.5 flex-1 text-left">
             <p class="text-[10px] font-bold text-slate-400 ml-3 mb-3 uppercase tracking-[0.2em]">Menu Utama</p>
-            <button onclick="showPage('dashboard')" id="btn-dashboard" class="nav-link active flex items-center w-full gap-3 p-3.5 rounded-xl transition-all">
-                <i class="fas fa-th-large"></i> Dashboard
-            </button>
-            <button onclick="showPage('history')" id="btn-history" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all">
-                <i class="fas fa-list-ul"></i> Riwayat Input
-            </button>
+            <button onclick="showPage('dashboard')" id="btn-dashboard" class="nav-link active flex items-center w-full gap-3 p-3.5 rounded-xl transition-all"><i class="fas fa-th-large"></i> Dashboard</button>
+            <button onclick="showPage('history')" id="btn-history" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all"><i class="fas fa-list-ul"></i> Riwayat Input</button>
             <p class="text-[10px] font-bold text-slate-400 ml-3 mt-6 mb-3 uppercase tracking-[0.2em]">Laporan</p>
             <button onclick="showPage('weekly')" id="btn-weekly" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all text-left"><i class="fas fa-calendar-week"></i> Rekap Mingguan</button>
             <button onclick="showPage('monthly')" id="btn-monthly" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all text-left"><i class="fas fa-calendar-alt"></i> Rekap Bulanan</button>
@@ -238,8 +214,8 @@
                     <div class="card-custom text-center">
                         <h3 class="font-black text-navy mb-6 uppercase text-[12px] tracking-widest text-center"><i class="fas fa-plus-circle"></i> Input Baru</h3>
                         <div class="space-y-4">
-                            <div class="form-control text-center"><label class="label font-black text-navy">NAMA LENGKAP</label><input type="text" id="nameInp" placeholder="Nama..." class="input w-full" /></div>
-                            <div class="form-control text-center"><label class="label font-black text-navy">STATUS</label><select id="statusInp" class="select w-full"><option value="" selected disabled>- Pilih Status -</option><option value="Hadir">HADIR</option><option value="Izin">IZIN</option><option value="Sakit">SAKIT</option><option value="Alpa">ALPA</option></select></div>
+                            <div class="form-control text-center"><label class="label font-black text-navy">NAMA LENGKAP</label><input type="text" id="nameInp" placeholder="Masukan Nama Lengkap" class="input w-full border-black" /></div>
+                            <div class="form-control text-center"><label class="label font-black text-navy">STATUS</label><select id="statusInp" class="select w-full border-black"><option value="" selected disabled>- Pilih Status -</option><option value="Hadir">HADIR</option><option value="Izin">IZIN</option><option value="Sakit">SAKIT</option><option value="Alpa">ALPA</option></select></div>
                             <button onclick="submitData()" class="btn btn-block h-12 bg-navy text-white font-black rounded-xl border-none">SIMPAN ABSENSI</button>
                         </div>
                     </div>
@@ -258,237 +234,153 @@
         </div>
 
         <div id="rekapContainer" class="page-content text-left">
-            <div class="card-custom">
+            <div class="card-custom overflow-x-auto">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b-2 border-slate-100 pb-6 text-left gap-4">
                     <div><h3 id="rekapTitle" class="text-2xl font-black text-navy uppercase mb-1 text-center md:text-left">Rekap</h3><p id="rekapDesc" class="text-navy font-normal text-[13px] text-center md:text-left"></p></div>
                     <button onclick="window.print()" class="btn bg-navy text-white hover:bg-blue-900 border-none no-print px-6 rounded-xl font-bold text-[12px]"><i class="fas fa-print mr-2"></i> PRINT LAPORAN</button>
                 </div>
-                <div class="overflow-x-auto"><table class="report-table"><thead id="rekapTableHeader"></thead><tbody id="rekapTableBody"></tbody></table></div>
+                <table class="report-table"><thead id="rekapTableHeader"></thead><tbody id="rekapTableBody"></tbody></table>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('edu_abs_pro_2026_final')) || [];
+    let db = JSON.parse(localStorage.getItem('edu_abs_pro_v2026_final')) || [];
 
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
-    }
-
-    function getAccount() {
-        let acc = JSON.parse(localStorage.getItem('edu_user_acc'));
-        if(!acc) acc = { u: "admin", p: "123456" };
-        return acc;
-    }
-
-    function switchAuth(target) {
-        if(target === 'register') {
-            document.getElementById('login-page').style.display = 'none';
-            document.getElementById('register-page').style.display = 'flex';
-        } else {
-            document.getElementById('login-page').style.display = 'flex';
-            document.getElementById('register-page').style.display = 'none';
-        }
-    }
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+    function togglePass(id, el) { const i = document.getElementById(id); i.type = i.type === "password" ? "text" : "password"; el.classList.toggle('fa-eye-slash'); }
+    function switchAuth(t) { document.getElementById('login-page').style.display = t==='login'?'flex':'none'; document.getElementById('register-page').style.display = t==='register'?'flex':'none'; }
 
     function handleRegister() {
-        const u = document.getElementById('regUser').value.trim();
-        const p = document.getElementById('regPass').value.trim();
-        if(u && p) {
-            localStorage.setItem('edu_user_acc', JSON.stringify({ u: u, p: p }));
-            alert("Akun Berhasil Dibuat!");
-            switchAuth('login');
-        } else { alert("Isi Username & Password!"); }
+        const u = document.getElementById('regUser').value.trim(), p = document.getElementById('regPass').value.trim();
+        if(u && p) { localStorage.setItem('edu_user_acc', JSON.stringify({u, p})); alert("Berhasil!"); switchAuth('login'); }
     }
 
     function handleLogin() {
-        const acc = getAccount();
-        const u = document.getElementById('userInput').value;
-        const p = document.getElementById('passInput').value;
-        if(u === acc.u && p === acc.p) {
-            document.getElementById('login-page').style.display = 'none';
-            document.getElementById('register-page').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-            sessionStorage.setItem('isLoggedIn', 'true');
-            renderUI();
-        } else { alert("User atau Password salah!"); }
+        const acc = JSON.parse(localStorage.getItem('edu_user_acc')) || {u:"admin", p:"123456"};
+        const u = document.getElementById('userInput').value, p = document.getElementById('passInput').value;
+        if(u === acc.u && p === acc.p) { 
+            document.getElementById('login-page').style.display='none'; document.getElementById('main-app').style.display='flex'; 
+            sessionStorage.setItem('isLoggedIn', 'true'); renderUI();
+        } else { alert("Salah!"); }
     }
 
     function customResetLogin() {
-        const confirmReset = confirm("Lupa Akun? Klik OK untuk menimpa akun lama dengan Nama & Password baru.");
-        if(confirmReset) {
-            const userBaru = prompt("Username Baru:");
-            const passBaru = prompt("Password Baru:");
-            if(userBaru && passBaru) {
-                localStorage.setItem('edu_user_acc', JSON.stringify({ u: userBaru.trim(), p: passBaru.trim() }));
-                alert("Berhasil! Silahkan login dengan akun baru.");
-            }
-        }
-    }
-
-    function togglePass(id, el) {
-        const input = document.getElementById(id);
-        if (input.type === "password") {
-            input.type = "text";
-            el.classList.replace("fa-eye", "fa-eye-slash");
-        } else {
-            input.type = "password";
-            el.classList.replace("fa-eye-slash", "fa-eye");
-        }
-    }
-
-    function handleLogout() { sessionStorage.removeItem('isLoggedIn'); location.reload(); }
-    if(sessionStorage.getItem('isLoggedIn') === 'true') { 
-        document.getElementById('login-page').style.display = 'none'; 
-        document.getElementById('register-page').style.display = 'none';
-        document.getElementById('main-app').style.display = 'flex'; 
+        const u = prompt("Username Baru:"), p = prompt("Password Baru:");
+        if(u && p) { localStorage.setItem('edu_user_acc', JSON.stringify({u: u.trim(), p: p.trim()})); alert("Berhasil!"); }
     }
 
     function updateDateTime() {
-        const now = new Date();
-        const d = String(now.getDate()).padStart(2, '0');
-        const mNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
-        const dayStr = dayNames[now.getDay()];
-        const monthStr = mNames[now.getMonth()];
-        const yearStr = now.getFullYear();
-        document.getElementById('digitalClock').innerText = now.getHours().toString().padStart(2, '0') + "." + now.getMinutes().toString().padStart(2, '0') + "." + now.getSeconds().toString().padStart(2, '0');
-        document.getElementById('currentDate').innerText = `${dayStr}, ${d} ${monthStr} ${yearStr}`;
+        const now = new Date(), days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"], months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        document.getElementById('currentDate').innerText = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        document.getElementById('digitalClock').innerText = now.getHours().toString().padStart(2,'0')+"."+now.getMinutes().toString().padStart(2,'0')+"."+now.getSeconds().toString().padStart(2,'0');
     }
     setInterval(updateDateTime, 1000); updateDateTime();
 
-    function showPage(pageId) {
-        document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        const btn = document.getElementById('btn-' + pageId);
-        if(btn) btn.classList.add('active');
-        if (['weekly', 'monthly', 'semester'].includes(pageId)) {
-            document.getElementById('rekapContainer').classList.add('active');
-            renderRekap(pageId);
-        } else {
-            document.getElementById('page-' + pageId).classList.add('active');
-        }
-        
-        if (window.innerWidth <= 1024) {
-            document.getElementById('sidebar').classList.remove('open');
-        }
+    function showPage(p) {
+        document.querySelectorAll('.page-content').forEach(x => x.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
+        document.getElementById('btn-'+p)?.classList.add('active');
+        if(['weekly','monthly','semester'].includes(p)) { document.getElementById('rekapContainer').classList.add('active'); renderRekap(p); }
+        else { document.getElementById('page-'+p).classList.add('active'); }
+        if(window.innerWidth <= 1024) document.getElementById('sidebar').classList.remove('open');
         renderUI();
     }
 
-    function getStatusLabel(status) {
-        if (!status) return `<span>-</span>`;
-        const s = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
-        let colorClass = s === "Hadir" ? "label-hadir" : s === "Izin" ? "label-izin" : s === "Sakit" ? "label-sakit" : "label-alpa";
-        return `<span class="status-label ${colorClass}">${s.toUpperCase()}</span>`;
+    function getStatusLabel(s) {
+        if (!s || s === "-") return "-";
+        const c = s === "Hadir" ? "label-hadir" : s === "Izin" ? "label-izin" : s === "Sakit" ? "label-sakit" : "label-alpa";
+        return `<span class="status-label ${c}">${s.toUpperCase()}</span>`;
     }
 
     function submitData() {
-        const n = document.getElementById('nameInp');
-        const s = document.getElementById('statusInp');
-        if(!n.value.trim() || !s.value) return alert("Isi Nama & Status!");
-        const now = new Date();
-        const tgl = String(now.getDate()).padStart(2, '0');
-        const bln = String(now.getMonth() + 1).padStart(2, '0');
-        const fixDateStr = tgl + "/" + bln + "/" + now.getFullYear();
-        const dateKey = `${now.getFullYear()}-${bln}-${tgl}`;
-        db.push({ id: Date.now(), name: n.value.trim().toUpperCase(), status: s.value, timestamp: Date.now(), dateStr: fixDateStr, dateKey: dateKey, day: document.getElementById('currentDate').innerText.split(',')[0] });
-        localStorage.setItem('edu_abs_pro_2026_final', JSON.stringify(db));
+        const n = document.getElementById('nameInp'), s = document.getElementById('statusInp');
+        if(!n.value || !s.value) return alert("Isi Data!");
+        const now = new Date(), days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"], months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        const dStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        db.push({ id: Date.now(), name: n.value.toUpperCase(), status: s.value, dateKey: `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`, dateStr: dStr, timestamp: Date.now(), day: days[now.getDay()] });
+        localStorage.setItem('edu_abs_pro_v2026_final', JSON.stringify(db));
         n.value = ""; s.selectedIndex = 0; renderUI();
     }
 
-    function remove(id) { db = db.filter(x => x.id !== id); localStorage.setItem('edu_abs_pro_2026_final', JSON.stringify(db)); renderUI(); }
-    function resetData() { if(confirm("Hapus semua data?")) { db = []; localStorage.removeItem('edu_abs_pro_2026_final'); location.reload(); } }
-
-    function getWeekInMonth(date) {
-        const d = date.getDate();
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-        const dayOffset = (firstDay === 0) ? 7 : firstDay; 
-        return Math.ceil((d + dayOffset - 1) / 7) - (dayOffset === 7 ? 1 : 0);
+    function remove(id) { 
+        db = db.filter(x => x.id !== id); 
+        localStorage.setItem('edu_abs_pro_v2026_final', JSON.stringify(db)); 
+        renderUI(); 
     }
+    
+    function handleLogout() { sessionStorage.removeItem('isLoggedIn'); location.reload(); }
+    function resetData() { if(confirm("Hapus semua?")) { db = []; localStorage.removeItem('edu_abs_pro_v2026_final'); location.reload(); } }
 
     function renderUI() {
-        const recentT = document.getElementById('recentTable');
-        const historyT = document.getElementById('historyTableBody');
+        const todayKey = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`;
+        const recentT = document.getElementById('recentTable'), historyT = document.getElementById('historyTableBody');
         recentT.innerHTML = ""; historyT.innerHTML = "";
-        const now = new Date();
-        const tgl = String(now.getDate()).padStart(2, '0');
-        const bln = String(now.getMonth() + 1).padStart(2, '0');
-        const todayKey = `${now.getFullYear()}-${bln}-${tgl}`;
         let stats = { Hadir: 0, Izin: 0, Sakit: 0, Alpa: 0 };
         
-        let todayData = db.filter(item => item.dateKey === todayKey).sort((a, b) => a.name.localeCompare(b.name));
-        todayData.forEach((item) => {
-            recentT.innerHTML += `<tr><td>HARI INI</td><td class="student-name-cell">${item.name}</td><td>${getStatusLabel(item.status)}</td><td class="no-print"><button onclick="remove(${item.id})" class="btn-hapus">HAPUS</button></td></tr>`;
+        db.filter(x => x.dateKey === todayKey).sort((a,b) => a.name.localeCompare(b.name)).forEach(item => {
+            recentT.innerHTML += `<tr><td>${item.dateStr}</td><td class="student-name-cell">${item.name}</td><td>${getStatusLabel(item.status)}</td><td class="no-print"><button onclick="remove(${item.id})" class="btn-hapus">HAPUS</button></td></tr>`;
         });
-
-        [...db].reverse().forEach((item) => {
+        
+        [...db].reverse().forEach(item => {
             stats[item.status]++;
-            historyT.innerHTML += `<tr><td><div class="date-text-table">${item.dateStr}</div><div class="day-text">${item.day}</div></td><td class="student-name-cell">${item.name}</td><td>${getStatusLabel(item.status)}</td><td class="no-print"><button onclick="remove(${item.id})" class="btn-hapus">HAPUS</button></td></tr>`;
+            historyT.innerHTML += `<tr><td>${item.dateStr}</td><td class="student-name-cell">${item.name}</td><td>${getStatusLabel(item.status)}</td><td class="no-print"><button onclick="remove(${item.id})" class="btn-hapus">HAPUS</button></td></tr>`;
         });
-        document.querySelectorAll('.sTotal').forEach(el => el.innerText = db.length);
-        document.querySelectorAll('.sHadir').forEach(el => el.innerText = stats.Hadir);
-        document.querySelectorAll('.sIzin').forEach(el => el.innerText = stats.Izin);
-        document.querySelectorAll('.sSakit').forEach(el => el.innerText = stats.Sakit);
-        document.querySelectorAll('.sAlpa').forEach(el => el.innerText = stats.Alpa);
+        
+        document.querySelector('.sTotal').innerText = db.length;
+        document.querySelector('.sHadir').innerText = stats.Hadir;
+        document.querySelector('.sIzin').innerText = stats.Izin;
+        document.querySelector('.sSakit').innerText = stats.Sakit;
+        document.querySelector('.sAlpa').innerText = stats.Alpa;
     }
 
-    function getMonday(d) { d = new Date(d); var day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6 : 1); return new Date(d.setDate(diff)).setHours(0,0,0,0); }
-
     function renderRekap(type) {
-        const thead = document.getElementById('rekapTableHeader');
-        const tbody = document.getElementById('rekapTableBody');
-        const titleEl = document.getElementById('rekapTitle');
-        const descEl = document.getElementById('rekapDesc');
+        const tbody = document.getElementById('rekapTableBody'), thead = document.getElementById('rekapTableHeader');
         tbody.innerHTML = "";
-        const now = new Date();
-        const currentMonth = now.getMonth();
-        const currentYear = now.getFullYear();
-        const monthNames = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
-        let startYear = (currentMonth >= 6) ? currentYear : currentYear - 1;
-        const taStr = `T.A. ${startYear}/${startYear + 1}`;
+        const now = new Date(), months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        const currentMonthName = months[now.getMonth()];
+        const taStr = `T.A. ${(now.getMonth() >= 6) ? now.getFullYear() : now.getFullYear()-1}/${(now.getMonth() >= 6) ? now.getFullYear()+1 : now.getFullYear()}`;
 
         if (type === 'weekly') {
-            titleEl.innerText = "REKAP MINGGUAN";
-            descEl.innerText = `Laporan kehadiran minggu ke - ${getWeekInMonth(now)} (${taStr})`;
-            thead.innerHTML = `<tr><th width="60">NO</th><th>NAMA SISWA</th><th>SENIN</th><th>SELASA</th><th>RABU</th><th>KAMIS</th><th>JUM'AT</th><th>SABTU</th></tr>`;
+            document.getElementById('rekapTitle').innerText = "REKAP MINGGUAN";
+            document.getElementById('rekapDesc').innerText = `Laporan kehadiran minggu ke - 2 (${taStr})`;
+            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>SENIN</th><th>SELASA</th><th>RABU</th><th>KAMIS</th><th>JUM'AT</th><th>SABTU</th></tr>`;
             let summary = {};
-            const monday = getMonday(new Date());
-            const satLimit = monday + (6 * 24 * 60 * 60 * 1000);
-            db.filter(item => item.timestamp >= monday && item.timestamp <= satLimit).forEach(item => {
+            db.forEach(item => {
                 if(!summary[item.name]) summary[item.name] = { "Senin": "-", "Selasa": "-", "Rabu": "-", "Kamis": "-", "Jum'at": "-", "Sabtu": "-" };
                 if(summary[item.name].hasOwnProperty(item.day)) summary[item.name][item.day] = item.status;
             });
-            Object.keys(summary).sort().forEach((name, idx) => {
+            Object.keys(summary).sort().forEach((name, i) => {
                 const s = summary[name];
-                tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td>${getStatusLabel(s.Senin)}</td><td>${getStatusLabel(s.Selasa)}</td><td>${getStatusLabel(s.Rabu)}</td><td>${getStatusLabel(s.Kamis)}</td><td>${getStatusLabel(s["Jum'at"])}</td><td>${getStatusLabel(s.Sabtu)}</td></tr>`;
+                tbody.innerHTML += `<tr><td>${i+1}</td><td class="student-name-cell">${name}</td><td>${getStatusLabel(s.Senin)}</td><td>${getStatusLabel(s.Selasa)}</td><td>${getStatusLabel(s.Rabu)}</td><td>${getStatusLabel(s.Kamis)}</td><td>${getStatusLabel(s["Jum'at"])}</td><td>${getStatusLabel(s.Sabtu)}</td></tr>`;
             });
         } else if (type === 'monthly') {
-            titleEl.innerText = `REKAP BULAN ${monthNames[currentMonth]} ${currentYear}`;
-            descEl.innerText = `Laporan kehadiran bulanan (${taStr})`;
-            thead.innerHTML = `<tr><th width="60">NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th style="background:#eff6ff; color:#1e3a8a">TOTAL</th></tr>`;
-            renderGeneralSummary(currentMonth, false);
+            document.getElementById('rekapTitle').innerText = `REKAP BULAN ${currentMonthName.toUpperCase()}`;
+            document.getElementById('rekapDesc').innerText = `Laporan bulan ${currentMonthName} (${taStr})`;
+            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th>TOTAL</th></tr>`;
+            renderSummary(false);
         } else {
-            const semNum = (currentMonth >= 6) ? "1" : "2";
-            titleEl.innerText = `REKAP SEMESTER ${semNum} (${taStr})`;
-            descEl.innerText = `Laporan kehadiran semester ${semNum}`;
-            thead.innerHTML = `<tr><th width="60">NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th style="background:#eff6ff; color:#1e3a8a">TOTAL</th></tr>`;
-            renderGeneralSummary(currentMonth, true);
+            const semNum = (now.getMonth() >= 6) ? "1" : "2";
+            document.getElementById('rekapTitle').innerText = `REKAP SEMESTER ${semNum}`;
+            document.getElementById('rekapDesc').innerText = `Laporan semester ${semNum} (${taStr})`;
+            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th>TOTAL</th></tr>`;
+            renderSummary(true);
         }
 
-        function renderGeneralSummary(monthIdx, isSemester) {
+        function renderSummary(isSemester) {
             let summary = {};
-            db.filter(item => isSemester || (new Date(item.timestamp).getMonth() === monthIdx)).forEach(item => {
-                if(!summary[item.name]) summary[item.name] = { Hadir: 0, Izin: 0, Sakit: 0, Alpa: 0 };
-                summary[item.name][item.status]++;
+            db.forEach(i => {
+                if(!summary[i.name]) summary[i.name] = {H:0,I:0,S:0,A:0};
+                if(i.status==='Hadir') summary[i.name].H++; else if(i.status==='Izin') summary[i.name].I++; else if(i.status==='Sakit') summary[i.name].S++; else summary[i.name].A++;
             });
             Object.keys(summary).sort().forEach((name, idx) => {
                 const s = summary[name];
-                tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td class="text-center font-black">${s.Hadir}</td><td class="text-center font-black">${s.Izin}</td><td class="text-center font-black">${s.Sakit}</td><td class="text-center font-black">${s.Alpa}</td><td style="background:#eff6ff; font-weight:900; color:#1e3a8a !important; text-align:center">${s.Hadir + s.Izin + s.Sakit + s.Alpa}</td></tr>`;
+                tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td>${s.H}</td><td>${s.I}</td><td>${s.S}</td><td>${s.A}</td><td class="font-black text-navy">${s.H+s.I+s.S+s.A}</td></tr>`;
             });
         }
     }
-    if(sessionStorage.getItem('isLoggedIn') === 'true') renderUI();
+    if(sessionStorage.getItem('isLoggedIn') === 'true') { document.getElementById('login-page').style.display='none'; document.getElementById('main-app').style.display='flex'; renderUI(); }
 </script>
 </body>
 </html>
