@@ -92,8 +92,8 @@
         .login-card { width: 100%; max-width: 400px; padding: 2.5rem !important; }
         .btn-link-navy { color: #1e3a8a !important; font-size: 12px; font-weight: 800; background: none; border: none; cursor: pointer; text-transform: uppercase; text-decoration: underline; }
 
-        /* HAMBURGER & SIDEBAR MOBILE */
-        #hamburger-btn { display: none; position: fixed; top: 1.5rem; left: 1.5rem; z-index: 100; background: #1e3a8a; color: white; padding: 10px 14px; border-radius: 12px; cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
+        /* HAMBURGER DI KANAN */
+        #hamburger-btn { display: none; position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100; background: #1e3a8a; color: white; padding: 10px 14px; border-radius: 12px; cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
         .sidebar-wrapper { width: 18rem; background: white; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); z-index: 50; display: flex; flex-direction: column; transition: transform 0.3s ease; }
 
         @media (max-width: 1024px) {
@@ -272,12 +272,10 @@
 <script>
     let db = JSON.parse(localStorage.getItem('edu_abs_pro_2026_final')) || [];
 
-    // SIDEBAR TOGGLE (HAMBURGER)
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('open');
     }
 
-    // FUNGSI AUTH
     function getAccount() {
         let acc = JSON.parse(localStorage.getItem('edu_user_acc'));
         if(!acc) acc = { u: "admin", p: "123456" };
@@ -318,13 +316,13 @@
     }
 
     function customResetLogin() {
-        const confirmReset = confirm("Lupa Username/Password? Klik OK untuk mengatur Nama & Password baru.");
+        const confirmReset = confirm("Lupa Akun? Klik OK untuk menimpa akun lama dengan Nama & Password baru.");
         if(confirmReset) {
             const userBaru = prompt("Username Baru:");
             const passBaru = prompt("Password Baru:");
             if(userBaru && passBaru) {
                 localStorage.setItem('edu_user_acc', JSON.stringify({ u: userBaru.trim(), p: passBaru.trim() }));
-                alert("Berhasil! Silahkan login.");
+                alert("Berhasil! Silahkan login dengan akun baru.");
             }
         }
     }
@@ -372,7 +370,6 @@
             document.getElementById('page-' + pageId).classList.add('active');
         }
         
-        // Tutup sidebar otomatis di mobile setelah pilih menu
         if (window.innerWidth <= 1024) {
             document.getElementById('sidebar').classList.remove('open');
         }
