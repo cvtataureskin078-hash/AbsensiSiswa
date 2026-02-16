@@ -84,7 +84,7 @@
         .btn-logout-navy { background-color: #1e3a8a !important; color: #ffffff !important; border: none !important; }
         .btn-logout-navy:hover { background-color: #172e6d !important; }
 
-        #login-page, #register-page { display: flex; align-items: center; justify-content: center; height: 100vh; background-color: #f1f5f9; }
+        #login-page, #register-page { display: flex; align-items: center; justify-content: center; height: 100vh; background-color: transparent; }
         .login-card { width: 100%; max-width: 400px; padding: 2.5rem !important; }
         .btn-link-navy { color: #1e3a8a !important; font-size: 12px; font-weight: 800; background: none; border: none; cursor: pointer; text-transform: uppercase; text-decoration: underline; }
 
@@ -255,10 +255,23 @@
 </div>
 
 <script>
+    // FUNGSI INI YANG SAYA ISI BIAR DAFTAR JALAN BOS
     let db = JSON.parse(localStorage.getItem('edu_abs_pro_v2026_final_fix_v5')) || [];
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
     function togglePass(id, el) { const i = document.getElementById(id); i.type = i.type === "password" ? "text" : "password"; el.classList.toggle('fa-eye-slash'); }
     function switchAuth(t) { document.getElementById('login-page').style.display = t==='login'?'flex':'none'; document.getElementById('register-page').style.display = t==='register'?'flex':'none'; }
+
+    // --- FITUR DAFTAR YANG TADI BOS GAK BISA ---
+    function handleRegister() {
+        const u = document.getElementById('regUser').value;
+        const p = document.getElementById('regPass').value;
+        if(!u || !p) return alert("Isi username & password baru bos!");
+        
+        // Simpan data pendaftaran ke localStorage
+        localStorage.setItem('edu_user_acc', JSON.stringify({u: u.trim(), p: p.trim()}));
+        alert("Pendaftaran Berhasil! Sekarang silakan login.");
+        switchAuth('login');
+    }
 
     function handleLogin() {
         const acc = JSON.parse(localStorage.getItem('edu_user_acc')) || {u:"admin", p:"123456"};
@@ -266,7 +279,7 @@
         if(u === acc.u && p === acc.p) { 
             document.getElementById('login-page').style.display='none'; document.getElementById('main-app').style.display='flex'; 
             sessionStorage.setItem('isLoggedIn', 'true'); renderUI();
-        } else { alert("Salah!"); }
+        } else { alert("Data Salah! Pastikan sudah daftar."); }
     }
 
     function customResetLogin() {
@@ -303,13 +316,13 @@
         const now = new Date(), days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"], months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         const dStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
         db.push({ id: Date.now(), name: n.value.toUpperCase(), status: s.value, dateKey: `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`, dateStr: dStr, timestamp: Date.now(), day: days[now.getDay()] });
-        localStorage.setItem('edu_abs_pro_v2026_final_v5', JSON.stringify(db));
+        localStorage.setItem('edu_abs_pro_v2026_final_fix_v5', JSON.stringify(db));
         n.value = ""; s.selectedIndex = 0; renderUI();
     }
 
-    function remove(id) { db = db.filter(x => x.id !== id); localStorage.setItem('edu_abs_pro_v2026_final_v5', JSON.stringify(db)); renderUI(); }
+    function remove(id) { db = db.filter(x => x.id !== id); localStorage.setItem('edu_abs_pro_v2026_final_fix_v5', JSON.stringify(db)); renderUI(); }
     function handleLogout() { sessionStorage.removeItem('isLoggedIn'); location.reload(); }
-    function resetData() { if(confirm("Hapus semua?")) { db = []; localStorage.removeItem('edu_abs_pro_v2026_final_v5'); location.reload(); } }
+    function resetData() { if(confirm("Hapus semua?")) { db = []; localStorage.removeItem('edu_abs_pro_v2026_final_fix_v5'); location.reload(); } }
 
     function renderUI() {
         const todayKey = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`;
@@ -351,7 +364,6 @@
                 tbody.innerHTML += `<tr><td>${i+1}</td><td class="student-name-cell">${name}</td><td>${getStatusLabel(s.Senin)}</td><td>${getStatusLabel(s.Selasa)}</td><td>${getStatusLabel(s.Rabu)}</td><td>${getStatusLabel(s.Kamis)}</td><td>${getStatusLabel(s["Jum'at"])}</td><td>${getStatusLabel(s.Sabtu)}</td></tr>`;
             });
         } else if (type === 'monthly') {
-            // FIX SESUAI PERMINTAAN: REKAP BULAN FEBRUARI
             document.getElementById('rekapTitle').innerText = `REKAP BULAN ${curM.toUpperCase()}`;
             document.getElementById('rekapDesc').innerText = `Laporan bulan ${curM} (${ta})`;
             thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th>TOTAL</th></tr>`;
