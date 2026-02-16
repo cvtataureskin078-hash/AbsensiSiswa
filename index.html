@@ -14,16 +14,27 @@
 
     <style>
         html { zoom: 0.9; height: 100%; }
-        html, body { min-height: 100%; margin: 0; background-color: #f8fafc; font-size: 15px; }
+        /* FIX: Pastikan body dan html menutup seluruh layar */
+        html, body { min-height: 100%; margin: 0; background-color: #f8fafc !important; font-size: 15px; }
         body { 
             font-family: 'Outfit', sans-serif; 
             background-image: radial-gradient(#cbd5e1 1px, transparent 1px); 
             background-size: 20px 20px; 
-            background-attachment: fixed; /* BIAR WARNA FULL SAMPAI DASAR LAYAR */
+            background-attachment: fixed;
             color: #1e3a8a !important; 
         }
         .main-wrapper { display: flex; min-height: 100vh; background: transparent; }
-        .content-area { flex: 1; padding: 2rem; background-color: #f8fafc; transition: all 0.3s; }
+        
+        /* FIX: Tambahkan min-height 100vh agar warna putih/abu terang full sampai bawah di HP */
+        .content-area { 
+            flex: 1; 
+            padding: 2rem; 
+            background-color: #f8fafc; 
+            transition: all 0.3s; 
+            min-height: 100vh; 
+            display: flex;
+            flex-direction: column;
+        }
         
         .text-navy { color: #1e3a8a !important; }
         .bg-navy { background-color: #1e3a8a !important; }
@@ -84,7 +95,7 @@
         .btn-logout-navy { background-color: #1e3a8a !important; color: #ffffff !important; border: none !important; }
         .btn-logout-navy:hover { background-color: #172e6d !important; }
 
-        #login-page, #register-page { display: flex; align-items: center; justify-content: center; height: 100vh; background-color: transparent; }
+        #login-page, #register-page { display: flex; align-items: center; justify-content: center; height: 100vh; background-color: #f8fafc; }
         .login-card { width: 100%; max-width: 400px; padding: 2.5rem !important; }
         .btn-link-navy { color: #1e3a8a !important; font-size: 12px; font-weight: 800; background: none; border: none; cursor: pointer; text-transform: uppercase; text-decoration: underline; }
 
@@ -255,19 +266,15 @@
 </div>
 
 <script>
-    // FUNGSI INI YANG SAYA ISI BIAR DAFTAR JALAN BOS
     let db = JSON.parse(localStorage.getItem('edu_abs_pro_v2026_final_fix_v5')) || [];
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
     function togglePass(id, el) { const i = document.getElementById(id); i.type = i.type === "password" ? "text" : "password"; el.classList.toggle('fa-eye-slash'); }
     function switchAuth(t) { document.getElementById('login-page').style.display = t==='login'?'flex':'none'; document.getElementById('register-page').style.display = t==='register'?'flex':'none'; }
 
-    // --- FITUR DAFTAR YANG TADI BOS GAK BISA ---
     function handleRegister() {
         const u = document.getElementById('regUser').value;
         const p = document.getElementById('regPass').value;
         if(!u || !p) return alert("Isi username & password baru bos!");
-        
-        // Simpan data pendaftaran ke localStorage
         localStorage.setItem('edu_user_acc', JSON.stringify({u: u.trim(), p: p.trim()}));
         alert("Pendaftaran Berhasil! Sekarang silakan login.");
         switchAuth('login');
