@@ -116,10 +116,10 @@
             .content-area { margin: 0 !important; padding: 0 !important; min-height: auto !important; background: white !important; } 
             body { background: white !important; zoom: 1; }
             .card-custom { box-shadow: none !important; border: none !important; padding: 0 !important; }
-            /* Paksa tabel mengecil agar muat 26-30 anak di 1 kertas HP */
+            /* Paksa tabel mengecil lebih kuat agar muat 26-30 anak di 1 kertas HP */
             .report-table { 
                 width: 100% !important; 
-                transform: scale(0.85); 
+                transform: scale(0.8); 
                 transform-origin: top center;
             }
         }
@@ -284,7 +284,7 @@
     function togglePass(id, el) { const i = document.getElementById(id); i.type = i.type === "password" ? "text" : "password"; el.classList.toggle('fa-eye-slash'); }
     function switchAuth(t) { document.getElementById('login-page').style.display = t==='login'?'flex':'none'; document.getElementById('register-page').style.display = t==='register'?'flex':'none'; }
 
-    // --- FUNGSI DAFTAR (FIX SUDAH AKTIF) ---
+    // --- FUNGSI DAFTAR (FIX) ---
     function handleRegister() {
         const u = document.getElementById('regUser').value, p = document.getElementById('regPass').value;
         if(!u || !p) return alert("Isi username & password baru!");
@@ -365,45 +365,29 @@
     function renderRekap(type) {
         const tbody = document.getElementById('rekapTableBody'), thead = document.getElementById('rekapTableHeader');
         tbody.innerHTML = "";
-        const now = new Date(), months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        const curM = months[now.getMonth()];
-        const ta = `T.A. ${(now.getMonth() >= 6) ? now.getFullYear() : now.getFullYear()-1}/${(now.getMonth() >= 6) ? now.getFullYear()+1 : now.getFullYear()}`;
-
         if (type === 'weekly') {
             document.getElementById('rekapTitle').innerText = "REKAP MINGGUAN";
-            document.getElementById('rekapDesc').innerText = `Laporan kehadiran minggu ke - 2 (${ta})`;
-            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>SENIN</th><th>SELASA</th><th>RABU</th><th>KAMIS</th><th>JUM'AT</th><th>SABTU</th></tr>`;
+            thead.innerHTML = `<tr><th>NO</th><th>NAMA</th><th>SENIN</th><th>SELASA</th><th>RABU</th><th>KAMIS</th><th>JUM'AT</th><th>SABTU</th></tr>`;
             let summary = {};
             db.forEach(item => {
-                if(!summary[item.name]) summary[item.name] = { "Senin": "-", "Selasa": "-", "Rabu": "-", "Kamis": "-", "Jum'at": "-", "Sabtu": "-" };
-                if(summary[item.name].hasOwnProperty(item.day)) summary[item.name][item.day] = item.status;
+                if(!summary[item.name]) summary[item.name] = { "Senin":"-","Selasa":"-","Rabu":"-","Kamis":"-","Jum'at":"-","Sabtu":"-" };
+                summary[item.name][item.day] = item.status;
             });
             Object.keys(summary).sort().forEach((name, i) => {
                 const s = summary[name];
                 tbody.innerHTML += `<tr><td>${i+1}</td><td class="student-name-cell">${name}</td><td>${getStatusLabel(s.Senin)}</td><td>${getStatusLabel(s.Selasa)}</td><td>${getStatusLabel(s.Rabu)}</td><td>${getStatusLabel(s.Kamis)}</td><td>${getStatusLabel(s["Jum'at"])}</td><td>${getStatusLabel(s.Sabtu)}</td></tr>`;
             });
-        } else if (type === 'monthly') {
-            document.getElementById('rekapTitle').innerText = `REKAP BULAN ${curM.toUpperCase()}`;
-            document.getElementById('rekapDesc').innerText = `Laporan bulan ${curM} (${ta})`;
-            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th>TOTAL</th></tr>`;
-            renderSummary();
         } else {
-            const sem = (now.getMonth() >= 6) ? "1" : "2";
-            document.getElementById('rekapTitle').innerText = `REKAP SEMESTER ${sem}`;
-            document.getElementById('rekapDesc').innerText = `Laporan semester ${sem} (${ta})`;
-            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th>TOTAL</th></tr>`;
-            renderSummary();
-        }
-
-        function renderSummary() {
-            let summary = {};
+            document.getElementById('rekapTitle').innerText = (type==='monthly'?"REKAP BULANAN":"REKAP SEMESTER");
+            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>H</th><th>I</th><th>S</th><th>A</th><th>TOTAL</th></tr>`;
+            let res = {};
             db.forEach(i => {
-                if(!summary[i.name]) summary[i.name] = {H:0,I:0,S:0,A:0};
-                if(i.status==='Hadir') summary[i.name].H++; else if(i.status==='Izin') summary[i.name].I++; else if(i.status==='Sakit') summary[i.name].S++; else summary[i.name].A++;
+                if(!res[i.name]) res[i.name] = {H:0,I:0,S:0,A:0};
+                if(i.status==='Hadir') res[i.name].H++; else if(i.status==='Izin') res[i.name].I++; else if(i.status==='Sakit') res[i.name].S++; else res[i.name].A++;
             });
-            Object.keys(summary).sort().forEach((name, idx) => {
-                const s = summary[name];
-                tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td>${s.H}</td><td>${s.I}</td><td>${s.S}</td><td>${s.A}</td><td class="font-black text-navy">${s.H+s.I+s.S+s.A}</td></tr>`;
+            Object.keys(res).sort().forEach((name, idx) => {
+                const s = res[name];
+                tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td>${s.H}</td><td>${s.I}</td><td>${s.S}</td><td>${s.A}</td><td class="font-black">${s.H+s.I+s.S+s.A}</td></tr>`;
             });
         }
     }
