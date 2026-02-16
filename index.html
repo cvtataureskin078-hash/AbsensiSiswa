@@ -109,7 +109,26 @@
             .content-area { padding-top: 5rem; }
         }
 
-        @media print { .no-print { display: none !important; } .content-area { margin-left: 0 !important; padding: 0 !important; } body { background: white !important; } }
+        /* --- PERBAIKAN PRINT 1 LEMBAR --- */
+        @media print { 
+            @page { 
+                size: auto; 
+                margin: 5mm; /* Memperkecil margin kertas agar muat banyak */
+            } 
+            .no-print { display: none !important; } 
+            .content-area { margin-left: 0 !important; padding: 0 !important; min-height: auto !important; background: white !important; } 
+            body { background: white !important; zoom: 0.95; } /* Zoom out global saat print */
+            .card-custom { box-shadow: none !important; border: none !important; padding: 0 !important; }
+            #pageTitle { font-size: 24px !important; margin-bottom: 10px !important; }
+            .report-table, .history-table, .dashboard-table { 
+                width: 100% !important; 
+                transform: scale(0.95); /* Memaksa tabel mengecil agar muat 1 lembar */
+                transform-origin: top center;
+            }
+            .report-table thead th { padding: 8px !important; font-size: 11px !important; }
+            .report-table tbody td { padding: 6px !important; font-size: 12px !important; }
+            .status-label { padding: 2px 6px !important; min-width: 60px !important; font-size: 9px !important; }
+        }
     </style>
 </head>
 <body>
@@ -271,22 +290,13 @@
     function togglePass(id, el) { const i = document.getElementById(id); i.type = i.type === "password" ? "text" : "password"; el.classList.toggle('fa-eye-slash'); }
     function switchAuth(t) { document.getElementById('login-page').style.display = t==='login'?'flex':'none'; document.getElementById('register-page').style.display = t==='register'?'flex':'none'; }
 
-    function handleRegister() {
-        const u = document.getElementById('regUser').value;
-        const p = document.getElementById('regPass').value;
-        if(!u || !p) return alert("Isi username & password baru bos!");
-        localStorage.setItem('edu_user_acc', JSON.stringify({u: u.trim(), p: p.trim()}));
-        alert("Pendaftaran Berhasil! Sekarang silakan login.");
-        switchAuth('login');
-    }
-
     function handleLogin() {
         const acc = JSON.parse(localStorage.getItem('edu_user_acc')) || {u:"admin", p:"123456"};
         const u = document.getElementById('userInput').value, p = document.getElementById('passInput').value;
         if(u === acc.u && p === acc.p) { 
             document.getElementById('login-page').style.display='none'; document.getElementById('main-app').style.display='flex'; 
             sessionStorage.setItem('isLoggedIn', 'true'); renderUI();
-        } else { alert("Data Salah! Pastikan sudah daftar."); }
+        } else { alert("Salah!"); }
     }
 
     function customResetLogin() {
