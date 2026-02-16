@@ -9,62 +9,39 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
         html { zoom: 0.9; height: 100%; }
-        /* FIX: Pastikan body dan html menutup seluruh layar */
         html, body { min-height: 100%; margin: 0; background-color: #f8fafc !important; font-size: 15px; }
         body { 
-            font-family: 'Outfit', sans-serif; 
+            font-family: 'Lexend', sans-serif; 
             background-image: radial-gradient(#cbd5e1 1px, transparent 1px); 
             background-size: 20px 20px; 
             background-attachment: fixed;
             color: #1e3a8a !important; 
         }
         .main-wrapper { display: flex; min-height: 100vh; background: transparent; }
-        
-        /* FIX: Tambahkan min-height 100vh agar warna putih/abu terang full sampai bawah di HP */
-        .content-area { 
-            flex: 1; 
-            padding: 2rem; 
-            background-color: #f8fafc; 
-            transition: all 0.3s; 
-            min-height: 100vh; 
-            display: flex;
-            flex-direction: column;
-        }
+        .content-area { flex: 1; padding: 2rem; background-color: #f8fafc; transition: all 0.3s; min-height: 100vh; display: flex; flex-direction: column; }
         
         .text-navy { color: #1e3a8a !important; }
         .bg-navy { background-color: #1e3a8a !important; }
         .stat-navy { color: #1e3a8a !important; opacity: 1 !important; font-weight: 800 !important; }
         
         .card-custom { background: white; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.05); border: none; }
-        
         .nav-link { color: #1e3a8a !important; font-size: 15px; font-weight: 500; }
         .nav-link i { color: #1e3a8a !important; } 
         .nav-link.active { background-color: #eff6ff; color: #1e3a8a !important; font-weight: 800; }
         
-        #pageTitle { font-size: 30px !important; display: block !important; line-height: 1.2; text-align: center; color: #1e3a8a !important; font-weight: 900; }
+        #pageTitle { font-size: 40px !important; font-weight: 900 !important; color: #1e3a8a !important; }
         
         .clock-badge { background: white; padding: 12px 25px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(30, 58, 138, 0.05); border: none !important; }
         .clock-badge i { color: #1e3a8a !important; font-size: 20px; } 
         .clock-badge span { font-size: 18px !important; font-weight: 400 !important; color: #1e3a8a !important; } 
 
-        .form-control label.label { color: #1e3a8a !important; font-weight: 800; font-size: 12px; justify-content: center; }
-        
-        input, select { 
-            background-color: #ffffff !important; 
-            color: #1e3a8a !important; 
-            font-weight: 600; 
-            border: 1.5px solid #000000 !important; 
-            font-size: 15px; 
-            height: 3.2rem !important; 
-            text-align: center; 
-            text-align-last: center; 
-            border-radius: 12px !important; 
-        }
+        .form-control label.label { color: #1e3a8a !important; font-weight: 800; font-size: 14px; justify-content: center; }
+        input, select { background-color: #ffffff !important; color: #1e3a8a !important; font-weight: 600; border: 1.5px solid #000000 !important; font-size: 15px; height: 3.2rem !important; text-align: center; text-align-last: center; border-radius: 12px !important; }
         input:focus { border-color: #1e3a8a !important; outline: none; }
 
         .password-container { position: relative; width: 100%; }
@@ -76,7 +53,6 @@
         .report-table thead th, .history-table thead th, .dashboard-table thead th { 
             background-color: #1e3a8a !important; color: #ffffff !important; text-align: center; font-weight: 700; border: 1.5px solid #000000 !important; padding: 12px; text-transform: uppercase; font-size: 12px; 
         }
-        
         .report-table tbody td, .history-table tbody td, .dashboard-table tbody td { 
             border: 1.5px solid #000000 !important; padding: 12px; text-align: center; color: #1e3a8a !important; font-size: 14px; 
         }
@@ -88,8 +64,7 @@
         .label-sakit { background-color: #fee2e2; color: #b91c1c; }
         .label-alpa { background-color: #f1f5f9; color: #1e293b; }
         
-        .student-name-cell { font-weight: 800 !important; font-size: 16px !important; color: #1e3a8a !important; text-transform: uppercase; }
-        
+        .student-name-cell { font-weight: 800 !important; font-size: 18px !important; color: #1e3a8a !important; text-transform: uppercase; }
         .btn-hapus { background-color: #fff1f2; color: #be123c; padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 11px; border: none !important; cursor: pointer; }
         
         .btn-logout-navy { background-color: #1e3a8a !important; color: #ffffff !important; border: none !important; }
@@ -97,7 +72,7 @@
 
         #login-page, #register-page { display: flex; align-items: center; justify-content: center; height: 100vh; background-color: #f8fafc; }
         .login-card { width: 100%; max-width: 400px; padding: 2.5rem !important; }
-        .btn-link-navy { color: #1e3a8a !important; font-size: 12px; font-weight: 800; background: none; border: none; cursor: pointer; text-transform: uppercase; text-decoration: underline; }
+        .btn-link-navy { color: #1e3a8a !important; font-size: 14px; font-weight: 800; background: none; border: none; cursor: pointer; text-transform: uppercase; text-decoration: underline; }
 
         #hamburger-btn { display: none; position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100; background: #1e3a8a; color: white; padding: 10px 14px; border-radius: 12px; cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
         .sidebar-wrapper { width: 18rem; background: white; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); z-index: 50; display: flex; flex-direction: column; transition: transform 0.3s ease; }
@@ -109,19 +84,19 @@
             .content-area { padding-top: 5rem; }
         }
 
-        /* --- FIX PRINT 1 LEMBAR DI HP --- */
+        /* --- FONT REKAP BESAR --- */
+        #rekapTitle { font-size: 19px !important; font-weight: 900 !important; color: #1e3a8a !important; line-height: 1 !important; }
+        #rekapDesc { font-size: 18px !important; font-weight: 600 !important; color: #1e3a8a !important; display: block !important; margin-top: 2px !important; }
+
         @media print { 
             @page { size: auto; margin: 3mm; } 
             .no-print { display: none !important; } 
             .content-area { margin: 0 !important; padding: 0 !important; min-height: auto !important; background: white !important; } 
-            body { background: white !important; zoom: 1; }
+            body { background: white !important; zoom: 1; color: #1e3a8a !important; } 
             .card-custom { box-shadow: none !important; border: none !important; padding: 0 !important; }
-            /* Paksa tabel mengecil lebih kuat agar muat 26-30 anak di 1 kertas HP */
-            .report-table { 
-                width: 100% !important; 
-                transform: scale(0.8); 
-                transform-origin: top center;
-            }
+            .report-table, .history-table, .dashboard-table { width: 100% !important; border-collapse: collapse !important; border: 1px solid #000000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .report-table thead th { background-color: #1e3a8a !important; color: #ffffff !important; border: 1.5px solid #000000 !important; }
+            .report-table tbody td { border: 1.5px solid #000000 !important; color: #1e3a8a !important; }
         }
     </style>
 </head>
@@ -135,14 +110,11 @@
     <div class="card-custom login-card text-center">
         <div class="flex flex-col items-center mb-8">
             <div class="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg mb-4"><i class="fas fa-user-shield text-2xl"></i></div>
-            <h2 class="text-2xl font-black text-navy uppercase tracking-tighter">LOGIN ABSENSI</h2>
-            <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase tracking-[0.2em]">Silahkan Masuk</p>
+            <h2 class="text-2xl font-black text-navy uppercase tracking-tighter">LOGIN MASUK AKUN</h2>
+            <p class="text-slate-400 text-[14px] font-bold mt-1 uppercase tracking-[0.2em]">Silahkan Masuk</p>
         </div>
         <div class="space-y-5 text-left">
-            <div class="form-control">
-                <label class="label uppercase font-black text-navy">Username</label>
-                <input type="text" id="userInput" placeholder="Masukkan Username" class="input w-full" />
-            </div>
+            <div class="form-control"><label class="label uppercase font-black text-navy">Username</label><input type="text" id="userInput" placeholder="Masukkan Username" class="input w-full" /></div>
             <div class="form-control">
                 <label class="label uppercase font-black text-navy">Password</label>
                 <div class="password-container">
@@ -152,13 +124,8 @@
             </div>
             <button onclick="handleLogin()" class="btn btn-block bg-navy hover:bg-blue-900 border-none text-white font-black rounded-xl h-14 mt-4 shadow-lg shadow-blue-900/20">MASUK APLIKASI</button>
             <div class="text-center mt-6 space-y-3">
-                <div>
-                    <p class="text-[11px] font-bold text-slate-500 uppercase">Belum punya akun?</p>
-                    <button onclick="switchAuth('register')" class="btn-link-navy">Buat Akun Baru Disini</button>
-                </div>
-                <div class="pt-2 border-t border-slate-200">
-                    <button onclick="customResetLogin()" class="btn-link-navy text-rose-600">Lupa Username / Password?</button>
-                </div>
+                <div><p class="text-[14px] font-bold text-slate-500 uppercase">Belum punya akun?</p><button onclick="switchAuth('register')" class="btn-link-navy">Buat Akun Baru Disini</button></div>
+                <div class="pt-2 border-t border-slate-200"><button onclick="customResetLogin()" class="btn-link-navy text-rose-600">Lupa Username / Password?</button></div>
             </div>
         </div>
     </div>
@@ -169,13 +136,10 @@
         <div class="flex flex-col items-center mb-8">
             <div class="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg mb-4"><i class="fas fa-user-plus text-2xl"></i></div>
             <h2 class="text-2xl font-black text-navy uppercase tracking-tighter">DAFTAR AKUN</h2>
-            <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase tracking-[0.2em]">EduPresent Absensi</p>
+            <p class="text-slate-400 text-[14px] font-bold mt-1 uppercase tracking-[0.2em]">Silahkan Buat Akun</p>
         </div>
         <div class="space-y-5 text-left">
-            <div class="form-control">
-                <label class="label uppercase font-black text-navy">Username Baru</label>
-                <input type="text" id="regUser" placeholder="Tentukan Username" class="input w-full" />
-            </div>
+            <div class="form-control"><label class="label uppercase font-black text-navy">Username Baru</label><input type="text" id="regUser" placeholder="Tentukan Username" class="input w-full" /></div>
             <div class="form-control">
                 <label class="label uppercase font-black text-navy">Password Baru</label>
                 <div class="password-container">
@@ -184,21 +148,14 @@
                 </div>
             </div>
             <button onclick="handleRegister()" class="btn btn-block bg-navy hover:bg-blue-900 border-none text-white font-black rounded-xl h-14 mt-4 shadow-lg shadow-blue-900/20">DAFTAR SEKARANG</button>
-            <div class="text-center mt-6 space-y-2">
-                <p class="text-[11px] font-bold text-slate-500 uppercase">Sudah punya akun?</p>
-                <button onclick="switchAuth('login')" class="btn-link-navy">Kembali ke Login</button>
-            </div>
+            <div class="text-center mt-6 space-y-2"><p class="text-[14px] font-bold text-slate-500 uppercase">Sudah punya akun?</p><button onclick="switchAuth('login')" class="btn-link-navy">Kembali ke Login</button></div>
         </div>
     </div>
 </div>
 
 <div id="main-app" class="main-wrapper" style="display: none;">
     <div id="sidebar" class="sidebar-wrapper no-print">
-        <div class="flex items-center gap-3 mb-10">
-            <div class="w-12 h-12 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg"><i class="fas fa-graduation-cap"></i></div>
-            <h2 class="text-xl font-black text-navy tracking-tighter uppercase">EDUPRESENT</h2>
-        </div>
-
+        <div class="flex items-center gap-3 mb-10"><div class="w-12 h-12 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg"><i class="fas fa-graduation-cap"></i></div><h2 class="text-xl font-black text-navy tracking-tighter uppercase">EDUPRESENT</h2></div>
         <nav class="space-y-1.5 flex-1 text-left">
             <p class="text-[10px] font-bold text-slate-400 ml-3 mb-3 uppercase tracking-[0.2em]">Menu Utama</p>
             <button onclick="showPage('dashboard')" id="btn-dashboard" class="nav-link active flex items-center w-full gap-3 p-3.5 rounded-xl transition-all"><i class="fas fa-th-large"></i> Dashboard</button>
@@ -208,7 +165,6 @@
             <button onclick="showPage('monthly')" id="btn-monthly" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all text-left"><i class="fas fa-calendar-alt"></i> Rekap Bulanan</button>
             <button onclick="showPage('semester')" id="btn-semester" class="nav-link flex items-center w-full gap-3 p-3.5 rounded-xl transition-all text-left"><i class="fas fa-book"></i> Rekap Semester</button>
         </nav>
-        
         <div class="mt-auto pt-5 border-t border-slate-100 mb-6 px-2 space-y-2">
             <button onclick="handleLogout()" class="btn btn-logout-navy btn-block h-12 rounded-xl font-black text-[12px] border-none">
                 <i class="fas fa-sign-out-alt mr-2"></i> LOGOUT
@@ -221,16 +177,8 @@
 
     <div class="content-area">
         <div class="mb-8 flex flex-col items-center">
-            <h1 id="pageTitle" class="font-black text-navy uppercase">RINGKASAN UTAMA</h1>
             <div id="clockContainer" class="no-print">
-                <div class="clock-badge">
-                    <i class="far fa-clock text-lg"></i> 
-                    <div class="flex items-center gap-2">
-                        <span id="currentDate">Memuat...</span>
-                        <span class="text-navy mx-1">|</span>
-                        <span id="digitalClock" class="font-black">00.00.00</span>
-                    </div>
-                </div>
+                <div class="clock-badge"><i class="far fa-clock text-lg"></i><div class="flex items-center gap-2"><span id="currentDate">Memuat...</span><span class="text-navy mx-1">|</span><span id="digitalClock" class="font-black">00.00.00</span></div></div>
             </div>
         </div>
 
@@ -256,7 +204,7 @@
                 <div class="lg:col-span-2 text-left">
                     <div class="card-custom overflow-x-auto">
                         <h3 class="font-black text-navy mb-6 uppercase text-[12px] tracking-widest text-left">Aktivitas Terbaru Hari Ini</h3>
-                        <table class="dashboard-table"><thead><tr><th>Waktu</th><th>Nama Siswa</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="recentTable"></tbody></table>
+                        <table class="dashboard-table"><thead><tr><th>Tanggal</th><th>Nama Siswa</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="recentTable"></tbody></table>
                     </div>
                 </div>
             </div>
@@ -268,8 +216,8 @@
 
         <div id="rekapContainer" class="page-content text-left">
             <div class="card-custom">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b-2 border-slate-100 pb-6 text-left gap-4">
-                    <div><h3 id="rekapTitle" class="text-2xl font-black text-navy uppercase mb-1 text-center md:text-left">Rekap</h3><p id="rekapDesc" class="text-navy font-normal text-[13px] text-center md:text-left"></p></div>
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b-2 border-slate-100 pb-6 gap-4">
+                    <div><h3 id="rekapTitle" class="uppercase">Rekap</h3><p id="rekapDesc"></p></div>
                     <button onclick="window.print()" class="btn bg-navy text-white hover:bg-blue-900 border-none no-print px-6 rounded-xl font-bold text-[12px]"><i class="fas fa-print mr-2"></i> PRINT LAPORAN</button>
                 </div>
                 <div class="overflow-x-auto"><table class="report-table"><thead id="rekapTableHeader"></thead><tbody id="rekapTableBody"></tbody></table></div>
@@ -280,11 +228,12 @@
 
 <script>
     let db = JSON.parse(localStorage.getItem('edu_abs_pro_v2026_final_fix_v5')) || [];
+    const monthsArr = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
+
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
     function togglePass(id, el) { const i = document.getElementById(id); i.type = i.type === "password" ? "text" : "password"; el.classList.toggle('fa-eye-slash'); }
     function switchAuth(t) { document.getElementById('login-page').style.display = t==='login'?'flex':'none'; document.getElementById('register-page').style.display = t==='register'?'flex':'none'; }
 
-    // --- FUNGSI DAFTAR (FIX) ---
     function handleRegister() {
         const u = document.getElementById('regUser').value, p = document.getElementById('regPass').value;
         if(!u || !p) return alert("Isi username & password baru!");
@@ -307,8 +256,8 @@
     }
 
     function updateDateTime() {
-        const now = new Date(), days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"], months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        document.getElementById('currentDate').innerText = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        const now = new Date(), days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
+        document.getElementById('currentDate').innerText = `${days[now.getDay()]}, ${now.getDate()} ${monthsArr[now.getMonth()]} ${now.getFullYear()}`;
         document.getElementById('digitalClock').innerText = now.getHours().toString().padStart(2,'0')+"."+now.getMinutes().toString().padStart(2,'0')+"."+now.getSeconds().toString().padStart(2,'0');
     }
     setInterval(updateDateTime, 1000); updateDateTime();
@@ -332,8 +281,8 @@
     function submitData() {
         const n = document.getElementById('nameInp'), s = document.getElementById('statusInp');
         if(!n.value || !s.value) return alert("Isi Data!");
-        const now = new Date(), days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"], months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        const dStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        const now = new Date(), days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
+        const dStr = `${days[now.getDay()]}, ${now.getDate()} ${monthsArr[now.getMonth()]} ${now.getFullYear()}`;
         db.push({ id: Date.now(), name: n.value.toUpperCase(), status: s.value, dateKey: `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`, dateStr: dStr, timestamp: Date.now(), day: days[now.getDay()] });
         localStorage.setItem('edu_abs_pro_v2026_final_fix_v5', JSON.stringify(db));
         n.value = ""; s.selectedIndex = 0; renderUI();
@@ -365,30 +314,48 @@
     function renderRekap(type) {
         const tbody = document.getElementById('rekapTableBody'), thead = document.getElementById('rekapTableHeader');
         tbody.innerHTML = "";
+        const now = new Date();
+        const year = now.getFullYear();
+        const TA = (now.getMonth() >= 6) ? `T.A. ${year}/${year+1}` : `T.A. ${year-1}/${year}`;
+        
         if (type === 'weekly') {
+            // LOGIKA HITUNG MINGGU OTOMATIS BERDASARKAN TANGGAL HARI INI
+            const date = now.getDate();
+            const weekNum = Math.ceil(date / 7); // Rumus: Tanggal dibagi 7, bulatkan ke atas
+            
             document.getElementById('rekapTitle').innerText = "REKAP MINGGUAN";
-            thead.innerHTML = `<tr><th>NO</th><th>NAMA</th><th>SENIN</th><th>SELASA</th><th>RABU</th><th>KAMIS</th><th>JUM'AT</th><th>SABTU</th></tr>`;
+            document.getElementById('rekapDesc').innerText = `Laporan kehadiran minggu ke - ${weekNum} (${TA})`;
+            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>SENIN</th><th>SELASA</th><th>RABU</th><th>KAMIS</th><th>JUM'AT</th><th>SABTU</th></tr>`;
             let summary = {};
             db.forEach(item => {
-                if(!summary[item.name]) summary[item.name] = { "Senin":"-","Selasa":"-","Rabu":"-","Kamis":"-","Jum'at":"-","Sabtu":"-" };
-                summary[item.name][item.day] = item.status;
+                if(!summary[item.name]) summary[item.name] = { "Senin": "-", "Selasa": "-", "Rabu": "-", "Kamis": "-", "Jum'at": "-", "Sabtu": "-" };
+                if(summary[item.name].hasOwnProperty(item.day)) summary[item.name][item.day] = item.status;
             });
-            Object.keys(summary).sort().forEach((name, i) => {
-                const s = summary[name];
-                tbody.innerHTML += `<tr><td>${i+1}</td><td class="student-name-cell">${name}</td><td>${getStatusLabel(s.Senin)}</td><td>${getStatusLabel(s.Selasa)}</td><td>${getStatusLabel(s.Rabu)}</td><td>${getStatusLabel(s.Kamis)}</td><td>${getStatusLabel(s["Jum'at"])}</td><td>${getStatusLabel(s.Sabtu)}</td></tr>`;
-            });
-        } else {
-            document.getElementById('rekapTitle').innerText = (type==='monthly'?"REKAP BULANAN":"REKAP SEMESTER");
-            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>H</th><th>I</th><th>S</th><th>A</th><th>TOTAL</th></tr>`;
-            let res = {};
+            Object.keys(summary).sort().forEach((name, i) => { const s = summary[name]; tbody.innerHTML += `<tr><td>${i+1}</td><td class="student-name-cell">${name}</td><td>${getStatusLabel(s.Senin)}</td><td>${getStatusLabel(s.Selasa)}</td><td>${getStatusLabel(s.Rabu)}</td><td>${getStatusLabel(s.Kamis)}</td><td>${getStatusLabel(s["Jum'at"])}</td><td>${getStatusLabel(s.Sabtu)}</td></tr>`; });
+        } 
+        else if (type === 'monthly') {
+            const currentMonthName = monthsArr[now.getMonth()];
+            document.getElementById('rekapTitle').innerText = `REKAP BULAN ${currentMonthName}`;
+            document.getElementById('rekapDesc').innerText = `Laporan kehadiran bulan ${currentMonthName.toLowerCase()} (${TA})`;
+            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th>TOTAL</th></tr>`;
+            let summary = {};
             db.forEach(i => {
-                if(!res[i.name]) res[i.name] = {H:0,I:0,S:0,A:0};
-                if(i.status==='Hadir') res[i.name].H++; else if(i.status==='Izin') res[i.name].I++; else if(i.status==='Sakit') res[i.name].S++; else res[i.name].A++;
+                if(!summary[i.name]) summary[i.name] = {H:0,I:0,S:0,A:0};
+                if(i.status==='Hadir') summary[i.name].H++; else if(i.status==='Izin') summary[i.name].I++; else if(i.status==='Sakit') summary[i.name].S++; else if(i.status==='Alpa') summary[i.name].A++;
             });
-            Object.keys(res).sort().forEach((name, idx) => {
-                const s = res[name];
-                tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td>${s.H}</td><td>${s.I}</td><td>${s.S}</td><td>${s.A}</td><td class="font-black">${s.H+s.I+s.S+s.A}</td></tr>`;
+            Object.keys(summary).sort().forEach((name, idx) => { const s = summary[name]; tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td>${s.H}</td><td>${s.I}</td><td>${s.S}</td><td>${s.A}</td><td class="font-black text-navy">${s.H+s.I+s.S+s.A}</td></tr>`; });
+        }
+        else {
+            const semester = (now.getMonth() >= 6) ? "GANJIL" : "GENAP";
+            document.getElementById('rekapTitle').innerText = `REKAP SEMESTER ${semester}`;
+            document.getElementById('rekapDesc').innerText = `Laporan kehadiran rekap semester ${semester.toLowerCase()} (${TA})`;
+            thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th>TOTAL</th></tr>`;
+            let summary = {};
+            db.forEach(i => {
+                if(!summary[i.name]) summary[i.name] = {H:0,I:0,S:0,A:0};
+                if(i.status==='Hadir') summary[i.name].H++; else if(i.status==='Izin') summary[i.name].I++; else if(i.status==='Sakit') summary[i.name].S++; else if(i.status==='Alpa') summary[i.name].A++;
             });
+            Object.keys(summary).sort().forEach((name, idx) => { const s = summary[name]; tbody.innerHTML += `<tr><td>${idx+1}</td><td class="student-name-cell">${name}</td><td>${s.H}</td><td>${s.I}</td><td>${s.S}</td><td>${s.A}</td><td class="font-black text-navy">${s.H+s.I+s.S+s.A}</td></tr>`; });
         }
     }
     if(sessionStorage.getItem('isLoggedIn') === 'true') { document.getElementById('login-page').style.display='none'; document.getElementById('main-app').style.display='flex'; renderUI(); }
