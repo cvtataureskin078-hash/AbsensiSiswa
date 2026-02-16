@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduPresent - Absensi</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
-        html { zoom: 0.9; }
-        html, body { height: 100%; margin: 0; background-color: #f8fafc; font-size: 15px; }
-        body { font-family: 'Outfit', sans-serif; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; color: #1e3a8a !important; }
+        html { zoom: 0.9; height: 100%; }
+        html, body { min-height: 100%; margin: 0; background-color: #f8fafc; font-size: 15px; }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px); 
+            background-size: 20px 20px; 
+            background-attachment: fixed; /* BIAR WARNA FULL SAMPAI DASAR LAYAR */
+            color: #1e3a8a !important; 
+        }
         .main-wrapper { display: flex; min-height: 100vh; background: transparent; }
         .content-area { flex: 1; padding: 2rem; background-color: #f8fafc; transition: all 0.3s; }
         
@@ -162,7 +171,7 @@
 <div id="main-app" class="main-wrapper" style="display: none;">
     <div id="sidebar" class="sidebar-wrapper no-print">
         <div class="flex items-center gap-3 mb-10">
-            <div class="w-12 h-12 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg"><i class="fas fa-graduation-cap text-xl"></i></div>
+            <div class="w-12 h-12 bg-navy rounded-2xl flex items-center justify-center text-white shadow-lg"><i class="fas fa-graduation-cap"></i></div>
             <h2 class="text-xl font-black text-navy tracking-tighter uppercase">EDUPRESENT</h2>
         </div>
 
@@ -234,28 +243,22 @@
         </div>
 
         <div id="rekapContainer" class="page-content text-left">
-            <div class="card-custom overflow-x-auto">
+            <div class="card-custom">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b-2 border-slate-100 pb-6 text-left gap-4">
                     <div><h3 id="rekapTitle" class="text-2xl font-black text-navy uppercase mb-1 text-center md:text-left">Rekap</h3><p id="rekapDesc" class="text-navy font-normal text-[13px] text-center md:text-left"></p></div>
                     <button onclick="window.print()" class="btn bg-navy text-white hover:bg-blue-900 border-none no-print px-6 rounded-xl font-bold text-[12px]"><i class="fas fa-print mr-2"></i> PRINT LAPORAN</button>
                 </div>
-                <table class="report-table"><thead id="rekapTableHeader"></thead><tbody id="rekapTableBody"></tbody></table>
+                <div class="overflow-x-auto"><table class="report-table"><thead id="rekapTableHeader"></thead><tbody id="rekapTableBody"></tbody></table></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('edu_abs_pro_v2026_final')) || [];
-
+    let db = JSON.parse(localStorage.getItem('edu_abs_pro_v2026_final_fix_v5')) || [];
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
     function togglePass(id, el) { const i = document.getElementById(id); i.type = i.type === "password" ? "text" : "password"; el.classList.toggle('fa-eye-slash'); }
     function switchAuth(t) { document.getElementById('login-page').style.display = t==='login'?'flex':'none'; document.getElementById('register-page').style.display = t==='register'?'flex':'none'; }
-
-    function handleRegister() {
-        const u = document.getElementById('regUser').value.trim(), p = document.getElementById('regPass').value.trim();
-        if(u && p) { localStorage.setItem('edu_user_acc', JSON.stringify({u, p})); alert("Berhasil!"); switchAuth('login'); }
-    }
 
     function handleLogin() {
         const acc = JSON.parse(localStorage.getItem('edu_user_acc')) || {u:"admin", p:"123456"};
@@ -267,7 +270,7 @@
     }
 
     function customResetLogin() {
-        const u = prompt("Username Baru:"), p = prompt("Password Baru:");
+        const u = prompt("User Baru:"), p = prompt("Pass Baru:");
         if(u && p) { localStorage.setItem('edu_user_acc', JSON.stringify({u: u.trim(), p: p.trim()})); alert("Berhasil!"); }
     }
 
@@ -300,34 +303,26 @@
         const now = new Date(), days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"], months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         const dStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
         db.push({ id: Date.now(), name: n.value.toUpperCase(), status: s.value, dateKey: `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`, dateStr: dStr, timestamp: Date.now(), day: days[now.getDay()] });
-        localStorage.setItem('edu_abs_pro_v2026_final', JSON.stringify(db));
+        localStorage.setItem('edu_abs_pro_v2026_final_v5', JSON.stringify(db));
         n.value = ""; s.selectedIndex = 0; renderUI();
     }
 
-    function remove(id) { 
-        db = db.filter(x => x.id !== id); 
-        localStorage.setItem('edu_abs_pro_v2026_final', JSON.stringify(db)); 
-        renderUI(); 
-    }
-    
+    function remove(id) { db = db.filter(x => x.id !== id); localStorage.setItem('edu_abs_pro_v2026_final_v5', JSON.stringify(db)); renderUI(); }
     function handleLogout() { sessionStorage.removeItem('isLoggedIn'); location.reload(); }
-    function resetData() { if(confirm("Hapus semua?")) { db = []; localStorage.removeItem('edu_abs_pro_v2026_final'); location.reload(); } }
+    function resetData() { if(confirm("Hapus semua?")) { db = []; localStorage.removeItem('edu_abs_pro_v2026_final_v5'); location.reload(); } }
 
     function renderUI() {
         const todayKey = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`;
         const recentT = document.getElementById('recentTable'), historyT = document.getElementById('historyTableBody');
         recentT.innerHTML = ""; historyT.innerHTML = "";
         let stats = { Hadir: 0, Izin: 0, Sakit: 0, Alpa: 0 };
-        
         db.filter(x => x.dateKey === todayKey).sort((a,b) => a.name.localeCompare(b.name)).forEach(item => {
             recentT.innerHTML += `<tr><td>${item.dateStr}</td><td class="student-name-cell">${item.name}</td><td>${getStatusLabel(item.status)}</td><td class="no-print"><button onclick="remove(${item.id})" class="btn-hapus">HAPUS</button></td></tr>`;
         });
-        
         [...db].reverse().forEach(item => {
             stats[item.status]++;
             historyT.innerHTML += `<tr><td>${item.dateStr}</td><td class="student-name-cell">${item.name}</td><td>${getStatusLabel(item.status)}</td><td class="no-print"><button onclick="remove(${item.id})" class="btn-hapus">HAPUS</button></td></tr>`;
         });
-        
         document.querySelector('.sTotal').innerText = db.length;
         document.querySelector('.sHadir').innerText = stats.Hadir;
         document.querySelector('.sIzin').innerText = stats.Izin;
@@ -339,12 +334,12 @@
         const tbody = document.getElementById('rekapTableBody'), thead = document.getElementById('rekapTableHeader');
         tbody.innerHTML = "";
         const now = new Date(), months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        const currentMonthName = months[now.getMonth()];
-        const taStr = `T.A. ${(now.getMonth() >= 6) ? now.getFullYear() : now.getFullYear()-1}/${(now.getMonth() >= 6) ? now.getFullYear()+1 : now.getFullYear()}`;
+        const curM = months[now.getMonth()];
+        const ta = `T.A. ${(now.getMonth() >= 6) ? now.getFullYear() : now.getFullYear()-1}/${(now.getMonth() >= 6) ? now.getFullYear()+1 : now.getFullYear()}`;
 
         if (type === 'weekly') {
             document.getElementById('rekapTitle').innerText = "REKAP MINGGUAN";
-            document.getElementById('rekapDesc').innerText = `Laporan kehadiran minggu ke - 2 (${taStr})`;
+            document.getElementById('rekapDesc').innerText = `Laporan kehadiran minggu ke - 2 (${ta})`;
             thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>SENIN</th><th>SELASA</th><th>RABU</th><th>KAMIS</th><th>JUM'AT</th><th>SABTU</th></tr>`;
             let summary = {};
             db.forEach(item => {
@@ -356,19 +351,20 @@
                 tbody.innerHTML += `<tr><td>${i+1}</td><td class="student-name-cell">${name}</td><td>${getStatusLabel(s.Senin)}</td><td>${getStatusLabel(s.Selasa)}</td><td>${getStatusLabel(s.Rabu)}</td><td>${getStatusLabel(s.Kamis)}</td><td>${getStatusLabel(s["Jum'at"])}</td><td>${getStatusLabel(s.Sabtu)}</td></tr>`;
             });
         } else if (type === 'monthly') {
-            document.getElementById('rekapTitle').innerText = `REKAP BULAN ${currentMonthName.toUpperCase()}`;
-            document.getElementById('rekapDesc').innerText = `Laporan bulan ${currentMonthName} (${taStr})`;
+            // FIX SESUAI PERMINTAAN: REKAP BULAN FEBRUARI
+            document.getElementById('rekapTitle').innerText = `REKAP BULAN ${curM.toUpperCase()}`;
+            document.getElementById('rekapDesc').innerText = `Laporan bulan ${curM} (${ta})`;
             thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th>TOTAL</th></tr>`;
-            renderSummary(false);
+            renderSummary();
         } else {
-            const semNum = (now.getMonth() >= 6) ? "1" : "2";
-            document.getElementById('rekapTitle').innerText = `REKAP SEMESTER ${semNum}`;
-            document.getElementById('rekapDesc').innerText = `Laporan semester ${semNum} (${taStr})`;
+            const sem = (now.getMonth() >= 6) ? "1" : "2";
+            document.getElementById('rekapTitle').innerText = `REKAP SEMESTER ${sem}`;
+            document.getElementById('rekapDesc').innerText = `Laporan semester ${sem} (${ta})`;
             thead.innerHTML = `<tr><th>NO</th><th>NAMA SISWA</th><th>HADIR</th><th>IZIN</th><th>SAKIT</th><th>ALPA</th><th>TOTAL</th></tr>`;
-            renderSummary(true);
+            renderSummary();
         }
 
-        function renderSummary(isSemester) {
+        function renderSummary() {
             let summary = {};
             db.forEach(i => {
                 if(!summary[i.name]) summary[i.name] = {H:0,I:0,S:0,A:0};
