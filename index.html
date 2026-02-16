@@ -109,16 +109,17 @@
             .content-area { padding-top: 5rem; }
         }
 
-        /* --- TAMBAHAN BIAR PRINT 1 LEMBAR DI HP --- */
+        /* --- FIX PRINT 1 LEMBAR DI HP --- */
         @media print { 
-            @page { size: auto; margin: 5mm; } 
+            @page { size: auto; margin: 3mm; } 
             .no-print { display: none !important; } 
-            .content-area { margin: 0 !important; padding: 0 !important; min-height: auto !important; } 
+            .content-area { margin: 0 !important; padding: 0 !important; min-height: auto !important; background: white !important; } 
             body { background: white !important; zoom: 1; }
             .card-custom { box-shadow: none !important; border: none !important; padding: 0 !important; }
-            .report-table, .history-table, .dashboard-table { 
+            /* Paksa tabel mengecil agar muat 26-30 anak di 1 kertas HP */
+            .report-table { 
                 width: 100% !important; 
-                transform: scale(0.9); /* Mengecilkan tabel saat print agar muat 1 lembar */
+                transform: scale(0.85); 
                 transform-origin: top center;
             }
         }
@@ -220,6 +221,7 @@
 
     <div class="content-area">
         <div class="mb-8 flex flex-col items-center">
+            <h1 id="pageTitle" class="font-black text-navy uppercase">RINGKASAN UTAMA</h1>
             <div id="clockContainer" class="no-print">
                 <div class="clock-badge">
                     <i class="far fa-clock text-lg"></i> 
