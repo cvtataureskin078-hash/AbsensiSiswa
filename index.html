@@ -282,14 +282,12 @@
     function togglePass(id, el) { const i = document.getElementById(id); i.type = i.type === "password" ? "text" : "password"; el.classList.toggle('fa-eye-slash'); }
     function switchAuth(t) { document.getElementById('login-page').style.display = t==='login'?'flex':'none'; document.getElementById('register-page').style.display = t==='register'?'flex':'none'; }
 
-    // FUNGSI DAFTAR BARU BIAR JALAN BOS
+    // --- FUNGSI DAFTAR (FIX SUDAH AKTIF) ---
     function handleRegister() {
-        const u = document.getElementById('regUser').value;
-        const p = document.getElementById('regPass').value;
-        if(!u || !p) return alert("Isi username & password!");
+        const u = document.getElementById('regUser').value, p = document.getElementById('regPass').value;
+        if(!u || !p) return alert("Isi username & password baru!");
         localStorage.setItem('edu_user_acc', JSON.stringify({u: u.trim(), p: p.trim()}));
-        alert("Berhasil Daftar!");
-        switchAuth('login');
+        alert("Berhasil Daftar! Silakan Login."); switchAuth('login');
     }
 
     function handleLogin() {
